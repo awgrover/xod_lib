@@ -1,0 +1,319 @@
+#!/usr/bin/env perl
+# --- project patch newlibpath
+#       project # path in ~/xod. so normally just the name
+#       patch # dir in project, or dir/something.xodp
+# --- patch-path newlibpath
+#       patch-path # path to patch directory or .xodp
+
+use strict; use warnings; no warnings 'uninitialized'; use 5.010; no if ($^V ge v5.18.0), warnings => 'experimental::smartmatch';
+use File::Glob ':bsd_glob';
+use File::Basename qw(basename dirname);
+use File::Spec;
+use Cwd;
+use IO::File;
+use JSON;
+
+our $workspace = "/home/".$ENV{'USER'}.'/xod';
+
+sub debug(&) {
+    warn "[DEBUG ". (caller(0))[2]."] ". &{$_[0]}."\n" if $ENV{'DEBUG'};
+    }
+
+sub warning {
+    warn "WARNING ",@_,"\n";
+    }
+
+sub find_project {
+    my ($want) = @_;
+    debug { "Look for project in $workspace for $want/project.xod..."; };
+    # FIXME strip project.xod, strip workspace, ... or converse rather
+    # If it's a patch, strip it back to project
+    # allow relative to here (./)
+    (-e "$workspace/$want/project.xod") ? "$workspace/$want" : undef
+    }
+
+sub find_patch {
+    my ($project, $want) = @_;
+    debug { "Look for patch '$project' / '$want'..."; };
+    my $full_path = !$project ? $want : "$project/$want"; # allows ./
+    debug { "  start with path $full_path"; };
+    if (-d $full_path) {
+        debug { "  it's a dir..." };
+        $full_path .= "/patch.xodp"
+        }
+
+    if ($full_path =~ /\.xodp$/) {
+        debug { "  at $full_path?" };
+        if (-e $full_path) {
+            debug { "  found patch $full_path" };
+            return $full_path
+            }
+        else {
+            debug { "  no patch at path $full_path" };
+            return undef;
+            }
+        }
+
+    $full_path .= ".xodp";
+    debug { "  at + .xodp?" };
+    if (-e $full_path) { 
+        debug { "  found patch $full_path" };
+        return $full_path
+        }
+    else {
+        debug { "  no patch at path $full_path" };
+        return undef;
+        }
+    }
+
+sub search_project {
+    my ($want) = @_;
+    debug { "Search in $workspace for ~$want/project.xod..."; };
+    my $i=0;
+    foreach (bsd_glob( "$workspace/*$want*/project.xod", GLOB_NOCASE )) {
+        if (!$i) {
+            say "## Maybe you meant projects:";
+            $i=1;
+            }
+        my $project = dirname($_);
+        $project =~ s/^\Q$workspace\E\///;
+        say "\t$project";
+        }
+    warn "No projects found\n" if $i==0;
+    }
+
+sub patch_to_lib {
+    # FIXME: if 2 then patch, new
+    # if 3 then project patch new
+    debug { "ARGV '".join("' '",@ARGV)."'" };
+
+    my $expected_more = sub {
+        # debug { "test argv ".scalar(@ARGV)." '".join("' '",@ARGV)."'" };
+        if (@ARGV==0) {
+            warn "Expected patchpath,newlibpath or projectpath,patchpath,newlibpath\n";
+            exit 1;
+            }
+        };
+
+    &$expected_more();
+
+    my $full_patch_path;
+
+    # $patch_path, $newpath
+    if (@ARGV==2 || @ARGV==1) {
+        $full_patch_path = find_patch_or_failsearch(undef, $ARGV[0]);
+        }
+    if ($full_patch_path) {
+        debug { 'ARGV was $patch_name, $newpath' };
+        shift @ARGV; # so next is newlib
+        }
+
+    else {
+        debug { 'ARGV must be $project_path, $patch_name, $newpath' };
+
+        # find or search...
+        my $project_path = $ARGV[0];
+        my $full_project_path = find_project($project_path);
+        if (!$full_project_path) {
+            warning "No such project $project_path";
+            search_project($project_path); # FIXME: should do phonetic/typo matching
+            exit(1);
+            }
+        shift @ARGV;
+
+        &$expected_more();
+
+        # search patchname->fullpath
+        my $patch_name = $ARGV[0];
+        $full_patch_path = find_patch_or_failsearch($project_path, $patch_name);
+        shift @ARGV;
+        }
+    debug { "Have patch $full_patch_path" };
+
+    &$expected_more();
+
+    # check newpath in lib, maybe warn
+    my $newlibpath = shift @ARGV;
+    # lib/$name/$path, $name/$path (in lib), existing, no $name part, no $path part
+    # ./.... obviates lib/ test
+
+    debug { "Figure new lib path..." };
+    if ($newlibpath =~ /\.(cpp|xodp)/) {
+        debug { "  strip .cpp/.xodp file parth" };
+        $newlibpath = dirname($newlibpath);
+        }
+
+    if ($newlibpath !~ /^lib\// && ($newlibpath =~ /^\.\// || (-d $newlibpath)) ) {
+        # relative, or existing, so I guess you mean it
+        # But if you say lib/...., and it's relative to cwd(), then you don't "really mean it"
+        # no fixup
+        debug { "  newlib .||-d: '$newlibpath'..." };
+        my $canonpath = Cwd::abs_path($newlibpath); # assume this is the salient path # was File::Spec->canonpath( $newlibpath );
+        $canonpath =~ /lib\//;
+        my ($beforelib, $justlibpath) = ($`.$& || ($& ? '' : $newlibpath."/"),$');
+        my $partct = split('/', $justlibpath);
+        if ($newlibpath =~ /^lib(\/|$)/ || $partct != 3 ) {
+            my @possible = ('$owner', '$libname', '$patchname');
+            debug { "    partct $partct of $justlibpath of canon $canonpath" };
+            my $meantmore = join("/", @possible[ ($partct)..$#possible ]);
+            warning "You probably meant $beforelib$meantmore, because this is not deep enough under lib/";
+            }
+        }
+    else {
+        if ($newlibpath !~ /^lib\//) {
+            $newlibpath = "lib/$newlibpath" 
+            }
+        my $actualworkspace = (-d $newlibpath) ? "." : $workspace; # could be relative to here
+
+        debug { "  in workspace: $newlibpath..." };
+        my $partct = split('/', $newlibpath) - 1;
+        if ($partct == 2) {
+            $newlibpath = "$newlibpath/".basename(dirname($full_patch_path));
+            debug { "  imply patch name from source patch name " };
+            $partct = 3;
+            }
+        if ($partct != 3) {
+            warn 'libraries have three level names: $owner/$libname/$patchname'."\n";
+            if (-d $newlibpath) {
+                warn "maybe you meant one of\n";
+                foreach ( bsd_glob("$actualworkspace/$newlibpath/*") ) {
+                    $_ =~ s/^\Q$actualworkspace\E\/lib\///;
+                    warn "\t$_\n";
+                    }
+                warn "\tor $newlibpath/\$somepatchname\n";
+                }
+            exit(1);
+            }
+        $newlibpath = "$actualworkspace/$newlibpath";
+        }
+
+    debug { "Into lib $newlibpath..." };
+    system('mkdir', '-p', $newlibpath) && exit($?);
+
+    my $patchfile = "$newlibpath/".basename($full_patch_path);
+    debug { "  will create ".basename($patchfile) };
+    
+    push @ARGV, $full_patch_path;
+    my $patch_decl = decode_json(join("",<>));
+    shift @ARGV;
+    # warn "json: ".Dumper($patch_decl)." "; use Data::Dumper;
+
+    my $has_native = 0;
+    my $has_non_xod_patch = 0;
+    foreach ( @{ $patch_decl->{'nodes'} ||[]} ) {
+       $has_native +=1 if $_->{'type'} eq 'xod/patch-nodes/not-implemented-in-xod';
+       $has_non_xod_patch +=1 if $_{'type'} !~ /^xod\/patch-nodes/;
+       }
+    debug { "  has native $has_native" };
+    debug { "  has non_xod $has_non_xod_patch" };
+    my $has_links = @{ ($patch_decl->{'links'} || []) };
+    debug { "  has links ".$has_links };
+
+    my @fails;
+
+    if ($has_native && $has_links) {
+        push @fails, "Has native node (xod/patch-nodes/not-implemented-in-xod) but also links, which doesn't make sense (in project's patch $full_patch_path)";
+        }
+    if ($has_native > 1) {
+        push @fails, "Has $has_native native nodes (xod/patch-nodes/not-implemented-in-xod), which doesn't make sense (in project's patch $full_patch_path)";
+        }
+    if (!$has_native && !$has_links) {
+        push @fails, "Has no native node, and no links, which doesn't make sense (in project's patch $full_patch_path)";
+        }
+    if (!$has_native && $has_non_xod_patch) {
+        push @fails, "Has native and non 'xod/patch-nodes/*' nodes, which doesn't make sense (in project's patch $full_patch_path)";
+        }
+    if (@fails) {
+        warn "FAIL\n".join("\n", @fails)."\n" ;
+        exit(1);
+        }
+
+    warning "No native node (xod/patch-nodes/not-implemented-in-xod) in $full_patch_path" if !$has_native;
+
+    $patch_decl->{'description'} = "Needs Description";
+    my $fh = IO::File->new( $patchfile, 'w') || die($!);
+    say $fh to_json($patch_decl, {utf8=>1, pretty => 1, canonical=>1});
+    $fh->close;
+    debug {"  Wrote $patchfile" };
+
+
+
+    if ($has_native) {
+        # make .cpp template
+        IO::File->new( "$newlibpath/implementation.cpp", 'w')->close if !(-e "$newlibpath/implementation.cpp");
+        }
+    else {
+        warning "Unneeded .cpp in $newlibpath" if bsd_glob( "$newlibpath/*.cpp" );
+        }
+
+    # could do git checks
+    }
+
+sub find_patch_or_failsearch {
+    my ($project_path, $patch_name) = @_;
+    my $found = find_patch($project_path, $patch_name);
+    return $found if $found;
+
+    $patch_name = "$project_path/$patch_name" if $project_path;
+    debug { "Search for patches '$patch_name'..." };
+
+    # proj/patch/x.xodp
+    if ($patch_name =~ /\.xodp$/) {
+        $patch_name = dirname($patch_name);
+        debug { "  trim off file part: $patch_name..." };
+        }
+
+    # proj/*.xod
+    if ($patch_name =~ /\.xod$/ ) {
+        $patch_name = dirname($patch_name)."/*";
+        debug { "  trim off file part: $patch_name..." };
+        }
+
+    # proj/patch
+    my ($projpart,$patchpart) = (basename(dirname($patch_name)), basename($patch_name));
+    # $projpart = '*' if $projpart eq '.';
+    return if $projpart ne '.' &&
+        (_find_patch_or_failsearch("$workspace/$projpart/*$patchpart*") ||
+        _find_patch_or_failsearch("$workspace/*$projpart*/*$patchpart*") ||
+        _find_patch_or_failsearch("$workspace/$projpart/*") ||
+        _find_patch_or_failsearch("$workspace/*$projpart*/*") ||
+        _find_patch_or_failsearch("$workspace/*/$patchpart*") ||
+        _find_patch_or_failsearch("$workspace/*/*$patchpart*")
+        ) && exit(1);
+
+    # patch
+    (_find_patch_or_failsearch("$workspace/*/$patchpart") ||
+    _find_patch_or_failsearch("$workspace/*/*$patchpart*")
+    ) && exit(1);
+
+    _find_patch_or_failsearch("$workspace/*/*") && exit(1);
+    warn("No patches found\n");
+    exit(1)
+    }
+
+sub _find_patch_or_failsearch {
+    my ($search) = @_;
+
+    debug { "  try '$search'..." };
+
+    my $i=0;
+    foreach (bsd_glob("$search/*.xodp")) {
+        if (!$i) {
+            say "## Maybe you meant patches:";
+            $i=1;
+            }
+        my $where = dirname($_);
+        $where =~ s/^\Q$workspace\E\///;
+        say "\t".$where;
+        }
+    return $i!=0;
+
+    }
+
+sub main {
+    patch_to_lib;
+    }
+
+main();
+
+
