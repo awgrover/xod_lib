@@ -263,15 +263,15 @@ sub patch_to_lib {
 
     if ($has_native) {
         # make .cpp template
-        backup_skeleton( "$newlibpath/implementation.cpp" );
-        my $fh = IO::File->new( "$newlibpath/implementation.cpp", 'w') || die($!);
+        backup_skeleton( "$newlibpath/any.cpp" );
+        my $fh = IO::File->new( "$newlibpath/any.cpp", 'w') || die($!);
         print $fh skeleton_cpp($full_patch_path, \@inputs, \@outputs); 
-        $fh->close if !(-e "$newlibpath/implementation.cpp");
-        if (!revert_backup_ifsame( "$newlibpath/implementation.cpp" )) {
-            warn "# wrote $newlibpath/implementation.cpp\n";
+        $fh->close if !(-e "$newlibpath/any.cpp");
+        if (!revert_backup_ifsame( "$newlibpath/any.cpp" )) {
+            warn "# wrote $newlibpath/any.cpp\n";
             }
         else {
-            warn "# unchanged $newlibpath/implementation.cpp\n";
+            warn "# unchanged $newlibpath/any.cpp\n";
             }
         }
     else {
@@ -327,7 +327,7 @@ sub skeleton_cpp {
 
     my @emits;
     foreach my $out (@$outputs) {
-        my $outvar = "output_".uc( $out->{'name'} );
+        my $outvar = "output_".$out->{'name'};
         push @emits, sprintf( '    emitValue<output_OUT>(ctx, /* a %s */);', $outvar, $out->{'type'} );
         }
 
@@ -335,7 +335,7 @@ sub skeleton_cpp {
         my $indent = $1;
         my @intext;
         foreach my $in (@$inputs) {
-            my $var = "input_".uc($in->{'name'});
+            my $var = "input_".$in->{'name'};
             push @intext, sprintf( $indent.'if (isInputDirty<%s>(ctx)) {', $var );
             if ($in->{'type'} eq 'pulse') {
                 push @intext, sprintf( $indent.'    // pulse. unwrap the \'if\' for implicit "is dirty this pulse"' );
