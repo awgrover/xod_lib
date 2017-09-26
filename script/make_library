@@ -1,8 +1,9 @@
 #!/usr/bin/env perl
-# --- project patch newlibpath
+# Make a "patch" in a project, extract it to a lib, with skeleton .cpp
+# --- [options] project patch newlibpath
 #       project # path in ~/xod. so normally just the name
 #       patch # dir in project, or dir/something.xodp
-# --- patch-path newlibpath
+# --- [options] patch-path newlibpath
 #       patch-path # path to patch directory or .xodp
 
 use strict; use warnings; no warnings 'uninitialized'; use 5.010; no if ($^V ge v5.18.0), warnings => 'experimental::smartmatch';
@@ -29,7 +30,14 @@ sub find_project {
     # FIXME strip project.xod, strip workspace, ... or converse rather
     # If it's a patch, strip it back to project
     # allow relative to here (./)
-    (-e "$workspace/$want/project.xod") ? "$workspace/$want" : undef
+    if (-e "$workspace/$want/project.xod") {
+        debug { "  found project '$workspace'/'$want'" };
+        "$workspace/$want";
+        }
+    else {
+        debug { "  not found project '$want'" };
+        undef;
+        }
     }
 
 sub find_patch {
@@ -125,7 +133,7 @@ sub patch_to_lib {
 
         # search patchname->fullpath
         my $patch_name = $ARGV[0];
-        $full_patch_path = find_patch_or_failsearch($project_path, $patch_name);
+        $full_patch_path = find_patch_or_failsearch($full_project_path, $patch_name);
         shift @ARGV;
         }
     debug { "Have patch $full_patch_path" };
@@ -200,17 +208,34 @@ sub patch_to_lib {
 
     my $has_native = 0;
     my $has_non_xod_patch = 0;
+    my @inputs;
+    my @outputs;
     foreach ( @{ $patch_decl->{'nodes'} ||[]} ) {
-       $has_native +=1 if $_->{'type'} eq 'xod/patch-nodes/not-implemented-in-xod';
-       $has_non_xod_patch +=1 if $_{'type'} !~ /^xod\/patch-nodes/;
-       }
+        $has_native +=1 if $_->{'type'} eq 'xod/patch-nodes/not-implemented-in-xod';
+        $has_non_xod_patch +=1 if $_->{'type'} !~ /^xod\/patch-nodes/;
+        if ($_->{'type'} =~ /^xod\/patch-nodes\/input-(.*)/) {
+            my $type = $1;
+            push @inputs, { type => $type, name => $_->{'label'} };
+            }
+        if ($_->{'type'} =~ /^xod\/patch-nodes\/output-(.*)/) {
+            my $type = $1;
+            push @outputs, { type => $type, name => $_->{'label'} };
+            }
+        }
     debug { "  has native $has_native" };
     debug { "  has non_xod $has_non_xod_patch" };
     my $has_links = @{ ($patch_decl->{'links'} || []) };
     debug { "  has links ".$has_links };
+    debug { "  has inputs ".@inputs." ".join(" ", map { $_->{'name'} } @inputs) };
+    debug { "  has outputs ".@outputs." ".join(" ", map { $_->{'name'} } @outputs) };
+    # warn Dumper(\@inputs); use Data::Dumper;
 
     my @fails;
 
+    if (!@inputs) {
+        push @fails, "Has no inputs (xod/patch-nodes/input-*), which doesn't make sense";
+        }
+    warning "Has no outputs xod\/patch-nodes/output-*, which might be ok" if !@outputs;
     if ($has_native && $has_links) {
         push @fails, "Has native node (xod/patch-nodes/not-implemented-in-xod) but also links, which doesn't make sense (in project's patch $full_patch_path)";
         }
@@ -234,13 +259,20 @@ sub patch_to_lib {
     my $fh = IO::File->new( $patchfile, 'w') || die($!);
     say $fh to_json($patch_decl, {utf8=>1, pretty => 1, canonical=>1});
     $fh->close;
-    debug {"  Wrote $patchfile" };
-
-
+    warn "# wrote $patchfile\n";
 
     if ($has_native) {
         # make .cpp template
-        IO::File->new( "$newlibpath/implementation.cpp", 'w')->close if !(-e "$newlibpath/implementation.cpp");
+        backup_skeleton( "$newlibpath/implementation.cpp" );
+        my $fh = IO::File->new( "$newlibpath/implementation.cpp", 'w') || die($!);
+        print $fh skeleton_cpp($full_patch_path, \@inputs, \@outputs); 
+        $fh->close if !(-e "$newlibpath/implementation.cpp");
+        if (!revert_backup_ifsame( "$newlibpath/implementation.cpp" )) {
+            warn "# wrote $newlibpath/implementation.cpp\n";
+            }
+        else {
+            warn "# unchanged $newlibpath/implementation.cpp\n";
+            }
         }
     else {
         warning "Unneeded .cpp in $newlibpath" if bsd_glob( "$newlibpath/*.cpp" );
@@ -248,6 +280,90 @@ sub patch_to_lib {
 
     # could do git checks
     }
+
+sub largest_n_skeleton_bak {
+    my ($fname) = @_;
+    my $n = 0;
+    foreach ( bsd_glob( "$fname.*.bak" ) ) {
+        $n = 0;
+        if (/(\d+)\.bak$/) {
+            $n = $1 if ($1 > $n);
+            }
+        }
+    return $n;
+    }
+
+sub backup_skeleton {
+    my ($fname) = @_;
+    return if !-e $fname;
+    return if -z $fname;
+
+    my $n = largest_n_skeleton_bak($fname) + 1;
+    system( 'cp', $fname, "$fname.$n.bak" );
+    debug { "backup $fname to $fname.$n.bak" };
+    }
+
+sub revert_backup_ifsame {
+    my ($fname) = @_;
+    return undef if !-e $fname;
+
+    my $n = largest_n_skeleton_bak($fname);
+    return undef if !-e "$fname.$n.bak";
+    if ( ! system( 'diff', '-q', $fname, "$fname.$n.bak" ) ) { # not diff
+        debug { "revert $fname to $fname.$n.bak" };
+        system( 'mv', "$fname.$n.bak", $fname );
+        return 1;
+        }
+    return undef;
+    }
+
+sub skeleton_cpp {
+    my ($full_patch_path, $inputs, $outputs) = @_;
+    my $template = join("", <DATA>);
+    
+    $template =~ s/\$FROM/$full_patch_path/g;
+    my $now = gmtime()." (utc)";
+    $template =~ s/\$DATE/$now/g;
+
+    my @emits;
+    foreach my $out (@$outputs) {
+        my $outvar = "output_".uc( $out->{'name'} );
+        push @emits, sprintf( '    emitValue<output_OUT>(ctx, /* a %s */);', $outvar, $out->{'type'} );
+        }
+
+    my $insert_vars = sub {
+        my $indent = $1;
+        my @intext;
+        foreach my $in (@$inputs) {
+            my $var = "input_".uc($in->{'name'});
+            push @intext, sprintf( $indent.'if (isInputDirty<%s>(ctx)) {', $var );
+            if ($in->{'type'} eq 'pulse') {
+                push @intext, sprintf( $indent.'    // pulse. unwrap the \'if\' for implicit "is dirty this pulse"' );
+                }
+            else {
+                push @intext, sprintf( $indent.'    auto newValue = getValue<%s>(ctx); // %s', $var, $in->{'type'} );
+                }
+            push @intext, map { "$indent$_" } @emits;
+            if (!@$outputs) {
+                push @intext, $indent.'    /* Do Something */';
+                }
+            push @intext,$indent."    }";
+            push @intext,'';
+            }
+        
+        join( "\n",@intext );
+        };
+    $template =~ s/^([ \t]*)\$EACHIN/&$insert_vars()/egm;
+
+    if (@$outputs) {
+        $template =~ s/^(\s*)\$GEN_EMIT/"$1".join("\n$1",@emits)/egm;
+        }
+    else {
+        $template =~ s/^(\s*)\$GEN_EMIT/$1\/* Do Something because at least one person was dirty *\//gm;
+        }
+    return $template;
+    }
+
 
 sub find_patch_or_failsearch {
     my ($project_path, $patch_name) = @_;
@@ -316,4 +432,30 @@ sub main {
 
 main();
 
+# Template for .cpp, see skeleton_cpp()
+__DATA__
+// Converted from the patch $FROM
+
+{{#global}}
+//#include <Servo.h>
+{{/global}}
+
+struct State {
+    // Number sample = NAN;
+};
+
+{{ GENERATED_CODE }}
+
+void evaluate(Context ctx) {
+    // State* state = getState(ctx);
+    
+    $EACHIN
+
+    // if (newValue != state->sample) // only emit if state changed
+    // if (getValue<output_OUT>(ctx) != state->sample) // only emit if state changed
+
+    $GEN_EMIT
+
+    state->sample = newValue; // save new state
+}
 
