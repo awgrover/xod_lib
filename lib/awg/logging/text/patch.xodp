@@ -1,0 +1,44 @@
+{
+   "description" : "Needs Description",
+   "nodes" : [
+      {
+         "id" : "B1cbLxDs-",
+         "label" : "pulse",
+         "position" : {
+            "x" : -1,
+            "y" : -1
+         },
+         "type" : "xod/patch-nodes/input-pulse"
+      },
+      {
+         "boundValues" : {
+            "__out__" : true
+         },
+         "id" : "BJMH8gwjb",
+         "label" : "always",
+         "position" : {
+            "x" : 136,
+            "y" : 0
+         },
+         "type" : "xod/patch-nodes/input-boolean"
+      },
+      {
+         "id" : "BysGLxDjb",
+         "label" : "text",
+         "position" : {
+            "x" : 68,
+            "y" : 0
+         },
+         "type" : "xod/patch-nodes/input-string"
+      },
+      {
+         "id" : "rJQW8gDo-",
+         "position" : {
+            "x" : 68,
+            "y" : 102
+         },
+         "type" : "xod/patch-nodes/not-implemented-in-xod"
+      }
+   ]
+}
+
