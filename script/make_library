@@ -1,10 +1,7 @@
 #!/usr/bin/env perl
+# try -h
 # Make a "patch" in a project, extract it to a lib, with skeleton .cpp
-# --- [options] project patch newlibpath
-#       project # path in ~/xod. so normally just the name
-#       patch # dir in project, or dir/something.xodp
-# --- [options] patch-path newlibpath
-#       patch-path # path to patch directory or .xodp
+
 
 use strict; use warnings; no warnings 'uninitialized'; use 5.010; no if ($^V ge v5.18.0), warnings => 'experimental::smartmatch';
 use File::Glob ':bsd_glob';
@@ -13,8 +10,10 @@ use File::Spec;
 use Cwd;
 use IO::File;
 use JSON;
+use awgrover::Getopt;
 
 our $workspace = "/home/".$ENV{'USER'}.'/xod';
+our $switches;
 
 sub debug(&) {
     warn "[DEBUG ". (caller(0))[2]."] ". &{$_[0]}."\n" if $ENV{'DEBUG'};
@@ -198,9 +197,14 @@ sub patch_to_lib {
     debug { "Into lib $newlibpath..." };
     system('mkdir', '-p', $newlibpath) && exit($?);
 
-    my $patchfile = "$newlibpath/".basename($full_patch_path);
-    debug { "  will create ".basename($patchfile) };
-    
+    my ($patch_decl, $has_native, $inputs, $outputs) = process_patchfile( $full_patch_path );
+    make_patchfile($newlibpath, $full_patch_path, $patch_decl, $has_native);
+    make_cpp($newlibpath, $full_patch_path, $has_native, $inputs, $outputs) if !$switches->{'patch-only'};
+    }
+
+sub process_patchfile {
+    my ($full_patch_path) = @_;
+
     push @ARGV, $full_patch_path;
     my $patch_decl = decode_json(join("",<>));
     shift @ARGV;
@@ -252,7 +256,15 @@ sub patch_to_lib {
         warn "FAIL\n".join("\n", @fails)."\n" ;
         exit(1);
         }
+    return ($patch_decl, $has_native, \@inputs, \@outputs);
+    }
 
+sub make_patchfile {
+    my ($newlibpath, $full_patch_path, $patch_decl, $has_native) = @_;
+
+    my $patchfile = "$newlibpath/".basename($full_patch_path);
+    debug { "  will create ".basename($patchfile) };
+    
     warning "No native node (xod/patch-nodes/not-implemented-in-xod) in $full_patch_path" if !$has_native;
 
     $patch_decl->{'description'} = "Needs Description";
@@ -261,12 +273,19 @@ sub patch_to_lib {
     $fh->close;
     warn "# wrote $patchfile\n";
 
+    }
+
+sub make_cpp {
+    my ($newlibpath, $full_patch_path, $has_native, $inputs, $outputs) = @_;
+
     if ($has_native) {
         # make .cpp template
         backup_skeleton( "$newlibpath/any.cpp" );
+
         my $fh = IO::File->new( "$newlibpath/any.cpp", 'w') || die($!);
-        print $fh skeleton_cpp($full_patch_path, \@inputs, \@outputs); 
+        print $fh skeleton_cpp($full_patch_path, $inputs, $outputs); 
         $fh->close if !(-e "$newlibpath/any.cpp");
+
         if (!revert_backup_ifsame( "$newlibpath/any.cpp" )) {
             warn "# wrote $newlibpath/any.cpp\n";
             }
@@ -427,6 +446,20 @@ sub _find_patch_or_failsearch {
     }
 
 sub main {
+   $switches=awgrover::Getopt::GetOptions
+                (
+                '' => <<'EOS',
+Make a "patch" in a project, extract it to a lib, with skeleton .cpp
+--- [options] project patch newlibpath
+      project # path in ~/xod. so normally just the name
+      patch # dir in project, or dir/something.xodp
+--- [options] patch-path newlibpath
+      patch-path # path to patch directory or .xodp
+EOS
+                'help|h|H'=>'this',
+                'patch-only|xodp-only|p' => 'Only remake the .xodp, leave the cpp alone',
+                );
+
     patch_to_lib;
     }
 
