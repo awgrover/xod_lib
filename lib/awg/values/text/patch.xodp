@@ -6,8 +6,8 @@
          "id" : "B1cbLxDs-",
          "label" : "pulse",
          "position" : {
-            "x" : -1,
-            "y" : -1
+            "x" : 68,
+            "y" : 0
          },
          "type" : "xod/patch-nodes/input-pulse"
       },
@@ -29,7 +29,7 @@
          "id" : "BysGLxDjb",
          "label" : "text",
          "position" : {
-            "x" : 68,
+            "x" : 0,
             "y" : 0
          },
          "type" : "xod/patch-nodes/input-string"
