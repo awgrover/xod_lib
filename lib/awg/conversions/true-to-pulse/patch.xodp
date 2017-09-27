@@ -1,5 +1,5 @@
 {
-  "description": "Convert anything into a pulse",
+  "description": "Convert (each) true into a pulse. Compare with cast-boolean-to-pulse",
   "nodes": [
     {
       "id": "H17p94tiZ",
@@ -13,12 +13,12 @@
     {
       "description": "Any",
       "id": "HJBj5VtiZ",
-      "label": "data",
+      "label": "bool",
       "position": {
         "x": 136,
         "y": 0
       },
-      "type": "xod/patch-nodes/input-string"
+      "type": "xod/patch-nodes/input-boolean"
     },
     {
       "id": "SkR_3VFsW",
