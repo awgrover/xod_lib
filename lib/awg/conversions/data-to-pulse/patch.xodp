@@ -1,0 +1,32 @@
+{
+  "description": "Convert anything into a pulse bob",
+  "nodes": [
+    {
+      "id": "H17p94tiZ",
+      "label": "pulse",
+      "position": {
+        "x": 136,
+        "y": 204
+      },
+      "type": "xod/patch-nodes/output-pulse"
+    },
+    {
+      "description": "Any",
+      "id": "HJBj5VtiZ",
+      "label": "data",
+      "position": {
+        "x": 136,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-string"
+    },
+    {
+      "id": "SkR_3VFsW",
+      "position": {
+        "x": 136,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    }
+  ]
+}

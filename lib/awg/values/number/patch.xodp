@@ -1,5 +1,5 @@
 {
-   "description" : "On pulse or text, copy the text out. Set always=false to only copy if the text has changed. Acts like casting pulse to text",
+   "description" : "On pulse or number, copy the number out. Set always=false to only copy if the number has changed. Acts like casting pulse to number",
    "nodes" : [
       {
          "description" : "Also copy on a pulse\n",
@@ -15,7 +15,7 @@
          "boundValues" : {
             "__out__" : true
          },
-         "description" : "On pulse or text, copy 'text'. If false, only copy when 'text' changes.\n ",
+         "description" : "On pulse or number, copy 'number'. If false, only copy when 'number' changes.\n ",
          "id" : "BJMH8gwjb",
          "label" : "always",
          "position" : {
@@ -25,24 +25,24 @@
          "type" : "xod/patch-nodes/input-boolean"
       },
       {
-         "description" : "The text to copy",
+         "description" : "The number to copy",
          "id" : "BysGLxDjb",
-         "label" : "text",
+         "label" : "number",
          "position" : {
             "x" : 0,
             "y" : 0
          },
-         "type" : "xod/patch-nodes/input-string"
+         "type" : "xod/patch-nodes/input-number"
       },
       {
-         "description" : "The 'text' ",
+         "description" : "The 'number' ",
          "id" : "S1l55GFoZ",
          "label" : "copy",
          "position" : {
             "x" : 34,
             "y" : 204
          },
-         "type" : "xod/patch-nodes/output-string"
+         "type" : "xod/patch-nodes/ouput-number"
       },
       {
          "id" : "SkMWwNtoZ",
