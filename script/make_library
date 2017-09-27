@@ -14,6 +14,12 @@ use awgrover::Getopt;
 
 our $workspace = "/home/".$ENV{'USER'}.'/xod';
 our $switches;
+our %cppType = (
+    string => 'XString',
+    number => 'int|uint8_t|float',
+    boolean => 'Logic|boolean',
+    pulse => 'Logic|boolean',
+    );
 
 sub debug(&) {
     warn "[DEBUG ". (caller(0))[2]."] ". &{$_[0]}."\n" if $ENV{'DEBUG'};
@@ -198,8 +204,29 @@ sub patch_to_lib {
     system('mkdir', '-p', $newlibpath) && exit($?);
 
     my ($patch_decl, $has_native, $inputs, $outputs) = process_patchfile( $full_patch_path );
+
     make_patchfile($newlibpath, $full_patch_path, $patch_decl, $has_native);
-    make_cpp($newlibpath, $full_patch_path, $has_native, $inputs, $outputs) if !$switches->{'patch-only'};
+
+    if (!$switches->{'patch-only'}) {
+        make_cpp($newlibpath, $full_patch_path, $has_native, $inputs, $outputs) 
+        }
+    else {
+        emit_inputs_outputs( $inputs, $outputs );
+        }
+    }
+
+sub emit_inputs_outputs {
+    my ($inputs, $outputs) = @_;
+
+    say "## inputs" if @$inputs;
+    foreach my $in (@$inputs) {
+        say getValue($in)." ".is_dirty($in);
+        }
+
+    say "## outputs" if @$outputs;
+    foreach my $out (@$outputs) {
+        say emitValue($out)
+        }
     }
 
 sub process_patchfile {
@@ -267,7 +294,8 @@ sub make_patchfile {
     
     warning "No native node (xod/patch-nodes/not-implemented-in-xod) in $full_patch_path" if !$has_native;
 
-    $patch_decl->{'description'} = "Needs Description";
+    $patch_decl->{'description'} = "Needs Description" if !$patch_decl->{'description'};
+    chomp $patch_decl->{'description'};
     my $fh = IO::File->new( $patchfile, 'w') || die($!);
     say $fh to_json($patch_decl, {utf8=>1, pretty => 1, canonical=>1});
     $fh->close;
@@ -336,6 +364,23 @@ sub revert_backup_ifsame {
     return undef;
     }
 
+sub getValue {
+    # format the getvalue statement
+    my ($input_info) = @_;
+    sprintf( '%s newValue = getValue<input_%s>(ctx); // %s', ($cppType{$input_info->{'type'}} || 'auto'), $input_info->{'name'}, $input_info->{'type'} );
+    }
+
+sub is_dirty {
+    my ($input_info) = @_;
+    # formatting
+    sprintf( 'if (isInputDirty<input_%s>(ctx)) {', $input_info->{'name'} );
+    }
+
+sub emitValue {
+    my ($out_info) = @_;
+    sprintf( 'emitValue<output_%s>(ctx, /* a \'%s\' %s */);', $out_info->{'name'}, $out_info->{'type'}, ($cppType{$out_info->{'type'}} || '?') );
+    }
+
 sub skeleton_cpp {
     my ($full_patch_path, $inputs, $outputs) = @_;
     my $template = join("", <DATA>);
@@ -346,8 +391,7 @@ sub skeleton_cpp {
 
     my @emits;
     foreach my $out (@$outputs) {
-        my $outvar = "output_".$out->{'name'};
-        push @emits, sprintf( '    emitValue<output_OUT>(ctx, /* a %s */);', $outvar, $out->{'type'} );
+        push @emits, '    '.emitValue($out);
         }
 
     my $insert_vars = sub {
@@ -355,12 +399,12 @@ sub skeleton_cpp {
         my @intext;
         foreach my $in (@$inputs) {
             my $var = "input_".$in->{'name'};
-            push @intext, sprintf( $indent.'if (isInputDirty<%s>(ctx)) {', $var );
+            push @intext, $indent.is_dirty($in);
             if ($in->{'type'} eq 'pulse') {
                 push @intext, sprintf( $indent.'    // pulse. unwrap the \'if\' for implicit "is dirty this pulse"' );
                 }
             else {
-                push @intext, sprintf( $indent.'    auto newValue = getValue<%s>(ctx); // %s', $var, $in->{'type'} );
+                push @intext, $indent.'    '.getValue($in);
                 }
             push @intext, map { "$indent$_" } @emits;
             if (!@$outputs) {
