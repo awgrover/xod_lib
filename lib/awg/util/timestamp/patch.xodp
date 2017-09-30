@@ -1,0 +1,193 @@
+{
+  "comments": [
+    {
+      "content": "Ideally, pulse just uses the data, or \"pulse\" if data is empty.\nBut there is no conditionals on text.",
+      "id": "BkToXrtjW",
+      "position": {
+        "x": 306,
+        "y": -102
+      },
+      "size": {
+        "height": 153,
+        "width": 238
+      }
+    }
+  ],
+  "links": [
+    {
+      "id": "B1au7StoW",
+      "input": {
+        "nodeId": "rk-u7HFiZ",
+        "pinKey": "ryv7IRdSP1b"
+      },
+      "output": {
+        "nodeId": "B14X0NKsZ",
+        "pinKey": "H17p94tiZ"
+      }
+    },
+    {
+      "id": "BJKdmBYiZ",
+      "input": {
+        "nodeId": "rk-u7HFiZ",
+        "pinKey": "ByU7LRuSPkW"
+      },
+      "output": {
+        "nodeId": "SyYrkHFsZ",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "BkSGqVtiW",
+      "input": {
+        "nodeId": "Sk4YFEti-",
+        "pinKey": "HJdO9HwJ-"
+      },
+      "output": {
+        "nodeId": "B1sbcEYs-",
+        "pinKey": "rksccsp-W"
+      }
+    },
+    {
+      "id": "HJET1rtiZ",
+      "input": {
+        "nodeId": "B14X0NKsZ",
+        "pinKey": "HJBj5VtiZ"
+      },
+      "output": {
+        "nodeId": "ryZuYNFs-",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "Sk_M9Vti-",
+      "input": {
+        "nodeId": "B1sbcEYs-",
+        "pinKey": "BkeKcj6ZZ"
+      },
+      "output": {
+        "nodeId": "ryZuYNFs-",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "Sknr94Kib",
+      "input": {
+        "nodeId": "B1sbcEYs-",
+        "pinKey": "Hkqu9oaWb"
+      },
+      "output": {
+        "nodeId": "H1zV94tjW",
+        "pinKey": "rksccsp-W"
+      }
+    },
+    {
+      "id": "SykYmSKjW",
+      "input": {
+        "nodeId": "BJ57cNYsb",
+        "pinKey": "Bk74I0_SPyb"
+      },
+      "output": {
+        "nodeId": "rk-u7HFiZ",
+        "pinKey": "ByHmL0uHPk-"
+      }
+    },
+    {
+      "id": "rkIo8Bti-",
+      "input": {
+        "nodeId": "Sk4YFEti-",
+        "pinKey": "S1n95SDJb"
+      },
+      "output": {
+        "nodeId": "rk-u7HFiZ",
+        "pinKey": "ByHmL0uHPk-"
+      }
+    },
+    {
+      "id": "rkWSqEYo-",
+      "input": {
+        "nodeId": "H1zV94tjW",
+        "pinKey": "Hkqu9oaWb"
+      },
+      "output": {
+        "nodeId": "BJ57cNYsb",
+        "pinKey": "BkEVI0uHwJb"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "description": "log data with a timestamp",
+      "id": "B14X0NKsZ",
+      "position": {
+        "x": 34,
+        "y": 0
+      },
+      "type": "awg/conversions/data-to-pulse"
+    },
+    {
+      "id": "B1sbcEYs-",
+      "position": {
+        "x": 102,
+        "y": 408
+      },
+      "type": "xod/core/concat"
+    },
+    {
+      "id": "BJ57cNYsb",
+      "position": {
+        "x": 34,
+        "y": 204
+      },
+      "type": "xod/core/system-time"
+    },
+    {
+      "boundValues": {
+        "BkeKcj6ZZ": "] "
+      },
+      "description": "visual mark",
+      "id": "H1zV94tjW",
+      "label": "space",
+      "position": {
+        "x": 34,
+        "y": 306
+      },
+      "type": "xod/core/concat"
+    },
+    {
+      "id": "Sk4YFEti-",
+      "position": {
+        "x": 102,
+        "y": 510
+      },
+      "type": "xod/core/console-log"
+    },
+    {
+      "description": "outputs 'data'\nbecause 'data' can't take a pulse as input.",
+      "id": "SyYrkHFsZ",
+      "label": "pulse",
+      "position": {
+        "x": 204,
+        "y": -102
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "id": "rk-u7HFiZ",
+      "position": {
+        "x": 34,
+        "y": 102
+      },
+      "type": "xod/core/any"
+    },
+    {
+      "description": "Any data except pulse\n",
+      "id": "ryZuYNFs-",
+      "label": "data",
+      "position": {
+        "x": 136,
+        "y": -102
+      },
+      "type": "xod/patch-nodes/input-string"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "links": [
+    {
+      "id": "BkUt5aHsZ",
+      "input": {
+        "nodeId": "SJfFc6riZ",
+        "pinKey": "__in__"
+      },
+      "output": {
+        "nodeId": "r1kkqpSjb",
+        "pinKey": "HJU8CE2lW"
+      }
+    },
+    {
+      "id": "S1V356BsW",
+      "input": {
+        "nodeId": "r1kkqpSjb",
+        "pinKey": "BJJICN2lW"
+      },
+      "output": {
+        "nodeId": "S1Gi5pBo-",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "SkP8cpHoZ",
+      "input": {
+        "nodeId": "r1kkqpSjb",
+        "pinKey": "B13SCNhl-"
+      },
+      "output": {
+        "nodeId": "ryu45pBiZ",
+        "pinKey": "BkqLCOSw1W"
+      }
+    },
+    {
+      "id": "r1TVqpriW",
+      "input": {
+        "nodeId": "ryu45pBiZ",
+        "pinKey": "BytUCdHD1-"
+      },
+      "output": {
+        "nodeId": "Bye-cariW",
+        "pinKey": "__out__"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "boundValues": {
+        "__out__": 1
+      },
+      "id": "Bye-cariW",
+      "label": "Hz",
+      "position": {
+        "x": 102,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "S1Gi5pBo-",
+      "label": "RST",
+      "position": {
+        "x": 170,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "id": "SJfFc6riZ",
+      "label": "tick",
+      "position": {
+        "x": 68,
+        "y": 306
+      },
+      "type": "xod/patch-nodes/output-pulse"
+    },
+    {
+      "id": "r1kkqpSjb",
+      "position": {
+        "x": 68,
+        "y": 204
+      },
+      "type": "xod/core/clock"
+    },
+    {
+      "boundValues": {
+        "SkdIRuBD1b": 1000
+      },
+      "id": "ryu45pBiZ",
+      "label": "1000/",
+      "position": {
+        "x": 68,
+        "y": 102
+      },
+      "type": "xod/core/divide"
+    }
+  ]
+}

@@ -5,7 +5,7 @@ all : lib2patch
 .PHONY : lib2patch
 # link a lib's patch.xodp to project lib-edit, patch lib-x-x-x
 lib2patch :
-	cd lib; for p in `find . -name patch.xodp`; do n=`dirname $$p | sed 's/^\.\///; s/\//-/g'`; newdir=~/xod/lib-edit/lib-$$n; mkdir -p $$newdir && ln -s `pwd`/`dirname $$p`/patch.xodp $$newdir; done
+	rm -rf ~/xod/lib-edit/lib-*; cd lib; for p in `find . -name patch.xodp`; do n=`dirname $$p | sed 's/^\.\///; s/\//-/g'`; newdir=~/xod/lib-edit/lib-$$n; mkdir -p $$newdir && ln -s `pwd`/`dirname $$p`/patch.xodp $$newdir; done
 
 .PHONY : derive-values
 derive-values : lib/awg/values/boolean lib/awg/values/number lib/awg/values/boolean/any.cpp lib/awg/values/number/any.cpp lib/awg/values/boolean/patch.xodp lib/awg/values/number/patch.xodp lib/awg/values/boolean/patch.xodp lib/awg/values/number/patch.xodp

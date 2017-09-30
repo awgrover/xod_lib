@@ -1,0 +1,82 @@
+{
+  "description": "Stores a number which gets incremented on each `INC` pulse, up to LIMIT, then restart at START.",
+  "nodes": [
+    {
+      "id": "H1MAWAu8-",
+      "position": {
+        "x": 136,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    },
+    {
+      "description": "Triggers a single change.",
+      "id": "HJAq-A_8-",
+      "label": "INC",
+      "position": {
+        "x": 170,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "boundValues": {
+        "__out__": 1
+      },
+      "description": "Limit of change, goes back to START on the next increment.",
+      "id": "HJvqZ0dL2",
+      "label": "LIMIT",
+      "position": {
+        "x": 102,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "boundValues": {
+        "__out__": 0
+      },
+      "description": "Start the sequence at this value.",
+      "id": "HJvqZ0dL3",
+      "label": "START",
+      "position": {
+        "x": -34,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "boundValues": {
+        "__out__": 0.256
+      },
+      "description": "Amount to change on each increment. Automatically deals with counting down.",
+      "id": "HJvqZ0dLZ",
+      "label": "STEP",
+      "position": {
+        "x": 34,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "description": "Resets the sequence to START.",
+      "id": "SkUjZA_L-",
+      "label": "RST",
+      "position": {
+        "x": 238,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "description": "The current value.",
+      "id": "r1yhZRd8W",
+      "label": "out",
+      "position": {
+        "x": 136,
+        "y": 204
+      },
+      "type": "xod/patch-nodes/output-number"
+    }
+  ]
+}
