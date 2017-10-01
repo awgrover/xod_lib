@@ -496,6 +496,9 @@ sub do_mv {
 
     # paths are lib/$ns/$cat/$lib
     # or $ns/$cat/$lib
+    $old =~ s/\/$//; # we rely on "clean" name
+    $new =~ s/\/$//; # we rely on "clean" name
+
     my $new_lib_name = $new."";
     $new_lib_name =~ s/^(\.\/)?lib\///; # canonical w/o lib/
     debug { "new_lib_name '$new_lib_name'" };
@@ -525,7 +528,20 @@ sub do_mv {
         debug { "mv $extant $prefix/$new_path" };
         # system('mv', $extant, "$prefix/$new_path" ) && die($?);
         }
+    
+    debug { "relink lib-edit project" };
+    system('make', 'lib2patch') && die($?);
 
+    my $esc_old = $old_lib_name."";
+    $esc_old =~ s/\//\\\//g;
+    my $esc_new = $new_lib_name."";
+    $esc_new =~ s/\//\\\//g;
+    debug { "Edit $old_lib_name -> $new_lib_name" };
+    foreach my $file ( `find $workspace $workspace/lib ./lib ./examples -name '*.xodp'` ) {
+        chomp $file;
+        system('grep', '-H', '-n', "\"$old_lib_name\"", "$file")
+        || system( 'sed', '-i', "s/\"$esc_old\"/\"$esc_new\"/g", "$file");
+        }
     }
 
 sub main {
@@ -533,7 +549,7 @@ sub main {
         when ('mv') {
             shift @ARGV;
             do_mv( @ARGV );
-            exit 1;
+            exit 0;
             }
         when (/^-/) {
             # ok

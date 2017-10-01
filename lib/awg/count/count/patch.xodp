@@ -1,5 +1,5 @@
 {
-  "description": "Stores a number which gets incremented on each `INC` pulse, up to LIMIT, then restart at START.",
+  "description": "From START to LIMIT by STEP each INC. Then reset to START. Either up or down. aka Sawtooth.",
   "nodes": [
     {
       "id": "H1MAWAu8-",
