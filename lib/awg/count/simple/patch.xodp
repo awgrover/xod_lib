@@ -1,0 +1,58 @@
+{
+  "description": "Simplified count: 0 to 1 by INC. Then repeat.",
+  "links": [
+    {
+      "id": "HJ8dGgknW",
+      "input": {
+        "nodeId": "Hk8rMeynb",
+        "pinKey": "HJvqZ0dLZ"
+      },
+      "output": {
+        "nodeId": "rJMdGgkhZ",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "rk_Pflk3-",
+      "input": {
+        "nodeId": "Hk8rMeynb",
+        "pinKey": "HJAq-A_8-"
+      },
+      "output": {
+        "nodeId": "rkpUMly2W",
+        "pinKey": "__out__"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "Hk8rMeynb",
+      "position": {
+        "x": 34,
+        "y": 204
+      },
+      "type": "awg/count/count"
+    },
+    {
+      "boundValues": {
+        "__out__": 0.256
+      },
+      "id": "rJMdGgkhZ",
+      "label": "STEP",
+      "position": {
+        "x": 68,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "rkpUMly2W",
+      "label": "INC",
+      "position": {
+        "x": 136,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    }
+  ]
+}
