@@ -148,6 +148,7 @@ sub patch_to_lib {
     # check newpath in lib, maybe warn
     my $newlibpath = shift @ARGV;
     # lib/$name/$path, $name/$path (in lib), existing, no $name part, no $path part
+    # with .cpp or .xodp
     # ./.... obviates lib/ test
 
     debug { "Figure new lib path..." };
@@ -297,7 +298,7 @@ sub make_patchfile {
     $patch_decl->{'description'} = "Needs Description" if !$patch_decl->{'description'};
     chomp $patch_decl->{'description'};
     my $fh = IO::File->new( $patchfile, 'w') || die($!);
-    say $fh to_json($patch_decl, {utf8=>1, pretty => 1, canonical=>1});
+    say $fh to_json($patch_decl, {utf8=>1, pretty => 1, canonical=>1, indent_length =>2});
     $fh->close;
     warn "# wrote $patchfile\n";
 
@@ -489,7 +490,59 @@ sub _find_patch_or_failsearch {
 
     }
 
+sub do_mv {
+    my ($old, $new) = @_;
+    die "Expected \$old \$new\n" if !$new || !$old;
+
+    # paths are lib/$ns/$cat/$lib
+    # or $ns/$cat/$lib
+    my $new_lib_name = $new."";
+    $new_lib_name =~ s/^(\.\/)?lib\///; # canonical w/o lib/
+    debug { "new_lib_name '$new_lib_name'" };
+    my $new_path = "lib/$new_lib_name";
+    if ( split('/', $new_lib_name) != 3) {
+       die "Unlikely new-name, expected lib/\$ns/\$cat/\$lib or \$ns/\$cat/\$lib\n";
+       }
+
+    warning "Already exists: ./$new_path" if (-e $new_path); # relative
+    warning "Already exists: $workspace/$new_path" if (-e "$workspace/$new_path"); # relative
+
+    my $old_lib_name = $old."";
+    $old_lib_name =~ s/^(\.\/)?lib\///; # canonical w/o lib/
+    debug { "old_lib_name '$old_lib_name'" };
+    my $old_path = "lib/$old_lib_name";
+    my $last_real_path;
+    for my $prefix ( ( ".", "$workspace" )) {
+        my $extant = "$prefix/$old_path";
+        next if ! -e $extant;
+        if ( $last_real_path eq Cwd::abs_path( $extant ) ) {
+            warning "skipped: $extant is the same as $last_real_path";
+            next;
+            }
+        $last_real_path = Cwd::abs_path( $extant );
+
+        debug { "Extant old $extant..." };
+        debug { "mv $extant $prefix/$new_path" };
+        # system('mv', $extant, "$prefix/$new_path" ) && die($?);
+        }
+
+    }
+
 sub main {
+    given ($ARGV[0]) {
+        when ('mv') {
+            shift @ARGV;
+            do_mv( @ARGV );
+            exit 1;
+            }
+        when (/^-/) {
+            # ok
+            }
+        default {
+            # ok
+            }
+        }
+    
    $switches=awgrover::Getopt::GetOptions
                 (
                 '' => <<'EOS',
@@ -499,6 +552,7 @@ Make a "patch" in a project, extract it to a lib, with skeleton .cpp
       patch # dir in project, or dir/something.xodp
 --- [options] patch-path newlibpath
       patch-path # path to patch directory or .xodp
+--- mv oldlibpath newlibpath # rename, will try to fixup all .xodp here and in ~/xod
 EOS
                 'help|h|H'=>'this',
                 'patch-only|xodp-only|p' => 'Only remake the .xodp, leave the cpp alone',

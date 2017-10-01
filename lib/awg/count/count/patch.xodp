@@ -71,7 +71,7 @@
     {
       "description": "The current value.",
       "id": "r1yhZRd8W",
-      "label": "out",
+      "label": "COUNT",
       "position": {
         "x": 136,
         "y": 204

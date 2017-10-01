@@ -1,4 +1,5 @@
 {
+  "description": "Produce n ticks/sec. aka Hz",
   "links": [
     {
       "id": "BkUt5aHsZ",
@@ -50,6 +51,7 @@
       "boundValues": {
         "__out__": 1
       },
+      "description": "ticks/second",
       "id": "Bye-cariW",
       "label": "Hz",
       "position": {
@@ -86,10 +88,10 @@
     },
     {
       "boundValues": {
-        "SkdIRuBD1b": 1000
+        "SkdIRuBD1b": 1
       },
       "id": "ryu45pBiZ",
-      "label": "1000/",
+      "label": "1/",
       "position": {
         "x": 68,
         "y": 102

@@ -14,12 +14,12 @@ void evaluate(Context ctx) {
 
       Number start = getValue<input_START>(ctx);
       Number limit = getValue<input_LIMIT>(ctx);
-      count = getValue<output_OUT>(ctx);
+      count = getValue<output_COUNT>(ctx);
 
       if (isInputDirty<input_INC>(ctx)) {
           if (start <= limit) {
             // step is an abs() change, in whatever direction
-            count += abs( getValue<input_STEP>(ctx) )
+            count += abs( getValue<input_STEP>(ctx) );
           } else {
             count -= abs( getValue<input_STEP>(ctx) );
           }
@@ -35,5 +35,5 @@ void evaluate(Context ctx) {
       }
     }
 
-    emitValue<output_OUT>(ctx, count);
+    emitValue<output_COUNT>(ctx, count);
 }

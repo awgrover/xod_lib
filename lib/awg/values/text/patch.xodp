@@ -1,66 +1,65 @@
 {
-   "description" : "On pulse or text, copy the text out. Set always=false to only copy if the text has changed. Acts like casting pulse to text",
-   "nodes" : [
-      {
-         "description" : "Also copy on a pulse\n",
-         "id" : "B1cbLxDs-",
-         "label" : "pulse",
-         "position" : {
-            "x" : 68,
-            "y" : 0
-         },
-         "type" : "xod/patch-nodes/input-pulse"
+  "description": "On pulse or text, copy the text out. Set always=false to only copy if the text has changed. Acts like casting pulse to text",
+  "nodes": [
+    {
+      "description": "Also copy on a pulse\n",
+      "id": "B1cbLxDs-",
+      "label": "pulse",
+      "position": {
+        "x": 68,
+        "y": 0
       },
-      {
-         "boundValues" : {
-            "__out__" : true
-         },
-         "description" : "On pulse or text, copy 'text'. If false, only copy when 'text' changes.\n ",
-         "id" : "BJMH8gwjb",
-         "label" : "always",
-         "position" : {
-            "x" : 136,
-            "y" : 0
-         },
-         "type" : "xod/patch-nodes/input-boolean"
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "boundValues": {
+        "__out__": true
       },
-      {
-         "description" : "The text to copy",
-         "id" : "BysGLxDjb",
-         "label" : "text",
-         "position" : {
-            "x" : 0,
-            "y" : 0
-         },
-         "type" : "xod/patch-nodes/input-string"
+      "description": "On pulse or text, copy 'text'. If false, only copy when 'text' changes.\n ",
+      "id": "BJMH8gwjb",
+      "label": "always",
+      "position": {
+        "x": 136,
+        "y": 0
       },
-      {
-         "description" : "The 'text' ",
-         "id" : "S1l55GFoZ",
-         "label" : "copy",
-         "position" : {
-            "x" : 34,
-            "y" : 204
-         },
-         "type" : "xod/patch-nodes/output-string"
+      "type": "xod/patch-nodes/input-boolean"
+    },
+    {
+      "description": "The text to copy",
+      "id": "BysGLxDjb",
+      "label": "text",
+      "position": {
+        "x": 0,
+        "y": 0
       },
-      {
-         "id" : "SkMWwNtoZ",
-         "label" : "trig",
-         "position" : {
-            "x" : 102,
-            "y" : 204
-         },
-         "type" : "xod/patch-nodes/output-pulse"
+      "type": "xod/patch-nodes/input-string"
+    },
+    {
+      "description": "The 'text' ",
+      "id": "S1l55GFoZ",
+      "label": "copy",
+      "position": {
+        "x": 34,
+        "y": 204
       },
-      {
-         "id" : "rJQW8gDo-",
-         "position" : {
-            "x" : 68,
-            "y" : 102
-         },
-         "type" : "xod/patch-nodes/not-implemented-in-xod"
-      }
-   ]
+      "type": "xod/patch-nodes/output-string"
+    },
+    {
+      "id": "SkMWwNtoZ",
+      "label": "trig",
+      "position": {
+        "x": 102,
+        "y": 204
+      },
+      "type": "xod/patch-nodes/output-pulse"
+    },
+    {
+      "id": "rJQW8gDo-",
+      "position": {
+        "x": 68,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    }
+  ]
 }
-
