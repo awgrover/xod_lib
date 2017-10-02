@@ -1,34 +1,108 @@
 {
-  "comments": [
-    {
-      "content": "Ideally, pulse just uses the data, or \"pulse\" if data is empty.\nBut there is no conditionals on text.",
-      "id": "BkToXrtjW",
-      "position": {
-        "x": 306,
-        "y": -102
-      },
-      "size": {
-        "height": 153,
-        "width": 238
-      }
-    }
-  ],
   "links": [
     {
-      "id": "B1au7StoW",
+      "id": "B17OvxkhW",
       "input": {
-        "nodeId": "rk-u7HFiZ",
+        "nodeId": "rJWuUgknb",
+        "pinKey": "Bk74I0_SPyb"
+      },
+      "output": {
+        "nodeId": "BynwDe12Z",
+        "pinKey": "ByHmL0uHPk-"
+      }
+    },
+    {
+      "id": "ByPsIek3b",
+      "input": {
+        "nodeId": "ryVsLl13-",
+        "pinKey": "Hkqu9oaWb"
+      },
+      "output": {
+        "nodeId": "Hy3LIgknb",
+        "pinKey": "rksccsp-W"
+      }
+    },
+    {
+      "id": "H1kdvgJ2b",
+      "input": {
+        "nodeId": "BynwDe12Z",
         "pinKey": "ryv7IRdSP1b"
       },
       "output": {
-        "nodeId": "B14X0NKsZ",
+        "nodeId": "BJXSPeJ3-",
         "pinKey": "H17p94tiZ"
       }
     },
     {
-      "id": "BJKdmBYiZ",
+      "id": "H1sBPxJ3-",
       "input": {
-        "nodeId": "rk-u7HFiZ",
+        "nodeId": "BJXSPeJ3-",
+        "pinKey": "HJBj5VtiZ"
+      },
+      "output": {
+        "nodeId": "HJBcIeJnZ",
+        "pinKey": "rksccsp-W"
+      }
+    },
+    {
+      "id": "HJ1rae1nZ",
+      "input": {
+        "nodeId": "Hy3ETekhW",
+        "pinKey": "HJdO9HwJ-"
+      },
+      "output": {
+        "nodeId": "ryVsLl13-",
+        "pinKey": "rksccsp-W"
+      }
+    },
+    {
+      "id": "HJ2hLl12b",
+      "input": {
+        "nodeId": "HJBcIeJnZ",
+        "pinKey": "Hkqu9oaWb"
+      },
+      "output": {
+        "nodeId": "BkrhUlynZ",
+        "pinKey": "rksccsp-W"
+      }
+    },
+    {
+      "id": "HJOtLeJ3Z",
+      "input": {
+        "nodeId": "Hy3LIgknb",
+        "pinKey": "Hkqu9oaWb"
+      },
+      "output": {
+        "nodeId": "rJWuUgknb",
+        "pinKey": "BkEVI0uHwJb"
+      }
+    },
+    {
+      "id": "Hy3A8ey2-",
+      "input": {
+        "nodeId": "BkrhUlynZ",
+        "pinKey": "Hkqu9oaWb"
+      },
+      "output": {
+        "nodeId": "HyMmBeJ2Z",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "HyfS6lkhZ",
+      "input": {
+        "nodeId": "Hy3ETekhW",
+        "pinKey": "S1n95SDJb"
+      },
+      "output": {
+        "nodeId": "BynwDe12Z",
+        "pinKey": "ByHmL0uHPk-"
+      }
+    },
+    {
+      "id": "r1d_Px12W",
+      "input": {
+        "nodeId": "BynwDe12Z",
         "pinKey": "ByU7LRuSPkW"
       },
       "output": {
@@ -37,31 +111,9 @@
       }
     },
     {
-      "id": "BkSGqVtiW",
+      "id": "r1tRUgknZ",
       "input": {
-        "nodeId": "Sk4YFEti-",
-        "pinKey": "HJdO9HwJ-"
-      },
-      "output": {
-        "nodeId": "B1sbcEYs-",
-        "pinKey": "rksccsp-W"
-      }
-    },
-    {
-      "id": "HJET1rtiZ",
-      "input": {
-        "nodeId": "B14X0NKsZ",
-        "pinKey": "HJBj5VtiZ"
-      },
-      "output": {
-        "nodeId": "ryZuYNFs-",
-        "pinKey": "__out__"
-      }
-    },
-    {
-      "id": "Sk_M9Vti-",
-      "input": {
-        "nodeId": "B1sbcEYs-",
+        "nodeId": "HJBcIeJnZ",
         "pinKey": "BkeKcj6ZZ"
       },
       "output": {
@@ -70,121 +122,119 @@
       }
     },
     {
-      "id": "Sknr94Kib",
+      "id": "rkFiLlknZ",
       "input": {
-        "nodeId": "B1sbcEYs-",
-        "pinKey": "Hkqu9oaWb"
+        "nodeId": "ryVsLl13-",
+        "pinKey": "BkeKcj6ZZ"
       },
       "output": {
-        "nodeId": "H1zV94tjW",
+        "nodeId": "HJBcIeJnZ",
         "pinKey": "rksccsp-W"
-      }
-    },
-    {
-      "id": "SykYmSKjW",
-      "input": {
-        "nodeId": "BJ57cNYsb",
-        "pinKey": "Bk74I0_SPyb"
-      },
-      "output": {
-        "nodeId": "rk-u7HFiZ",
-        "pinKey": "ByHmL0uHPk-"
-      }
-    },
-    {
-      "id": "rkIo8Bti-",
-      "input": {
-        "nodeId": "Sk4YFEti-",
-        "pinKey": "S1n95SDJb"
-      },
-      "output": {
-        "nodeId": "rk-u7HFiZ",
-        "pinKey": "ByHmL0uHPk-"
-      }
-    },
-    {
-      "id": "rkWSqEYo-",
-      "input": {
-        "nodeId": "H1zV94tjW",
-        "pinKey": "Hkqu9oaWb"
-      },
-      "output": {
-        "nodeId": "BJ57cNYsb",
-        "pinKey": "BkEVI0uHwJb"
       }
     }
   ],
   "nodes": [
     {
-      "description": "log data with a timestamp",
-      "id": "B14X0NKsZ",
+      "id": "BJXSPeJ3-",
       "position": {
-        "x": 34,
-        "y": 0
+        "x": 782,
+        "y": 204
       },
       "type": "awg/conversions/data-to-pulse"
     },
     {
-      "id": "B1sbcEYs-",
+      "boundValues": {
+        "BkeKcj6ZZ": " "
+      },
+      "id": "BkrhUlynZ",
+      "label": "space",
       "position": {
-        "x": 102,
-        "y": 408
+        "x": 680,
+        "y": 0
       },
       "type": "xod/core/concat"
     },
     {
-      "id": "BJ57cNYsb",
+      "id": "BynwDe12Z",
       "position": {
-        "x": 34,
-        "y": 204
+        "x": 816,
+        "y": 306
       },
-      "type": "xod/core/system-time"
+      "type": "xod/core/any"
+    },
+    {
+      "id": "HJBcIeJnZ",
+      "position": {
+        "x": 748,
+        "y": 102
+      },
+      "type": "xod/core/concat"
+    },
+    {
+      "id": "Hy3ETekhW",
+      "position": {
+        "x": 714,
+        "y": 714
+      },
+      "type": "xod/core/console-log"
     },
     {
       "boundValues": {
         "BkeKcj6ZZ": "] "
       },
-      "description": "visual mark",
-      "id": "H1zV94tjW",
+      "id": "Hy3LIgknb",
       "label": "space",
       "position": {
-        "x": 34,
-        "y": 306
+        "x": 612,
+        "y": 510
       },
       "type": "xod/core/concat"
     },
     {
-      "id": "Sk4YFEti-",
-      "position": {
-        "x": 102,
-        "y": 510
+      "boundValues": {
+        "__out__": ""
       },
-      "type": "xod/core/console-log"
+      "description": "A label before the data:\nts] prefix data\nConvenience for adding a label.",
+      "id": "HyMmBeJ2Z",
+      "label": "prefix",
+      "position": {
+        "x": 680,
+        "y": -102
+      },
+      "type": "xod/patch-nodes/input-string"
     },
     {
-      "description": "outputs 'data'\nbecause 'data' can't take a pulse as input.",
+      "description": "also outputs 'data'. If you wanted to log a message on a pulse.",
       "id": "SyYrkHFsZ",
       "label": "pulse",
       "position": {
-        "x": 204,
+        "x": 850,
         "y": -102
       },
       "type": "xod/patch-nodes/input-pulse"
     },
     {
-      "id": "rk-u7HFiZ",
+      "id": "rJWuUgknb",
       "position": {
-        "x": 34,
-        "y": 102
+        "x": 612,
+        "y": 408
       },
-      "type": "xod/core/any"
+      "type": "xod/core/system-time"
     },
     {
-      "description": "Any data except pulse\n",
+      "id": "ryVsLl13-",
+      "position": {
+        "x": 714,
+        "y": 612
+      },
+      "type": "xod/core/concat"
+    },
+    {
+      "description": "Any data except pulse. Log the data on update.\n",
       "id": "ryZuYNFs-",
       "label": "data",
       "position": {
-        "x": 136,
+        "x": 782,
         "y": -102
       },
       "type": "xod/patch-nodes/input-string"

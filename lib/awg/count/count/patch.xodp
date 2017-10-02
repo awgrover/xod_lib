@@ -47,7 +47,7 @@
     },
     {
       "boundValues": {
-        "__out__": 0.256
+        "__out__": 0.00390625
       },
       "description": "Amount to change on each increment. Automatically deals with counting down.",
       "id": "HJvqZ0dLZ",

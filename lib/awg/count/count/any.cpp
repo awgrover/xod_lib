@@ -29,8 +29,7 @@ void evaluate(Context ctx) {
 
       // and, START, STEP, LIMIT may have changed, so also have to check limit
       // nb. If START changes, and count < start, then it will be out of range for a while!
-      if ( (start <= limit && count > limit)
-            || count < limit ) {
+      if ( (start <= limit && count > limit) || ( start > limit && count < limit )) {
           count = start;
       }
     }

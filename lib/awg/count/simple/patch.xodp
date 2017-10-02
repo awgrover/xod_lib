@@ -1,5 +1,5 @@
 {
-  "description": "Simplified count: 0 to 1 by INC. Then repeat.",
+  "description": "Simplified count: 0 to 1 by INC. Then repeat. Default is 256 steps suitable for LEDs etc. aka sawtooth.",
   "links": [
     {
       "id": "HJ8dGgknW",
