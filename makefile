@@ -1,6 +1,6 @@
 
 .PHONY : all
-all : lib2patch
+all : lib2patch derive-values
 
 .PHONY : lib2patch
 # link a lib's patch.xodp to project lib-edit, patch lib-x-x-x
@@ -23,7 +23,7 @@ lib/awg/values/boolean/patch.xodp lib/awg/values/number/patch.xodp : lib/awg/val
 	@# we assume all text -> number
 	sed -i 's/text/$(shell basename $(shell dirname $@))/g' $@
 	sed -i "s/input-string/input-$(shell basename $(shell dirname $@))/g" $@
-	sed -i "s/output-string/ouput-$(shell basename $(shell dirname $@))/g" $@
+	sed -i "s/output-string/output-$(shell basename $(shell dirname $@))/g" $@
 
 
 

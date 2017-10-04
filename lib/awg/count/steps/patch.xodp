@@ -1,152 +1,151 @@
 {
-   "description" : "counts from 0 to LIMIT in N steps. e.g. 0..1000 in 255 steps. sawtooth.",
-   "links" : [
-      {
-         "id" : "B1LHrWynW",
-         "input" : {
-            "nodeId" : "S1brSWy2Z",
-            "pinKey" : "BytUCdHD1-"
-         },
-         "output" : {
-            "nodeId" : "HkYj4Zy2Z",
-            "pinKey" : "__out__"
-         }
+  "description": "counts from 0 to LIMIT in N steps. e.g. 0..1000 in 255 steps. sawtooth.",
+  "links": [
+    {
+      "id": "B1LHrWynW",
+      "input": {
+        "nodeId": "S1brSWy2Z",
+        "pinKey": "BytUCdHD1-"
       },
-      {
-         "id" : "S1mfrbJ2-",
-         "input" : {
-            "nodeId" : "S1I5EWJ2Z",
-            "pinKey" : "HJvqZ0dL3"
-         },
-         "output" : {
-            "nodeId" : "HyeMBb12b",
-            "pinKey" : "B1x2RV3eZ"
-         }
-      },
-      {
-         "id" : "SJHHrZ1nb",
-         "input" : {
-            "nodeId" : "S1brSWy2Z",
-            "pinKey" : "SkdIRuBD1b"
-         },
-         "output" : {
-            "nodeId" : "ByWiE-y2Z",
-            "pinKey" : "__out__"
-         }
-      },
-      {
-         "id" : "SkSeBbJnb",
-         "input" : {
-            "nodeId" : "S1I5EWJ2Z",
-            "pinKey" : "HJvqZ0dL2"
-         },
-         "output" : {
-            "nodeId" : "ByWiE-y2Z",
-            "pinKey" : "__out__"
-         }
-      },
-      {
-         "id" : "SyKSB-13-",
-         "input" : {
-            "nodeId" : "S1I5EWJ2Z",
-            "pinKey" : "HJvqZ0dLZ"
-         },
-         "output" : {
-            "nodeId" : "S1brSWy2Z",
-            "pinKey" : "BkqLCOSw1W"
-         }
-      },
-      {
-         "id" : "r1JlS-y3Z",
-         "input" : {
-            "nodeId" : "S1I5EWJ2Z",
-            "pinKey" : "HJAq-A_8-"
-         },
-         "output" : {
-            "nodeId" : "HyOyHbkh-",
-            "pinKey" : "__out__"
-         }
-      },
-      {
-         "id" : "rJBDrZ13Z",
-         "input" : {
-            "nodeId" : "HJ7PrbJ3Z",
-            "pinKey" : "__in__"
-         },
-         "output" : {
-            "nodeId" : "S1I5EWJ2Z",
-            "pinKey" : "r1yhZRd8W"
-         }
+      "output": {
+        "nodeId": "HkYj4Zy2Z",
+        "pinKey": "__out__"
       }
-   ],
-   "nodes" : [
-      {
-         "boundValues" : {
-            "__out__" : 1
-         },
-         "id" : "ByWiE-y2Z",
-         "label" : "LIMIT",
-         "position" : {
-            "x" : 306,
-            "y" : 102
-         },
-         "type" : "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "S1mfrbJ2-",
+      "input": {
+        "nodeId": "S1I5EWJ2Z",
+        "pinKey": "HJvqZ0dL3"
       },
-      {
-         "id" : "HJ7PrbJ3Z",
-         "label" : "COUNT",
-         "position" : {
-            "x" : 238,
-            "y" : 510
-         },
-         "type" : "xod/patch-nodes/output-number"
-      },
-      {
-         "boundValues" : {
-            "__out__" : 255
-         },
-         "id" : "HkYj4Zy2Z",
-         "label" : "STEPS",
-         "position" : {
-            "x" : 374,
-            "y" : 102
-         },
-         "type" : "xod/patch-nodes/input-number"
-      },
-      {
-         "id" : "HyOyHbkh-",
-         "label" : "INC",
-         "position" : {
-            "x" : 476,
-            "y" : 102
-         },
-         "type" : "xod/patch-nodes/input-pulse"
-      },
-      {
-         "id" : "HyeMBb12b",
-         "label" : "0",
-         "position" : {
-            "x" : 238,
-            "y" : 306
-         },
-         "type" : "xod/core/constant-number"
-      },
-      {
-         "id" : "S1I5EWJ2Z",
-         "position" : {
-            "x" : 238,
-            "y" : 408
-         },
-         "type" : "awg/count/count"
-      },
-      {
-         "id" : "S1brSWy2Z",
-         "position" : {
-            "x" : 340,
-            "y" : 204
-         },
-         "type" : "xod/core/divide"
+      "output": {
+        "nodeId": "HyeMBb12b",
+        "pinKey": "B1x2RV3eZ"
       }
-   ]
+    },
+    {
+      "id": "SJHHrZ1nb",
+      "input": {
+        "nodeId": "S1brSWy2Z",
+        "pinKey": "SkdIRuBD1b"
+      },
+      "output": {
+        "nodeId": "ByWiE-y2Z",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "SkSeBbJnb",
+      "input": {
+        "nodeId": "S1I5EWJ2Z",
+        "pinKey": "HJvqZ0dL2"
+      },
+      "output": {
+        "nodeId": "ByWiE-y2Z",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "SyKSB-13-",
+      "input": {
+        "nodeId": "S1I5EWJ2Z",
+        "pinKey": "HJvqZ0dLZ"
+      },
+      "output": {
+        "nodeId": "S1brSWy2Z",
+        "pinKey": "BkqLCOSw1W"
+      }
+    },
+    {
+      "id": "r1JlS-y3Z",
+      "input": {
+        "nodeId": "S1I5EWJ2Z",
+        "pinKey": "HJAq-A_8-"
+      },
+      "output": {
+        "nodeId": "HyOyHbkh-",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "rJBDrZ13Z",
+      "input": {
+        "nodeId": "HJ7PrbJ3Z",
+        "pinKey": "__in__"
+      },
+      "output": {
+        "nodeId": "S1I5EWJ2Z",
+        "pinKey": "r1yhZRd8W"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "boundValues": {
+        "__out__": 1
+      },
+      "id": "ByWiE-y2Z",
+      "label": "LIMIT",
+      "position": {
+        "x": 306,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "HJ7PrbJ3Z",
+      "label": "COUNT",
+      "position": {
+        "x": 238,
+        "y": 510
+      },
+      "type": "xod/patch-nodes/output-number"
+    },
+    {
+      "boundValues": {
+        "__out__": 255
+      },
+      "id": "HkYj4Zy2Z",
+      "label": "STEPS",
+      "position": {
+        "x": 374,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "HyOyHbkh-",
+      "label": "INC",
+      "position": {
+        "x": 476,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "id": "HyeMBb12b",
+      "label": "0",
+      "position": {
+        "x": 238,
+        "y": 306
+      },
+      "type": "xod/core/constant-number"
+    },
+    {
+      "id": "S1I5EWJ2Z",
+      "position": {
+        "x": 238,
+        "y": 408
+      },
+      "type": "awg/count/count"
+    },
+    {
+      "id": "S1brSWy2Z",
+      "position": {
+        "x": 340,
+        "y": 204
+      },
+      "type": "xod/core/divide"
+    }
+  ]
 }
-

@@ -42,7 +42,7 @@
         "x": 34,
         "y": 204
       },
-      "type": "xod/patch-nodes/ouput-boolean"
+      "type": "xod/patch-nodes/output-boolean"
     },
     {
       "id": "SkMWwNtoZ",

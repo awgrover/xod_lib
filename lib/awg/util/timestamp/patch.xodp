@@ -23,6 +23,17 @@
       }
     },
     {
+      "id": "H1iNa9Z3W",
+      "input": {
+        "nodeId": "rkmEpq-nb",
+        "pinKey": "B1GfLR_SPk-"
+      },
+      "output": {
+        "nodeId": "rJWuUgknb",
+        "pinKey": "BkEVI0uHwJb"
+      }
+    },
+    {
       "id": "H1kdvgJ2b",
       "input": {
         "nodeId": "BynwDe12Z",
@@ -67,17 +78,6 @@
       }
     },
     {
-      "id": "HJOtLeJ3Z",
-      "input": {
-        "nodeId": "Hy3LIgknb",
-        "pinKey": "Hkqu9oaWb"
-      },
-      "output": {
-        "nodeId": "rJWuUgknb",
-        "pinKey": "BkEVI0uHwJb"
-      }
-    },
-    {
       "id": "Hy3A8ey2-",
       "input": {
         "nodeId": "BkrhUlynZ",
@@ -97,6 +97,17 @@
       "output": {
         "nodeId": "BynwDe12Z",
         "pinKey": "ByHmL0uHPk-"
+      }
+    },
+    {
+      "id": "S1FracW3Z",
+      "input": {
+        "nodeId": "Hy3LIgknb",
+        "pinKey": "Hkqu9oaWb"
+      },
+      "output": {
+        "nodeId": "rkmEpq-nb",
+        "pinKey": "BkQzLCurwJZ"
       }
     },
     {
@@ -173,7 +184,7 @@
     {
       "id": "Hy3ETekhW",
       "position": {
-        "x": 714,
+        "x": 782,
         "y": 714
       },
       "type": "xod/core/console-log"
@@ -216,10 +227,22 @@
     {
       "id": "rJWuUgknb",
       "position": {
-        "x": 612,
+        "x": 680,
         "y": 408
       },
       "type": "xod/core/system-time"
+    },
+    {
+      "boundValues": {
+        "SJ4zUC_BD1-": 1000
+      },
+      "id": "rkmEpq-nb",
+      "label": "*1000",
+      "position": {
+        "x": 578,
+        "y": 408
+      },
+      "type": "xod/core/multiply"
     },
     {
       "id": "ryVsLl13-",
