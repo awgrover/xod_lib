@@ -1,6 +1,6 @@
 
 .PHONY : all
-all : lib2patch derive-values
+all : lib2patch derive-values install
 
 .PHONY : lib2patch
 # link a lib's patch.xodp to project lib-edit, patch lib-x-x-x
@@ -29,5 +29,6 @@ lib/awg/values/boolean/patch.xodp lib/awg/values/number/patch.xodp : lib/awg/val
 
 .PHONY : install
 install :
+	rm /home/$(USER)/xod/lib/awg 2>/dev/null || true
 	ln -s `pwd`/lib/awg /home/$(USER)/xod/lib/awg
 
