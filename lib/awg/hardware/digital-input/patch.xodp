@@ -1,0 +1,59 @@
+{
+  "description": "Reads analog signal value from board ADC port",
+  "nodes": [
+    {
+      "description": "Number of a board ADC port to read from",
+      "id": "BJuORNheZ",
+      "label": "PORT",
+      "position": {
+        "x": 10,
+        "y": 16
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "H1vY0E2xb",
+      "position": {
+        "x": 138,
+        "y": 120
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    },
+    {
+      "description": "use INPUT_PULLUP, i.e. pin is held high by  a large value resistor (~20k ohm). False is default INPUT behavior",
+      "id": "HkvaG5P2-",
+      "label": "PULLUP",
+      "position": {
+        "x": 136,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-boolean"
+    },
+    {
+      "boundValues": {
+        "__in__": ""
+      },
+      "description": "The latest read value in range 0.0 … 1.0",
+      "id": "SyBtREhlW",
+      "label": "VAL",
+      "position": {
+        "x": 138,
+        "y": 224
+      },
+      "type": "xod/patch-nodes/output-number"
+    },
+    {
+      "boundValues": {
+        "__out__": "CONTINUOUSLY"
+      },
+      "description": "Triggers new read",
+      "id": "SyKd0E2x-",
+      "label": "UPD",
+      "position": {
+        "x": 266,
+        "y": 16
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    }
+  ]
+}

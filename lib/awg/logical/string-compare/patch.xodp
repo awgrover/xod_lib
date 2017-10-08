@@ -1,61 +1,60 @@
 {
-  "description" : "Needs Description",
-  "nodes" : [
+  "description": "Needs Description",
+  "nodes": [
     {
-      "id" : "B1ADpTI3b",
-      "position" : {
-        "x" : 272,
-        "y" : 204
+      "id": "B1ADpTI3b",
+      "position": {
+        "x": 272,
+        "y": 204
       },
-      "type" : "xod/patch-nodes/not-implemented-in-xod"
+      "type": "xod/patch-nodes/not-implemented-in-xod"
     },
     {
-      "description" : "string 2 to compare\n",
-      "id" : "H1s8aaUnZ",
-      "label" : "b",
-      "position" : {
-        "x" : 340,
-        "y" : 102
+      "description": "string 2 to compare\n",
+      "id": "H1s8aaUnZ",
+      "label": "b",
+      "position": {
+        "x": 340,
+        "y": 102
       },
-      "type" : "xod/patch-nodes/input-string"
+      "type": "xod/patch-nodes/input-string"
     },
     {
-      "id" : "HyyK6TI2b",
-      "label" : "greater",
-      "position" : {
-        "x" : 340,
-        "y" : 306
+      "id": "HyyK6TI2b",
+      "label": "greater",
+      "position": {
+        "x": 340,
+        "y": 306
       },
-      "type" : "xod/patch-nodes/output-boolean"
+      "type": "xod/patch-nodes/output-boolean"
     },
     {
-      "id" : "SJF_668hW",
-      "label" : "less",
-      "position" : {
-        "x" : 204,
-        "y" : 306
+      "id": "SJF_668hW",
+      "label": "less",
+      "position": {
+        "x": 204,
+        "y": 306
       },
-      "type" : "xod/patch-nodes/output-boolean"
+      "type": "xod/patch-nodes/output-boolean"
     },
     {
-      "id" : "SylJYppIhZ",
-      "label" : "eq",
-      "position" : {
-        "x" : 272,
-        "y" : 306
+      "id": "SylJYppIhZ",
+      "label": "eq",
+      "position": {
+        "x": 272,
+        "y": 306
       },
-      "type" : "xod/patch-nodes/output-boolean"
+      "type": "xod/patch-nodes/output-boolean"
     },
     {
-      "description" : "String 1 to compare",
-      "id" : "r1WstYI3Z",
-      "label" : "a",
-      "position" : {
-        "x" : 204,
-        "y" : 102
+      "description": "String 1 to compare",
+      "id": "r1WstYI3Z",
+      "label": "a",
+      "position": {
+        "x": 204,
+        "y": 102
       },
-      "type" : "xod/patch-nodes/input-string"
+      "type": "xod/patch-nodes/input-string"
     }
   ]
 }
-
