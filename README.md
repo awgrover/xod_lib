@@ -35,7 +35,7 @@ Simplified count: 0 to 1 by INC. Then repeat. Default is 256 steps suitable for 
 ### awg/count/steps
 counts from 0 to LIMIT in N steps. e.g. 0..1000 in 255 steps. sawtooth.
 ### awg/hardware/digital-input
-Reads digital signal value from board ADC port. Can set input-pullup.
+Reads digital signal value from board port. Can set input-pullup.
 ### awg/logical/if-else-string
 Outputs either input value depending on condition
 ### awg/logical/string-compare

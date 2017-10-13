@@ -1,5 +1,5 @@
 {
-  "description": "Reads digital signal value from board ADC port. Can set input-pullup.",
+  "description": "Reads digital signal value from board port. Can set input-pullup.",
   "nodes": [
     {
       "description": "Number of a board digital port to read from",

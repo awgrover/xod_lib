@@ -83,7 +83,7 @@ counts from 0 to LIMIT in N steps. e.g. 0..1000 in 255 steps. sawtooth.
 > **COUNT : number.**
 
 # awg/hardware/digital-input
-Reads digital signal value from board ADC port. Can set input-pullup.
+Reads digital signal value from board port. Can set input-pullup.
 ## Inputs
 > **PORT : number.**
 > Number of a board digital port to read from
