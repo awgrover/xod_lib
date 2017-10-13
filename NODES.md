@@ -82,7 +82,7 @@ counts from 0 to LIMIT in N steps. e.g. 0..1000 in 255 steps. sawtooth.
 > **COUNT : number**
 
 # awg/hardware/digital-input
-Reads analog signal value from board ADC port
+Reads analog signal value from board ADC port. Can set input-pullup.
 ## Inputs
 > **PORT : number**
 > Number of a board ADC port to read from
@@ -114,7 +114,7 @@ Outputs either input value depending on condition
 > Outputs value of `T` if `COND` is true, and `F` otherwise
 
 # awg/logical/string-compare
-Needs Description
+Compares 2 strings, giving <, =, or > boolean output.
 ## Inputs
 > **a : string**
 > String 1 to compare
@@ -141,7 +141,7 @@ Produce n ticks/sec. aka Hz
 > **tick : pulse**
 
 # awg/util/log-data
-Output the DATA on the console-log, possibly followed by a space, BUT without end-of-line. So you can output more than 1 thing per line.
+Output the DATA on the console-log, possibly followed by a space. End-of-line is optional. So you can output more than 1 thing per line.
 ## Inputs
 > **data : string**
 

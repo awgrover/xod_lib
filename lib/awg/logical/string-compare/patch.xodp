@@ -1,5 +1,5 @@
 {
-  "description": "Needs Description",
+  "description": "Compares 2 strings, giving <, =, or > boolean output.",
   "nodes": [
     {
       "id": "B1ADpTI3b",

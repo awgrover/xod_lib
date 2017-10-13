@@ -34,15 +34,15 @@ Simplified count: 0 to 1 by INC. Then repeat. Default is 256 steps suitable for 
 ### awg/count/steps
 counts from 0 to LIMIT in N steps. e.g. 0..1000 in 255 steps. sawtooth.
 ### awg/hardware/digital-input
-Reads analog signal value from board ADC port
+Reads analog signal value from board ADC port. Can set input-pullup.
 ### awg/logical/if-else-string
 Outputs either input value depending on condition
 ### awg/logical/string-compare
-Needs Description
+Compares 2 strings, giving <, =, or > boolean output.
 ### awg/util/clock-per-second
 Produce n ticks/sec. aka Hz
 ### awg/util/log-data
-Output the DATA on the console-log, possibly followed by a space, BUT without end-of-line. So you can output more than 1 thing per line.
+Output the DATA on the console-log, possibly followed by a space. End-of-line is optional. So you can output more than 1 thing per line.
 ### awg/util/timestamp
 output "[time] prefix data". So you can see when it happened, what it's for (prefix). Unlike console-log, this outputs on prefix, or data. Of course, also on trig.
 ### awg/values/boolean
