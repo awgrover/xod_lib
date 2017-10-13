@@ -1,10 +1,10 @@
-## Some XOD nodes
+# Some XOD nodes
 
 XOD is a flow-based-programming tool for programming arduino. See https://xod.io && https://github.com/xodio/xod .
 
 This (https://github.com/awgrover/xod_lib) is a library of nodes for it. Some may be useful. Some may be ill conceived.
 
-## Installation
+# Installation
 
 The XOD project is working on an easier way to install libraries, until then you have to put the 'awg' directory into the xod workspace lib manually.
 
@@ -18,3 +18,5 @@ The XOD project is working on an easier way to install libraries, until then you
 1. It's installed.
 1. Do a "reload" in XOD.
 1. My libs should be visible and usable.
+
+# Nodes [](auto generated below here)

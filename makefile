@@ -1,6 +1,6 @@
 
 .PHONY : all
-all : lib2patch derive-values install
+all : lib2patch derive-values install doc
 
 .PHONY : lib2patch
 # link a lib's patch.xodp to project lib-edit, patch lib-x-x-x
@@ -9,6 +9,22 @@ lib2patch :
 
 .PHONY : derive-values
 derive-values : lib/awg/values/boolean lib/awg/values/number lib/awg/values/boolean/any.cpp lib/awg/values/number/any.cpp lib/awg/values/boolean/patch.xodp lib/awg/values/number/patch.xodp lib/awg/values/boolean/patch.xodp lib/awg/values/number/patch.xodp
+
+.PHONY : doc
+doc : README.md NODES.md
+
+NODES.md : always
+	script/doc lib/awg > $@
+
+README.md : always
+	@# for node documentation
+	awk '/^# Nodes/ {print}; /^# Nodes/,/^#/ {next}; {print}' $@ > tmp_README.md
+	script/doc -n -h 3 lib/awg >> tmp_README.md
+	mv tmp_README.md README.md
+
+.PHONY : always
+always :
+
 
 lib/awg/values/boolean lib/awg/values/number :
 	mkidr -p $@

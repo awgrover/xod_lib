@@ -1,0 +1,107 @@
+#!/usr/bin/env perl
+# --- [options] dir ... # produce basic documentation on xod nodes
+#       -p n # strip n elements off head for name of lib, default is one if starts with lib/ otherwise 0
+#       -h n # min header depth. A node gets header depth 1 (markdown #). so -h 3 will give you 3 "###"
+#       -n # just the node name/description. no inputs/outputs
+
+
+use strict; use warnings; no warnings 'uninitialized'; use 5.010; no if ($^V ge v5.18.0), warnings => 'experimental::smartmatch';
+use JSON;
+use File::Glob ':bsd_glob';
+my %opts;
+
+sub debug(&) {
+    warn "[DEBUG ". (caller(0))[2]."] ". &{$_[0]}."\n" if $ENV{'DEBUG'};
+    }
+
+sub warning {
+    warn "WARNING ",@_,"\n";
+    }
+
+sub do_dirs {
+    foreach my $where (@_) {
+        
+        debug { "consider $where" };
+        if (! -d $where) {
+            warning "Skipping: not a directory '$where'\n";
+            next;
+            }
+        
+        if (! -e "$where/patch.xodp" ) {
+            my @subdirs = grep { -d $_ } bsd_glob("$where/*");
+            if ( @subdirs ) {
+                debug { "  sub... ".join(" ",@subdirs) };
+                do_dirs( @subdirs ) 
+                }
+            else {
+                warning "no .xodp, and no subdirs in $where";
+                next;
+                }
+            }
+        else {
+            do_doc( $where )
+            }
+        }
+    }
+
+sub header {
+    my ($thislevel) = @_;
+    return ( "#" x ($thislevel + $opts{'header_depth'} - 1) );
+    }
+
+sub do_doc {
+    my ($dir) = @_;
+    debug { "Doc $dir /patch.xodp" };
+
+    push @ARGV, "$dir/patch.xodp";
+    my $patch = decode_json(join("",<>));
+    shift @ARGV;
+
+    if (! defined($opts{'strip'}) && $dir =~ /^lib\//) {
+        say header(1)," ",$';
+        }
+
+    my $desc = $patch->{'description'}; $desc =~ s/\s+$//s;
+    say $desc;
+
+    return if $opts{'nodeonly'};
+
+    # in x direction which is how they show in xod
+    my @sorted = sort { $a->{'position'}->{'x'} <=> $b->{'position'}->{'x'} } @{$patch->{'nodes'}};
+
+    foreach my $direction (qw(input output)) {
+        say header(2)." ".ucfirst($direction)."s";
+        foreach my $node ( @sorted ) {
+            if ($node->{'type'} =~ /^xod\/patch-nodes\/$direction-/) {
+                my $type = $';
+                say "> **", $node->{'label'}, " : ", $type, "**";
+                $desc = $node->{'description'}; $desc =~ s/\s+$//s;
+                say "> ",$desc if $desc;
+                say "";
+                }
+            }
+        }
+    }
+
+$opts{'strip'} = undef;
+while ($ARGV[0] =~ /^-/) {
+    given ( $ARGV[0] ) { 
+        when ('-p' ) {
+            shift @ARGV;
+            $opts{'strip'} = shift @ARGV;
+            }
+        when ('-h' ) {
+            shift @ARGV;
+            $opts{'header_depth'} = shift @ARGV;
+            }
+        when ('-n' ) {
+            shift @ARGV;
+            $opts{'nodeonly'} = 1;
+            }
+        otherwise {
+            die "what? $_";
+            }
+        }
+    }
+
+do_dirs(@ARGV);
