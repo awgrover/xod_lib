@@ -47,7 +47,7 @@
     },
     {
       "boundValues": {
-        "__out__": 0.00392156
+        "__out__": 0.00392157
       },
       "description": "Value to add on each INC pulse. Use a negative value (e.g. -1) to make decrements.\nDefault is 0..1 in 255 steps of .00392156 suitable for PWM",
       "id": "BySZeUAnb",
