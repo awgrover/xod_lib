@@ -1,8 +1,8 @@
 {
-  "description": "Reads analog signal value from board ADC port. Can set input-pullup.",
+  "description": "Reads digital signal value from board ADC port. Can set input-pullup.",
   "nodes": [
     {
-      "description": "Number of a board ADC port to read from",
+      "description": "Number of a board digital port to read from",
       "id": "BJuORNheZ",
       "label": "PORT",
       "position": {
@@ -31,9 +31,9 @@
     },
     {
       "boundValues": {
-        "__in__": ""
+        "__in__": 0
       },
-      "description": "The latest read value in range 0.0 … 1.0",
+      "description": "The latest read value: 0 or 1",
       "id": "SyBtREhlW",
       "label": "VAL",
       "position": {

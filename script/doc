@@ -69,16 +69,26 @@ sub do_doc {
     # in x direction which is how they show in xod
     my @sorted = sort { $a->{'position'}->{'x'} <=> $b->{'position'}->{'x'} } @{$patch->{'nodes'}};
 
+    # default/initial values are:
+    # $node->['boundValues'] -> $id => $value
+    #   the id isn't relevant in patch.xodp
+
     foreach my $direction (qw(input output)) {
         say header(2)." ".ucfirst($direction)."s";
+        my $any = undef;
         foreach my $node ( @sorted ) {
             if ($node->{'type'} =~ /^xod\/patch-nodes\/$direction-/) {
                 my $type = $';
-                say "> **", $node->{'label'}, " : ", $type, "**";
+                my $default = (values( %{$node->{'boundValues'} || {}} ))[0];
+                say "> **", $node->{'label'}, " : ", $type, (defined($default) ? " ($default)" : ''),".**";
                 $desc = $node->{'description'}; $desc =~ s/\s+$//s;
                 say "> ",$desc if $desc;
                 say "";
+                $any = 1;
                 }
+            }
+        if (!$any) {
+            say "**none**";
             }
         }
     }

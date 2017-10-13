@@ -20,6 +20,7 @@ The XOD project is working on an easier way to install libraries, until then you
 1. My libs should be visible and usable.
 
 # Nodes 
+More detailed documentation at [NODES.md](/NODES.md)
 <span id="auto generated below here"></span>
 ### awg/conversions/data-to-pulse
 Convert anything into a pulse
@@ -34,7 +35,7 @@ Simplified count: 0 to 1 by INC. Then repeat. Default is 256 steps suitable for 
 ### awg/count/steps
 counts from 0 to LIMIT in N steps. e.g. 0..1000 in 255 steps. sawtooth.
 ### awg/hardware/digital-input
-Reads analog signal value from board ADC port. Can set input-pullup.
+Reads digital signal value from board ADC port. Can set input-pullup.
 ### awg/logical/if-else-string
 Outputs either input value depending on condition
 ### awg/logical/string-compare

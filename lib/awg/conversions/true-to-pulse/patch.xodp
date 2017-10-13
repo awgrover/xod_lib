@@ -11,7 +11,7 @@
       "type": "xod/patch-nodes/output-pulse"
     },
     {
-      "description": "Any",
+      "description": "boolean, or Number (0=false, everything else is true)",
       "id": "HJBj5VtiZ",
       "label": "bool",
       "position": {

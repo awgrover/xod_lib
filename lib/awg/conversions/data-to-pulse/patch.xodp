@@ -11,7 +11,7 @@
       "type": "xod/patch-nodes/output-pulse"
     },
     {
-      "description": "Any",
+      "description": "Actually takes any",
       "id": "HJBj5VtiZ",
       "label": "data",
       "position": {

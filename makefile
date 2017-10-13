@@ -21,7 +21,7 @@ README.md : always
 	@# for node documentation
 	awk '/"auto generated below here"/ {print}; /"auto generated below here"/,/^# / {next}; {print}' $@ > tmp_README.md
 	script/doc -n -h 3 lib/awg >> tmp_README.md
-	cp tmp_README.md README.md
+	mv tmp_README.md README.md
 	markdown $@ > README.html
 
 .PHONY : always
