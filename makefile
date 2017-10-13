@@ -15,12 +15,14 @@ doc : README.md NODES.md
 
 NODES.md : always
 	script/doc lib/awg > $@
+	markdown $@ > NODES.html
 
 README.md : always
 	@# for node documentation
-	awk '/^# Nodes/ {print}; /^# Nodes/,/^#/ {next}; {print}' $@ > tmp_README.md
+	awk '/^# Nodes/ {print}; /^# Nodes/,/^# / {next}; {print}' $@ > tmp_README.md
 	script/doc -n -h 3 lib/awg >> tmp_README.md
 	mv tmp_README.md README.md
+	markdown $@ > README.html
 
 .PHONY : always
 always :

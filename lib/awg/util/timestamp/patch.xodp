@@ -1,4 +1,5 @@
 {
+  "description": "output \"[time] prefix data\". So you can see when it happened, what it's for (prefix). Unlike console-log, this outputs on prefix, or data. Of course, also on trig.",
   "links": [
     {
       "id": "B19KtOR2Z",
