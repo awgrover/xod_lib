@@ -1,0 +1,54 @@
+{
+  "description": "Output the DATA on the console-log, possibly followed by a space, BUT without end-of-line. So you can output more than 1 thing per line.",
+  "nodes": [
+    {
+      "id": "B116pDChb",
+      "position": {
+        "x": 102,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    },
+    {
+      "description": "pulses on output to chain these",
+      "id": "BkO7o_ChZ",
+      "label": "chain",
+      "position": {
+        "x": 102,
+        "y": 204
+      },
+      "type": "xod/patch-nodes/output-pulse"
+    },
+    {
+      "id": "HyBcTPR3W",
+      "label": "data",
+      "position": {
+        "x": 68,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-string"
+    },
+    {
+      "id": "S1_f0wC3-",
+      "label": "EOL",
+      "position": {
+        "x": 204,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-boolean"
+    },
+    {
+      "boundValues": {
+        "__out__": true
+      },
+      "description": "Puts a space after DATA",
+      "id": "SJtiTvAhW",
+      "label": "space",
+      "position": {
+        "x": 136,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-boolean"
+    }
+  ]
+}

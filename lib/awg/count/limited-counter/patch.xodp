@@ -1,0 +1,82 @@
+{
+  "description": "Count up/down on each  INC pulse. Will not exceed MAX or go-below MIN. I.e. Count up to MAX. Won't output if nothing changes (e.g. RST when already MIN, or just changing STEP)",
+  "nodes": [
+    {
+      "id": "BJA2WI0nZ",
+      "position": {
+        "x": 102,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    },
+    {
+      "boundValues": {
+        "__out__": 1
+      },
+      "description": "Maximum value of OUT. Stops counting up when it hits this value. Will reset to this value on RST if STEP is negative.\n",
+      "id": "BkJ1gLA3W",
+      "label": "MAX",
+      "position": {
+        "x": 204,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "description": "On a pulse, add the STEP to the current OUT. Thus negative decrements. There will be no output if the OUT doesn't change. e.g. A STEP of 0.",
+      "id": "BkVTkI0nb",
+      "label": "INC",
+      "position": {
+        "x": 136,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "boundValues": {
+        "__out__": "ON_BOOT"
+      },
+      "description": "Reset the output to MIN. NB:  the default of \"on boot\" will cause OUT to be MIN on the first transaction. (if STEP is negative, then it will use MAX for above).",
+      "id": "BkjB-LRhZ",
+      "label": "RST",
+      "position": {
+        "x": 272,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "boundValues": {
+        "__out__": 0.00392156
+      },
+      "description": "Value to add on each INC pulse. Use a negative value (e.g. -1) to make decrements.\nDefault is 0..1 in 255 steps of .00392156 suitable for PWM",
+      "id": "BySZeUAnb",
+      "label": "STEP",
+      "position": {
+        "x": 68,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "description": "The changing value, never below MIN or above MAX. Will not output unless this value changes.\n",
+      "id": "HyVqZLAnZ",
+      "label": "OUT",
+      "position": {
+        "x": 102,
+        "y": 204
+      },
+      "type": "xod/patch-nodes/output-number"
+    },
+    {
+      "description": "Minimum value of OUT. Stops counting down when it hits this value. Will reset to this value on RST if STEP is positive.",
+      "id": "S12Rk803W",
+      "label": "MIN",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    }
+  ]
+}
