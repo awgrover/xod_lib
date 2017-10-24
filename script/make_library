@@ -11,6 +11,7 @@ use Cwd;
 use IO::File;
 use JSON;
 use awgrover::Getopt;
+use Carp;
 
 our $workspace = "/home/".$ENV{'USER'}.'/xod';
 our $switches;
@@ -236,6 +237,7 @@ sub process_patchfile {
     my ($full_patch_path) = @_;
 
     push @ARGV, $full_patch_path;
+    confess "noent $full_patch_path" if ! -e $full_patch_path;
     my $patch_decl = decode_json(join("",<>));
     shift @ARGV;
     # warn "json: ".Dumper($patch_decl)." "; use Data::Dumper;
@@ -553,6 +555,15 @@ sub main {
             do_mv( @ARGV );
             exit 0;
             }
+        when ('template') {
+          shift @ARGV;
+          my $where = "$workspace/".(shift @ARGV);
+          say $where;
+          my ($patch_decl, $has_native, $inputs, $outputs) = process_patchfile( "$where/patch.xodp" );
+          make_cpp($where, $where, 1, $inputs, $outputs);
+          exit 0;
+          }
+
         when (/^-/) {
             # ok
             }
@@ -571,6 +582,7 @@ Make a "patch" in a project, extract it to a lib, with skeleton .cpp
 --- [options] patch-path newlibpath
       patch-path # path to patch directory or .xodp
 --- mv oldlibpath newlibpath # rename, will try to fixup all .xodp here and in ~/xod
+--- template $project/$patch # make the .cpp template
 EOS
                 'help|h|H'=>'this',
                 'patch-only|xodp-only|p' => 'Only remake the .xodp, leave the cpp alone',
