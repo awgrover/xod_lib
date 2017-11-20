@@ -130,6 +130,21 @@ Compares 2 strings, giving <, =, or > boolean output.
 
 > **greater : boolean.**
 
+# awg/midi
+Constructs the midiEventPacket_t packet.  See https://github.com/arduino-libraries/MIDIUSB/blob/master/src/MIDIUSB.h
+## Inputs
+> **header : number.**
+
+> **byte1 : number.**
+
+> **byte2 : number.**
+
+> **byte3 : number.**
+
+## Outputs
+> **event : number.**
+> An midiEventPacket_t pointer
+
 # awg/util/clock-per-second
 Produce n ticks/sec. aka Hz
 ## Inputs
