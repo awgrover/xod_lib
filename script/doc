@@ -120,6 +120,7 @@ sub insert_toc {
     my @html;
     my %toc;
     my $ct;
+    my $last_header;
 
     while (<$fh>) {
       if ($. == 1) {
@@ -132,6 +133,7 @@ sub insert_toc {
         debug {"TOC $ARGV starts at <h$depth>"};
         }
 
+      # hunt for a header
       if (/<h$depth>([^<]+)</) {
         debug {"  hdr"};
         # { xod => { units => { rad-to-deg => 145 }}}
@@ -143,10 +145,17 @@ sub insert_toc {
           $t = $t->{ $parts[0] } ||= {};
           shift @parts;
           }
-        $t->{ $parts[0] } = $ct;
+        $t->{ $parts[0] } = [$ct];
+        $last_header = $t->{ $parts[0] };
 
         s/>/ id="$ct">/;
         # debug {"  ",$_};
+        }
+
+      # add desription fragment to last header
+      if ($last_header && /^<p>([^<]+)</) {
+        push $last_header, substr($1, 0, 80);
+        $last_header = undef;
         }
         
       push @html, $_;
@@ -159,7 +168,7 @@ sub insert_toc {
 
     $fh->close;
 
-    debug {"processed $f ",Dumper(\%toc)};
+    debug {"slurped $f ",Dumper(\%toc)};
 
     $fh = IO::File->new(">$f") or die($!);
 
@@ -180,10 +189,12 @@ sub generate_toc {
   my $indent = ' ' x (length($full_prefix)) ;
   foreach my $part (sort keys %$subtoc) {
     my $subpart = $subtoc->{$part}; # hash for deeper, or $ct
-    if (! ref $subpart) {
-      say $fh "$indent<a href='#$subpart'>$part</a>";
+    if ( ref( $subpart ) eq 'ARRAY' ) {
+      my ($anchor, $desc) = @$subpart;
+      say $fh "$indent<a href='#$anchor'>$part</a> $desc";
       }
     else {
+      die "isa ".ref($subpart) if !ref($subpart) eq 'HASH';
       if (keys( %$subpart ) > 7) {
         say $fh "$indent$part/";
         }

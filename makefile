@@ -23,11 +23,11 @@ NODES.md : always
 	markdown $@ > NODES.html
 
 XODNODES.md : always
-	if [ -e xod-dev ]; then \
-		script/doc -h 3 xod-dev/workspace/__lib__ > $@; \
+	if [ -e xod-git ]; then \
+		script/doc -h 3 xod-git/workspace/__lib__ > $@; \
 		markdown $@ > XODNODES.html; \
 	else \
-		echo "Can't make $@, link 'xod-dev' to git checkout"; \
+		echo "Can't make $@, link 'xod-git' to git checkout"; \
 	fi
 
 README.md : always
