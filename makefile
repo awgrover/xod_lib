@@ -1,11 +1,16 @@
+workspace := ~/xod
+# as of 0.15.0, it's __lib__ for user stuff
+libdir := __lib__
+userlib := $(workspace)/$libdir
 
 .PHONY : all
 all : lib2patch derive-values install doc
 
 .PHONY : lib2patch
-# link a lib's patch.xodp to project lib-edit, patch lib-x-x-x
+# link our lib's patch.xodp to project lib-edit, patch lib-x-x-x
+# then we can edit it from xod
 lib2patch :
-	rm -rf ~/xod/lib-edit/lib-*; cd lib; for p in `find . -name patch.xodp`; do n=`dirname $$p | sed 's/^\.\///; s/\//-/g'`; newdir=~/xod/lib-edit/lib-$$n; mkdir -p $$newdir && ln -s `pwd`/`dirname $$p`/patch.xodp $$newdir; done
+	rm -rf $(workspace)/lib-edit/lib-*; cd lib; for p in `find . -name patch.xodp`; do n=`dirname $$p | sed 's/^\.\///; s/\//-/g'`; newdir=$(workspace)/lib-edit/lib-$$n; mkdir -p $$newdir && ln -s `pwd`/`dirname $$p`/patch.xodp $$newdir; done
 
 .PHONY : derive-values
 derive-values : lib/awg/values/boolean lib/awg/values/number lib/awg/values/boolean/any.cpp lib/awg/values/number/any.cpp lib/awg/values/boolean/patch.xodp lib/awg/values/number/patch.xodp lib/awg/values/boolean/patch.xodp lib/awg/values/number/patch.xodp
@@ -16,6 +21,14 @@ doc : README.md NODES.md
 NODES.md : always
 	script/doc lib/awg > $@
 	markdown $@ > NODES.html
+
+XODNODES.md : always
+	if [ -e xod-dev ]; then \
+		script/doc -h 3 xod-dev/workspace/__lib__ > $@; \
+		markdown $@ > XODNODES.html; \
+	else \
+		echo "Can't make $@, link 'xod-dev' to git checkout"; \
+	fi
 
 README.md : always
 	@# for node documentation
@@ -47,6 +60,6 @@ lib/awg/values/boolean/patch.xodp lib/awg/values/number/patch.xodp : lib/awg/val
 
 .PHONY : install
 install :
-	rm /home/$(USER)/xod/lib/awg 2>/dev/null || true
-	ln -s `pwd`/lib/awg /home/$(USER)/xod/lib/awg
+	rm $(workspace)/lib/awg 2>/dev/null || true
+	ln -s `pwd`/lib/awg $(workspace)/lib/awg
 

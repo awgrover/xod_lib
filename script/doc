@@ -1,14 +1,19 @@
 #!/usr/bin/env perl
 # --- [options] dir ... # produce basic documentation on xod nodes
-#       -p n # strip n elements off head for name of lib, default is one if starts with lib/ otherwise 0
+#       -p n # strip n elements off dir-head for name of lib, default is 0|up-through __lib__
 #       -h n # min header depth. A node gets header depth 1 (markdown #). so -h 3 will give you 3 "###"
 #       -n # just the node name/description. no inputs/outputs
+#       -1 # just do the first lib node, for debugging
+# --- --toc $some.html # insert a toc, making a lot of assumptions about how markdown made the html
+# env DEBUG=1 --- ... # output debug stuff
 
 
 use strict; use warnings; no warnings 'uninitialized'; use 5.010; no if ($^V ge v5.18.0), warnings => 'experimental::smartmatch';
 use JSON;
 use File::Glob ':bsd_glob';
+use Data::Dumper;
 my %opts;
+use IO::File;
 
 sub debug(&) {
     warn "[DEBUG ". (caller(0))[2]."] ". &{$_[0]}."\n" if $ENV{'DEBUG'};
@@ -19,6 +24,8 @@ sub warning {
     }
 
 sub do_dirs {
+    my $ct = 0;
+
     foreach my $where (@_) {
         
         debug { "consider $where" };
@@ -31,7 +38,7 @@ sub do_dirs {
             my @subdirs = grep { -d $_ } bsd_glob("$where/*");
             if ( @subdirs ) {
                 debug { "  sub... ".join(" ",@subdirs) };
-                do_dirs( @subdirs ) 
+                $ct += do_dirs( @subdirs ) 
                 }
             else {
                 warning "no .xodp, and no subdirs in $where";
@@ -39,9 +46,13 @@ sub do_dirs {
                 }
             }
         else {
-            do_doc( $where )
+            $ct += 1;
+            do_doc( $where );
+            if ($opts{'onlyfirst'}) {exit;}
             }
         }
+
+    return $ct;
     }
 
 sub header {
@@ -54,12 +65,20 @@ sub do_doc {
     debug { "Doc $dir /patch.xodp" };
 
     push @ARGV, "$dir/patch.xodp";
-    my $patch = decode_json(join("",<>));
+    my $patch = JSON->new->utf8(0)->decode(join("",<>));
     shift @ARGV;
 
-    if (! defined($opts{'strip'}) && $dir =~ /^lib\//) {
-        say header(1)," ",$';
-        }
+    # lib-name
+    my $libname;
+    if (! $opts{'strip'} ) {
+      $dir =~ /(^|\/)__lib__\//;
+      $libname = $';
+      }
+    else {
+      my @dirpieces = split('/',$dir);
+      $libname = join('/', @dirpieces[ $opts{'strip'} .. $#dirpieces ]);
+      }
+    say header(1), ' ', $libname;
 
     my $desc = $patch->{'description'}; $desc =~ s/\s+$//s;
     say $desc;
@@ -93,6 +112,90 @@ sub do_doc {
         }
     }
 
+sub insert_toc {
+  foreach my $f (@_) {
+    my $fh = IO::File->new("<$f") or die($!);
+
+    my $depth;
+    my @html;
+    my %toc;
+    my $ct;
+
+    while (<$fh>) {
+      if ($. == 1) {
+        # we assume the first line is a header, and we are interested in top-level headers only
+        ($depth) = $_ =~ /<h(\d+)>/;
+        if (!$depth) {
+          warn "Expected first line to be '<h...>' in $ARGV\n";
+          break;
+          }
+        debug {"TOC $ARGV starts at <h$depth>"};
+        }
+
+      if (/<h$depth>([^<]+)</) {
+        debug {"  hdr"};
+        # { xod => { units => { rad-to-deg => 145 }}}
+        $ct += 1;
+
+        my @parts = split('/',$1);
+        my $t = \%toc;
+        while(@parts > 1) {
+          $t = $t->{ $parts[0] } ||= {};
+          shift @parts;
+          }
+        $t->{ $parts[0] } = $ct;
+
+        s/>/ id="$ct">/;
+        # debug {"  ",$_};
+        }
+        
+      push @html, $_;
+      }
+
+    if (!$depth) {
+      warn "Expected first line to be '<h...>' in $ARGV\n";
+      next;
+      }
+
+    $fh->close;
+
+    debug {"processed $f ",Dumper(\%toc)};
+
+    $fh = IO::File->new(">$f") or die($!);
+
+    say $fh "<pre>";
+    generate_toc($fh, [], \%toc);
+    say $fh "</pre>";
+
+    print $fh @html;
+
+    }
+  }
+
+sub generate_toc {
+  my ($fh, $prefix, $subtoc) = @_;
+
+  # FIXME: if 1 subpart, prefix=x/x/x/, recursee prints at !hash. otherwise prefix=indent
+  my $full_prefix = join("/", @$prefix);
+  my $indent = ' ' x (length($full_prefix)) ;
+  foreach my $part (sort keys %$subtoc) {
+    my $subpart = $subtoc->{$part}; # hash for deeper, or $ct
+    if (! ref $subpart) {
+      say $fh "$indent<a href='#$subpart'>$part</a>";
+      }
+    else {
+      if (keys( %$subpart ) > 7) {
+        say $fh "$indent$part/";
+        }
+      else {
+        # collapse if only 1 subpart
+        say $fh join("/", @$prefix, $part),"/";
+        }
+      generate_toc($fh, [@$prefix,$part], $subpart);
+      }
+    }
+  }
+
 $opts{'strip'} = undef;
 $opts{'header_depth'} = 1;
 
@@ -106,9 +209,21 @@ while ($ARGV[0] =~ /^-/) {
             shift @ARGV;
             $opts{'header_depth'} = shift @ARGV;
             }
+        when ('-=' ) {
+            shift @ARGV;
+            $opts{'onlymatches'} = shift @ARGV;
+            }
+        when ('-1' ) {
+            shift @ARGV;
+            $opts{'onlyfirst'} = 1;
+            }
         when ('-n' ) {
             shift @ARGV;
             $opts{'nodeonly'} = 1;
+            }
+        when ('--toc' ) {
+            shift @ARGV;
+            $opts{'toc'} = 1;
             }
         otherwise {
             die "what? $_";
@@ -116,4 +231,16 @@ while ($ARGV[0] =~ /^-/) {
         }
     }
 
-do_dirs(@ARGV);
+
+if ($opts{'toc'} ) {
+  insert_toc(@ARGV);
+  }
+
+else {
+  die "No directory, did you screw up an option? ",Dumper(\%opts),"\n" if !@ARGV;
+
+  foreach my $firstlevel (@ARGV) {
+    my $did = do_dirs($firstlevel);
+    warn "Nothing in $firstlevel\n" if $did == 0;
+    }
+  }
