@@ -14,8 +14,8 @@ The XOD project is working on an easier way to install libraries, until then you
 1. Navigate into the zip, inside 'lib'. So you can see the 'awg' directory.
 1. Find your xod workspace: run xod, choose File:Select Workspace. Note the "Current workspace directory". You can probabably select and copy it.
 1. Open your file-explorer, and navigate to the xod workspace.
-1. Make a directory "__lib__"
-1. Drag 'awg' from the zip to '__lib__' in the workspace.
+1. Make a directory "\_\_lib\_\_"
+1. Drag 'awg' from the zip to '\_\_lib\_\_' in the workspace.
 1. It's installed.
 1. Do a "reload" in XOD.
 1. My libs should be visible and usable.
