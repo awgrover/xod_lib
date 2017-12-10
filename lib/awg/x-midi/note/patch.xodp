@@ -1,0 +1,81 @@
+{
+  "description": "explicitly start/stop a note. cf. -button",
+  "nodes": [
+    {
+      "description": "stop. send noteoff",
+      "id": "B1C_iV5xG",
+      "label": "stop",
+      "position": {
+        "x": 340,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "description": "start.send noteon",
+      "id": "BJExOs4clz",
+      "label": "play",
+      "position": {
+        "x": 204,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "boundValues": {
+        "__out__": 64
+      },
+      "description": "often volume, depends on the instrument",
+      "id": "BJxxujN9xf",
+      "label": "on_velocity",
+      "position": {
+        "x": 67,
+        "y": -1
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "description": "some instruments respond to off-velocity, or have decay",
+      "id": "HJGluiEqeM",
+      "label": "off_velocity",
+      "position": {
+        "x": 272,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "HkSedjNqgM",
+      "position": {
+        "x": 135,
+        "y": 101
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    },
+    {
+      "boundValues": {
+        "__out__": 1
+      },
+      "id": "S1mldsE5lz",
+      "label": "channel",
+      "position": {
+        "x": 136,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "boundValues": {
+        "__out__": 60
+      },
+      "description": "see midi note numbers",
+      "id": "SyluoNqlG",
+      "label": "note",
+      "position": {
+        "x": -1,
+        "y": -1
+      },
+      "type": "xod/patch-nodes/input-number"
+    }
+  ]
+}
