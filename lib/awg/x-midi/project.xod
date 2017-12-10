@@ -1,0 +1,6 @@
+{
+  "description": "MIDI nodes, first attempt at making them usable. Please give feedback on https://forum.xod.io or https://github.com/awgrover/xod_lib",
+  "license": "gplv3",
+  "name": "x-midi",
+  "version": "1.1.1"
+}

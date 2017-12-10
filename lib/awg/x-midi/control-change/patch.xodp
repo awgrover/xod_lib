@@ -1,0 +1,56 @@
+{
+  "description": "Set the values, sends the control change on pulse (\"send\").",
+  "nodes": [
+    {
+      "boundValues": {
+        "__out__": 3
+      },
+      "id": "BJ3-BVjWG",
+      "label": "controller_number",
+      "position": {
+        "x": 34,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "H1eNr4oWM",
+      "label": "control_value",
+      "position": {
+        "x": 102,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "HJXTNNibM",
+      "position": {
+        "x": 102,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    },
+    {
+      "description": "sends the change",
+      "id": "HJe1S4oZM",
+      "label": "send",
+      "position": {
+        "x": 238,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "boundValues": {
+        "__out__": 1
+      },
+      "id": "S19ESVs-M",
+      "label": "channel",
+      "position": {
+        "x": 170,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    }
+  ]
+}
