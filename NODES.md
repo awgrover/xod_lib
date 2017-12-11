@@ -1,4 +1,4 @@
-# awg/conversions/data-to-pulse
+# awgrover/conversions/data-to-pulse
 Convert anything into a pulse
 ## Inputs
 > **data : string.**
@@ -7,7 +7,7 @@ Convert anything into a pulse
 ## Outputs
 > **pulse : pulse.**
 
-# awg/conversions/true-to-pulse
+# awgrover/conversions/true-to-pulse
 Convert (each) true into a pulse. Compare with cast-boolean-to-pulse
 ## Inputs
 > **bool : boolean.**
@@ -16,7 +16,7 @@ Convert (each) true into a pulse. Compare with cast-boolean-to-pulse
 ## Outputs
 > **pulse : pulse.**
 
-# awg/count/count
+# awgrover/count/count
 From START to LIMIT by STEP each INC. Then reset to START. Either up or down. aka Sawtooth.
 ## Inputs
 > **START : number (0).**
@@ -38,7 +38,7 @@ From START to LIMIT by STEP each INC. Then reset to START. Either up or down. ak
 > **COUNT : number.**
 > The current value.
 
-# awg/count/limited-counter
+# awgrover/count/limited-counter
 Count up/down on each  INC pulse. Will not exceed MAX or go-below MIN. I.e. Count up to MAX. Won't output if nothing changes (e.g. RST when already MIN, or just changing STEP)
 ## Inputs
 > **MIN : number.**
@@ -61,7 +61,7 @@ Default is 0..1 in 255 steps of .00392156 suitable for PWM
 > **OUT : number.**
 > The changing value, never below MIN or above MAX. Will not output unless this value changes.
 
-# awg/count/simple
+# awgrover/count/simple
 Simplified count: 0 to 1 by INC. Then repeat. Default is 256 steps suitable for LEDs etc. aka sawtooth.
 ## Inputs
 > **STEP : number (0.256).**
@@ -70,7 +70,7 @@ Simplified count: 0 to 1 by INC. Then repeat. Default is 256 steps suitable for 
 
 ## Outputs
 **none**
-# awg/count/steps
+# awgrover/count/steps
 counts from 0 to LIMIT in N steps. e.g. 0..1000 in 255 steps. sawtooth.
 ## Inputs
 > **LIMIT : number (1).**
@@ -82,7 +82,20 @@ counts from 0 to LIMIT in N steps. e.g. 0..1000 in 255 steps. sawtooth.
 ## Outputs
 > **COUNT : number.**
 
-# awg/hardware/digital-input
+# awgrover/hardware/button
+This button signals up & down. The signal is immediate (debounce inhibits signals for 20msec). Assumes normally-open switch. Does input-pullup.
+## Inputs
+> **port : number.**
+> any pin. other side of switch should be to ground
+
+## Outputs
+> **close : pulse.**
+> pulse when button is pushed (closed)
+
+> **open : pulse.**
+> pulse when button is released (opened)
+
+# awgrover/hardware/digital-input
 Reads digital signal value from board port. Can set input-pullup.
 ## Inputs
 > **PORT : number.**
@@ -98,7 +111,7 @@ Reads digital signal value from board port. Can set input-pullup.
 > **VAL : number (0).**
 > The latest read value: 0 or 1
 
-# awg/logical/if-else-string
+# awgrover/logical/if-else-string
 Outputs either input value depending on condition
 ## Inputs
 > **COND : boolean.**
@@ -114,7 +127,7 @@ Outputs either input value depending on condition
 > **R : string (0).**
 > Outputs value of `T` if `COND` is true, and `F` otherwise
 
-# awg/logical/string-compare
+# awgrover/logical/string-compare
 Compares 2 strings, giving <, =, or > boolean output.
 ## Inputs
 > **a : string.**
@@ -130,22 +143,7 @@ Compares 2 strings, giving <, =, or > boolean output.
 
 > **greater : boolean.**
 
-# awg/midi
-Constructs the midiEventPacket_t packet.  See https://github.com/arduino-libraries/MIDIUSB/blob/master/src/MIDIUSB.h
-## Inputs
-> **header : number.**
-
-> **byte1 : number.**
-
-> **byte2 : number.**
-
-> **byte3 : number.**
-
-## Outputs
-> **event : number.**
-> An midiEventPacket_t pointer
-
-# awg/util/clock-per-second
+# awgrover/util/clock-per-second
 Produce n ticks/sec. aka Hz
 ## Inputs
 > **Hz : number (1).**
@@ -157,7 +155,7 @@ Produce n ticks/sec. aka Hz
 ## Outputs
 > **tick : pulse.**
 
-# awg/util/log-data
+# awgrover/util/log-data
 Output the DATA on the console-log, possibly followed by a space. End-of-line is optional. So you can output more than 1 thing per line.
 ## Inputs
 > **data : string.**
@@ -171,7 +169,7 @@ Output the DATA on the console-log, possibly followed by a space. End-of-line is
 > **chain : pulse.**
 > pulses on output to chain these
 
-# awg/util/timestamp
+# awgrover/util/timestamp
 output "[time] prefix data". So you can see when it happened, what it's for (prefix). Unlike console-log, this outputs on prefix, or data. Of course, also on trig.
 ## Inputs
 > **prefix : string ().**
@@ -187,7 +185,7 @@ Convenience for adding a label.
 
 ## Outputs
 **none**
-# awg/values/boolean
+# awgrover/values/boolean
 On pulse or boolean, copy the boolean out. Set always=false to only copy if the boolean has changed. Acts like casting pulse to boolean
 ## Inputs
 > **boolean : boolean.**
@@ -205,7 +203,7 @@ On pulse or boolean, copy the boolean out. Set always=false to only copy if the 
 
 > **trig : pulse.**
 
-# awg/values/number
+# awgrover/values/number
 On pulse or number, copy the number out. Set always=false to only copy if the number has changed. Acts like casting pulse to number
 ## Inputs
 > **number : number.**
@@ -223,7 +221,7 @@ On pulse or number, copy the number out. Set always=false to only copy if the nu
 
 > **trig : pulse.**
 
-# awg/values/text
+# awgrover/values/text
 On pulse or text, copy the text out. Set always=false to only copy if the text has changed. Acts like casting pulse to text
 ## Inputs
 > **text : string.**
@@ -240,4 +238,103 @@ On pulse or text, copy the text out. Set always=false to only copy if the text h
 > The 'text'
 
 > **trig : pulse.**
+
+# awgrover/x-midi/bank-program-change
+Bank-Select and Program-Change
+## Inputs
+> **msb : number.**
+
+> **lsb : number.**
+
+> **program_number : number (1).**
+
+> **channel : number (1).**
+
+> **send : pulse.**
+
+## Outputs
+> **sent : pulse.**
+> Pulse on sent
+
+# awgrover/x-midi/control-change
+Set the values, sends the control change on pulse ("send").
+## Inputs
+> **controller_number : number (3).**
+
+> **control_value : number.**
+
+> **channel : number (1).**
+
+> **send : pulse.**
+> sends the change
+
+## Outputs
+> **sent : pulse.**
+> pulse after sent
+
+# awgrover/x-midi/example-control-change
+Real simple examples
+## Inputs
+**none**
+## Outputs
+**none**
+# awgrover/x-midi/example-program-change
+
+## Inputs
+**none**
+## Outputs
+**none**
+# awgrover/x-midi/note
+explicitly start/stop a note. cf. -button
+## Inputs
+> **note : number (60).**
+> see midi note numbers
+
+> **on_velocity : number (64).**
+> often volume, depends on the instrument
+
+> **channel : number (1).**
+
+> **play : pulse.**
+> start.send noteon
+
+> **off_velocity : number.**
+> some instruments respond to off-velocity, or have decay
+
+> **stop : pulse.**
+> stop. send noteoff
+
+## Outputs
+**none**
+# awgrover/x-midi/note-button
+A button starts the note (push) and stops on release. Uses xod/common-hardware/button
+## Inputs
+> **port : number (10).**
+> pin for button
+
+> **note : number (60).**
+> see midi note numbers
+
+> **on-velocity : number (64).**
+> often volume, depends on the instrument
+
+> **channel : number (1).**
+
+> **off-velocity : number.**
+> some instruments respond to off-velocity, or have decay
+
+## Outputs
+**none**
+# awgrover/x-midi/program-change
+Set the values, sent on pulse ("send")
+## Inputs
+> **program_number : number (1).**
+
+> **channel : number (1).**
+
+> **send : pulse.**
+
+## Outputs
+> **sent : pulse.**
+> Pulse on sent
 

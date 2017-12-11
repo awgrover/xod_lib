@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # --- [options] dir ... # produce basic documentation on xod nodes
-#       -p n # strip n elements off dir-head for name of lib, default is 0|up-through __lib__
+#       -p n # strip n elements off dir-head for name of lib, default is 0|up-through 'lib'
 #       -h n # min header depth. A node gets header depth 1 (markdown #). so -h 3 will give you 3 "###"
 #       -n # just the node name/description. no inputs/outputs
 #       -1 # just do the first lib node, for debugging
@@ -67,17 +67,19 @@ sub do_doc {
     push @ARGV, "$dir/patch.xodp";
     my $patch = JSON->new->utf8(0)->decode(join("",<>));
     shift @ARGV;
+    # debug { "json: ".Dumper($patch) };
 
     # lib-name
     my $libname;
     if (! $opts{'strip'} ) {
-      $dir =~ /(^|\/)__lib__\//;
+      $dir =~ /(^|\/)lib\//;
       $libname = $';
       }
     else {
       my @dirpieces = split('/',$dir);
       $libname = join('/', @dirpieces[ $opts{'strip'} .. $#dirpieces ]);
       }
+    debug { "Lib '$libname'" };
     say header(1), ' ', $libname;
 
     my $desc = $patch->{'description'}; $desc =~ s/\s+$//s;
