@@ -137,7 +137,7 @@
         "x": 238,
         "y": 408
       },
-      "type": "awg/count/count"
+      "type": "awgrover/count/count"
     },
     {
       "id": "S1brSWy2Z",

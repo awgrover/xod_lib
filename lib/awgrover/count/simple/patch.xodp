@@ -31,7 +31,7 @@
         "x": 34,
         "y": 204
       },
-      "type": "awg/count/count"
+      "type": "awgrover/count/count"
     },
     {
       "boundValues": {

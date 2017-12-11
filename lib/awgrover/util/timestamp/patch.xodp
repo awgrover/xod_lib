@@ -229,7 +229,7 @@
         "x": 510,
         "y": 0
       },
-      "type": "awg/conversions/data-to-pulse"
+      "type": "awgrover/conversions/data-to-pulse"
     },
     {
       "boundValues": {
@@ -240,7 +240,7 @@
         "x": 578,
         "y": 510
       },
-      "type": "awg/values/text"
+      "type": "awgrover/values/text"
     },
     {
       "id": "BJXSPeJ3-",
@@ -248,7 +248,7 @@
         "x": 442,
         "y": 0
       },
-      "type": "awg/conversions/data-to-pulse"
+      "type": "awgrover/conversions/data-to-pulse"
     },
     {
       "id": "ByIYQF0hW",
@@ -267,7 +267,7 @@
         "x": 850,
         "y": 714
       },
-      "type": "awg/util/log-data"
+      "type": "awgrover/util/log-data"
     },
     {
       "id": "BynwDe12Z",
@@ -283,7 +283,7 @@
         "x": 850,
         "y": 612
       },
-      "type": "awg/values/text"
+      "type": "awgrover/values/text"
     },
     {
       "description": "also triggers output of current values",
@@ -301,7 +301,7 @@
         "x": 714,
         "y": 612
       },
-      "type": "awg/values/text"
+      "type": "awgrover/values/text"
     },
     {
       "id": "HkRRUu02b",
@@ -309,7 +309,7 @@
         "x": 714,
         "y": 714
       },
-      "type": "awg/util/log-data"
+      "type": "awgrover/util/log-data"
     },
     {
       "boundValues": {
@@ -320,7 +320,7 @@
         "x": 306,
         "y": 306
       },
-      "type": "awg/values/text"
+      "type": "awgrover/values/text"
     },
     {
       "boundValues": {
@@ -352,7 +352,7 @@
         "x": 442,
         "y": 510
       },
-      "type": "awg/values/text"
+      "type": "awgrover/values/text"
     },
     {
       "boundValues": {
@@ -363,7 +363,7 @@
         "x": 306,
         "y": 408
       },
-      "type": "awg/util/log-data"
+      "type": "awgrover/util/log-data"
     },
     {
       "boundValues": {
@@ -374,7 +374,7 @@
         "x": 442,
         "y": 612
       },
-      "type": "awg/util/log-data"
+      "type": "awgrover/util/log-data"
     },
     {
       "id": "rJWuUgknb",
@@ -403,7 +403,7 @@
         "x": 578,
         "y": 612
       },
-      "type": "awg/util/log-data"
+      "type": "awgrover/util/log-data"
     }
   ]
 }
