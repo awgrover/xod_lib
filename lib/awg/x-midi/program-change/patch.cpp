@@ -29,18 +29,16 @@ struct State {
 {{ GENERATED_CODE }}
 
 void evaluate(Context ctx) {
-    xod::awg__x_midi::midi_setup();
+     xod::awg__x_midi::midi_setup();
     
     if (isInputDirty<input_send>(ctx)) {
-      auto channel = getValue<input_channel>(ctx);
-      auto controller_number = getValue<input_controller_number>(ctx);
-      auto control_value = getValue<input_control_value>(ctx);
-    	// note, velocity, channel
-    	xod::awg__x_midi::MIDI.sendControlChange(controller_number, control_value, channel);
-      emitValue<output_sent>(ctx,1);
-      // only if xod "Debugger" is on
-      DEBUG_SERIAL.print(millis());DEBUG_SERIAL.print(F(" "));
-      DEBUG_SERIAL.print(F("Sent CC "));DEBUG_SERIAL.print(controller_number);
-      DEBUG_SERIAL.print(F(" V "));DEBUG_SERIAL.println(control_value);
+        auto channel = getValue<input_channel>(ctx);
+        auto program_number = getValue<input_program_number>(ctx);
+      	xod::awg__x_midi::MIDI.sendProgramChange(program_number, channel);
+        emitValue<output_sent>(ctx,1);
+        // only if xod "Debugger" is on
+        DEBUG_SERIAL.print(millis());DEBUG_SERIAL.print(F(" "));
+        DEBUG_SERIAL.print(F("Sent progchg "));DEBUG_SERIAL.print(program_number);
+        DEBUG_SERIAL.print(F(" ch "));DEBUG_SERIAL.println(channel);
     }
 }

@@ -168,6 +168,9 @@
       "type": "xod/core/delay"
     },
     {
+      "boundValues": {
+        "ByNiWkt8Z": 10
+      },
       "id": "Syh6HVsWf",
       "position": {
         "x": 136,

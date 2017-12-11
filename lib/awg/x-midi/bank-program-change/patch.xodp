@@ -1,0 +1,210 @@
+{
+  "description": "Bank-Select and Program-Change",
+  "links": [
+    {
+      "id": "B1rcx8jbM",
+      "input": {
+        "nodeId": "S1jJJUsZz",
+        "pinKey": "HyVupSsWf"
+      },
+      "output": {
+        "nodeId": "H1Kz0Bs-M",
+        "pinKey": "r1DdJUj-G"
+      }
+    },
+    {
+      "id": "BJYix8jWf",
+      "input": {
+        "nodeId": "rkpcxUsbz",
+        "pinKey": "__in__"
+      },
+      "output": {
+        "nodeId": "S1jJJUsZz",
+        "pinKey": "rkKOlIsWf"
+      }
+    },
+    {
+      "id": "BkX5g8oZM",
+      "input": {
+        "nodeId": "H1Kz0Bs-M",
+        "pinKey": "HJe1S4oZM"
+      },
+      "output": {
+        "nodeId": "BJSMCBs-f",
+        "pinKey": "r1DdJUj-G"
+      }
+    },
+    {
+      "id": "ByH7CHiZG",
+      "input": {
+        "nodeId": "BJSMCBs-f",
+        "pinKey": "HJe1S4oZM"
+      },
+      "output": {
+        "nodeId": "S1b7CHjbf",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "S1-UCrjbf",
+      "input": {
+        "nodeId": "H1Kz0Bs-M",
+        "pinKey": "S19ESVs-M"
+      },
+      "output": {
+        "nodeId": "BkIBCBi-M",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "SJYq0BjZf",
+      "input": {
+        "nodeId": "H1Kz0Bs-M",
+        "pinKey": "H1eNr4oWM"
+      },
+      "output": {
+        "nodeId": "Bk89CrsbG",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "r1yL0Sibf",
+      "input": {
+        "nodeId": "BJSMCBs-f",
+        "pinKey": "S19ESVs-M"
+      },
+      "output": {
+        "nodeId": "BkIBCBi-M",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "rJkgyUibz",
+      "input": {
+        "nodeId": "S1jJJUsZz",
+        "pinKey": "rJ5FtBoZG"
+      },
+      "output": {
+        "nodeId": "BkIBCBi-M",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "rJxcArsZM",
+      "input": {
+        "nodeId": "BJSMCBs-f",
+        "pinKey": "H1eNr4oWM"
+      },
+      "output": {
+        "nodeId": "Skw_AHi-M",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "rySX18iZG",
+      "input": {
+        "nodeId": "S1jJJUsZz",
+        "pinKey": "HJT7tBobG"
+      },
+      "output": {
+        "nodeId": "BJveJLiZG",
+        "pinKey": "__out__"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "boundValues": {
+        "BJ3-BVjWG": 0
+      },
+      "description": "cc-0,msb bank-select",
+      "id": "BJSMCBs-f",
+      "position": {
+        "x": 102,
+        "y": 204
+      },
+      "type": "@/control-change"
+    },
+    {
+      "boundValues": {
+        "__out__": 1
+      },
+      "id": "BJveJLiZG",
+      "label": "program_number",
+      "position": {
+        "x": 102,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "Bk89CrsbG",
+      "label": "lsb",
+      "position": {
+        "x": 34,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "boundValues": {
+        "__out__": 1
+      },
+      "id": "BkIBCBi-M",
+      "label": "channel",
+      "position": {
+        "x": 170,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "boundValues": {
+        "BJ3-BVjWG": 32
+      },
+      "description": "cc-32,lsb bank-select",
+      "id": "H1Kz0Bs-M",
+      "position": {
+        "x": 102,
+        "y": 408
+      },
+      "type": "@/control-change"
+    },
+    {
+      "id": "S1b7CHjbf",
+      "label": "send",
+      "position": {
+        "x": 238,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "id": "S1jJJUsZz",
+      "position": {
+        "x": 136,
+        "y": 612
+      },
+      "type": "@/program-change"
+    },
+    {
+      "id": "Skw_AHi-M",
+      "label": "msb",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "description": "Pulse on sent",
+      "id": "rkpcxUsbz",
+      "label": "sent",
+      "position": {
+        "x": 136,
+        "y": 714
+      },
+      "type": "xod/patch-nodes/output-pulse"
+    }
+  ]
+}

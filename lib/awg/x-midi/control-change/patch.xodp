@@ -51,6 +51,16 @@
         "y": 0
       },
       "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "description": "pulse after sent",
+      "id": "r1DdJUj-G",
+      "label": "sent",
+      "position": {
+        "x": 102,
+        "y": 204
+      },
+      "type": "xod/patch-nodes/output-pulse"
     }
   ]
 }

@@ -1,0 +1,56 @@
+{
+  "description": "Set the values, sent on pulse (\"send\")",
+  "nodes": [
+    {
+      "boundValues": {
+        "__out__": 1
+      },
+      "id": "HJT7tBobG",
+      "label": "program_number",
+      "position": {
+        "x": 102,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "HyVupSsWf",
+      "label": "send",
+      "position": {
+        "x": 238,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "boundValues": {
+        "__out__": 1
+      },
+      "id": "rJ5FtBoZG",
+      "label": "channel",
+      "position": {
+        "x": 170,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "description": "Pulse on sent",
+      "id": "rkKOlIsWf",
+      "label": "sent",
+      "position": {
+        "x": 170,
+        "y": 204
+      },
+      "type": "xod/patch-nodes/output-pulse"
+    },
+    {
+      "id": "ryiRaHoZG",
+      "position": {
+        "x": 170,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    }
+  ]
+}

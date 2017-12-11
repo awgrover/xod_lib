@@ -118,7 +118,7 @@
   "nodes": [
     {
       "boundValues": {
-        "__out__": 60
+        "__out__": 10
       },
       "description": "pin for button",
       "id": "B1_2cAr-z",
