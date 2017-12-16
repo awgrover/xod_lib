@@ -5,17 +5,17 @@ namespace awgrover__x_midi {
   #ifndef MIDI47_DEFAULT_INSTANCE
     // create one 'MIDI' object only once
     #define MIDI47_DEFAULT_INSTANCE
+    bool MIDI_DefaultInited=0; // control setup once
 
     MIDI_CREATE_DEFAULT_INSTANCE(); // MIDI
-    bool MIDI_DefaultInited=0; // control setup once
 
     void midi_setup() {
       // this should be in setup
       // ( call as xod::awgrover__x_midi::midi_setup(); in evaluate)
       if (!MIDI_DefaultInited) {
-        DEBUG_SERIAL.print(millis());DEBUG_SERIAL.print(F(" MIDI.begin()"));
-        // this will reset the serial port to 36800 for the midi's serial port
+        // this will reset the serial port to 31250 for the midi's serial port
         MIDI.begin(MIDI_CHANNEL_OMNI); // Enable Soft Thru, everything at the input is sent back
+        DEBUG_SERIAL.print(millis());DEBUG_SERIAL.println(F(" MIDI.begin()"));
         MIDI_DefaultInited = 1;
       }
     }
@@ -40,7 +40,8 @@ void evaluate(Context ctx) {
       emitValue<output_sent>(ctx,1);
       // only if xod "Debugger" is on
       DEBUG_SERIAL.print(millis());DEBUG_SERIAL.print(F(" "));
-      DEBUG_SERIAL.print(F("Sent CC "));DEBUG_SERIAL.print(controller_number);
+      DEBUG_SERIAL.print(F("Sent CC/"));DEBUG_SERIAL.print(channel);
+      DEBUG_SERIAL.print(F(" "));DEBUG_SERIAL.print(controller_number);
       DEBUG_SERIAL.print(F(" V "));DEBUG_SERIAL.println(control_value);
     }
 }
