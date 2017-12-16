@@ -272,6 +272,13 @@ Set the values, sends the control change on pulse ("send").
 > **sent : pulse.**
 > pulse after sent
 
+# awgrover/x-midi/debug
+For this to work, it must fire first. Putting in the top-left helps. Sets baud to 115200 for debugging
+## Inputs
+> **dumy : pulse (ON_BOOT).**
+
+## Outputs
+**none**
 # awgrover/x-midi/example-control-change
 Real simple examples
 ## Inputs

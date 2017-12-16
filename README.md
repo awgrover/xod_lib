@@ -63,6 +63,8 @@ On pulse or text, copy the text out. Set always=false to only copy if the text h
 Bank-Select and Program-Change
 ### awgrover/x-midi/control-change
 Set the values, sends the control change on pulse ("send").
+### awgrover/x-midi/debug
+For this to work, it must fire first. Putting in the top-left helps. Sets baud to 115200 for debugging
 ### awgrover/x-midi/example-control-change
 Real simple examples
 ### awgrover/x-midi/example-program-change
