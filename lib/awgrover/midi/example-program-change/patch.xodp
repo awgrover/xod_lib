@@ -121,7 +121,7 @@
       "id": "S1U1QIiWz",
       "label": "11",
       "position": {
-        "x": 136,
+        "x": 68,
         "y": 408
       },
       "type": "xod/core/constant-number"
@@ -133,7 +133,7 @@
       "id": "rkKfzLi-z",
       "label": "101",
       "position": {
-        "x": 68,
+        "x": 102,
         "y": 408
       },
       "type": "xod/core/constant-number"
@@ -145,7 +145,7 @@
       "id": "rkf8z8j-M",
       "label": "006",
       "position": {
-        "x": 102,
+        "x": 136,
         "y": 408
       },
       "type": "xod/core/constant-number"

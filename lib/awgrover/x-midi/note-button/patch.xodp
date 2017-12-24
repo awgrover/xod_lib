@@ -161,7 +161,7 @@
         "x": 102,
         "y": 306
       },
-      "type": "awgrover/midi/note"
+      "type": "@/note"
     },
     {
       "boundValues": {

@@ -27,20 +27,9 @@
       }
     },
     {
-      "id": "H1i8AMq-M",
+      "id": "BkNVa_TMG",
       "input": {
-        "nodeId": "ByeW3-9ZG",
-        "pinKey": "B1C_iV5xG"
-      },
-      "output": {
-        "nodeId": "BkRuaz5ZG",
-        "pinKey": "BJxRgAO8-"
-      }
-    },
-    {
-      "id": "HkCb2b5ZG",
-      "input": {
-        "nodeId": "ByeW3-9ZG",
+        "nodeId": "rybQ6daMG",
         "pinKey": "BJxxujN9xf"
       },
       "output": {
@@ -49,35 +38,35 @@
       }
     },
     {
-      "id": "HkVvCzcWf",
+      "id": "ByZE6d6MG",
       "input": {
-        "nodeId": "ByeW3-9ZG",
-        "pinKey": "BJExOs4clz"
+        "nodeId": "rybQ6daMG",
+        "pinKey": "HJGluiEqeM"
       },
       "output": {
-        "nodeId": "BJHfRz9bM",
+        "nodeId": "B1zxdqArbM",
         "pinKey": "__out__"
       }
     },
     {
-      "id": "Hynb3b5ZM",
+      "id": "H1UEadaGM",
       "input": {
-        "nodeId": "ByeW3-9ZG",
-        "pinKey": "SyluoNqlG"
-      },
-      "output": {
-        "nodeId": "SJ4eO9RSZG",
-        "pinKey": "__out__"
-      }
-    },
-    {
-      "id": "S1lfnbcZf",
-      "input": {
-        "nodeId": "ByeW3-9ZG",
+        "nodeId": "rybQ6daMG",
         "pinKey": "S1mldsE5lz"
       },
       "output": {
         "nodeId": "S17gOcAS-z",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "SyFETOazG",
+      "input": {
+        "nodeId": "rybQ6daMG",
+        "pinKey": "SyluoNqlG"
+      },
+      "output": {
+        "nodeId": "SJ4eO9RSZG",
         "pinKey": "__out__"
       }
     },
@@ -104,14 +93,25 @@
       }
     },
     {
-      "id": "rJMz3-q-G",
+      "id": "r1ir6dTzz",
       "input": {
-        "nodeId": "ByeW3-9ZG",
-        "pinKey": "HJGluiEqeM"
+        "nodeId": "rybQ6daMG",
+        "pinKey": "BJExOs4clz"
       },
       "output": {
-        "nodeId": "B1zxdqArbM",
+        "nodeId": "BJHfRz9bM",
         "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "rJdST_6ff",
+      "input": {
+        "nodeId": "rybQ6daMG",
+        "pinKey": "B1C_iV5xG"
+      },
+      "output": {
+        "nodeId": "BkRuaz5ZG",
+        "pinKey": "BJxRgAO8-"
       }
     }
   ],
@@ -154,14 +154,6 @@
         "y": 204
       },
       "type": "xod/core/pulse-on-false"
-    },
-    {
-      "id": "ByeW3-9ZG",
-      "position": {
-        "x": 102,
-        "y": 306
-      },
-      "type": "awgrover/midi/note"
     },
     {
       "boundValues": {
@@ -209,6 +201,14 @@
         "y": 0
       },
       "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "rybQ6daMG",
+      "position": {
+        "x": 68,
+        "y": 408
+      },
+      "type": "@/note"
     }
   ]
 }

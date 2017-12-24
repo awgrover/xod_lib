@@ -25,14 +25,6 @@
       "type": "xod/patch-nodes/input-number"
     },
     {
-      "id": "HJSEDdTzM",
-      "position": {
-        "x": 408,
-        "y": 204
-      },
-      "type": "dox/x-midi/control-change-2"
-    },
-    {
       "id": "HJXTNNibM",
       "position": {
         "x": 102,
