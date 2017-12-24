@@ -1,0 +1,215 @@
+{
+  "comments": [
+    {
+      "content": "On button-press, send a control change",
+      "id": "H1Rm8EiZz",
+      "position": {
+        "x": 204,
+        "y": 0
+      },
+      "size": {
+        "height": 51,
+        "width": 136
+      }
+    },
+    {
+      "content": "Every second, switch to mono,\nthen .33 sec later, back to poly",
+      "id": "Hy4ffSiWG",
+      "position": {
+        "x": 748,
+        "y": 204
+      },
+      "size": {
+        "height": 51,
+        "width": 272
+      }
+    },
+    {
+      "content": "What should the defaults be?\ncontroller-number: 3 (undef?)\ncontroller-value:?\nchannel: 1,",
+      "id": "rJoJZBiZG",
+      "position": {
+        "x": 170,
+        "y": 204
+      },
+      "size": {
+        "height": 153,
+        "width": 272
+      }
+    }
+  ],
+  "description": "Real simple examples",
+  "links": [
+    {
+      "id": "B1HwWBsbf",
+      "input": {
+        "nodeId": "SJhIWrsbM",
+        "pinKey": "SkSuD6LMb"
+      },
+      "output": {
+        "nodeId": "S1rI-Bsbf",
+        "pinKey": "HJU8CE2lW"
+      }
+    },
+    {
+      "id": "ByCpxBj-z",
+      "input": {
+        "nodeId": "HJh2SNsWG",
+        "pinKey": "H1eNr4oWM"
+      },
+      "output": {
+        "nodeId": "BkqplSjbz",
+        "pinKey": "B1x2RV3eZ"
+      }
+    },
+    {
+      "id": "HJ618NjbM",
+      "input": {
+        "nodeId": "HJh2SNsWG",
+        "pinKey": "HJe1S4oZM"
+      },
+      "output": {
+        "nodeId": "ByFyLEoWM",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "HJg2-rsWM",
+      "input": {
+        "nodeId": "rynuWBs-z",
+        "pinKey": "HJe1S4oZM"
+      },
+      "output": {
+        "nodeId": "S1rI-Bsbf",
+        "pinKey": "HJU8CE2lW"
+      }
+    },
+    {
+      "id": "HkF2lrsWf",
+      "input": {
+        "nodeId": "HJh2SNsWG",
+        "pinKey": "BJ3-BVjWG"
+      },
+      "output": {
+        "nodeId": "rkpjlBs-z",
+        "pinKey": "B1x2RV3eZ"
+      }
+    },
+    {
+      "id": "SyiJGSiZz",
+      "input": {
+        "nodeId": "r1FTWribf",
+        "pinKey": "HJe1S4oZM"
+      },
+      "output": {
+        "nodeId": "SJhIWrsbM",
+        "pinKey": "Bk4gU0drwJ-"
+      }
+    },
+    {
+      "id": "ry3J8NobG",
+      "input": {
+        "nodeId": "ByFyLEoWM",
+        "pinKey": "__in__"
+      },
+      "output": {
+        "nodeId": "Syh6HVsWf",
+        "pinKey": "BJ--G1tI-"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "boundValues": {
+        "B1x2RV3eZ": 2
+      },
+      "id": "BkqplSjbz",
+      "label": "2",
+      "position": {
+        "x": 68,
+        "y": 102
+      },
+      "type": "xod/core/constant-number"
+    },
+    {
+      "id": "ByFyLEoWM",
+      "position": {
+        "x": 136,
+        "y": 102
+      },
+      "type": "xod/core/cast-boolean-to-pulse"
+    },
+    {
+      "id": "HJh2SNsWG",
+      "position": {
+        "x": 34,
+        "y": 204
+      },
+      "type": "@/control-change"
+    },
+    {
+      "id": "S1rI-Bsbf",
+      "label": "clock 1Hz",
+      "position": {
+        "x": 578,
+        "y": 0
+      },
+      "type": "xod/core/clock"
+    },
+    {
+      "boundValues": {
+        "Skre8ROSv1-": 0.33
+      },
+      "id": "SJhIWrsbM",
+      "label": "delay .33",
+      "position": {
+        "x": 646,
+        "y": 102
+      },
+      "type": "xod/core/delay"
+    },
+    {
+      "boundValues": {
+        "ByNiWkt8Z": 10
+      },
+      "id": "Syh6HVsWf",
+      "position": {
+        "x": 136,
+        "y": 0
+      },
+      "type": "xod/common-hardware/button"
+    },
+    {
+      "boundValues": {
+        "BJ3-BVjWG": 127
+      },
+      "id": "r1FTWribf",
+      "label": "control-change poly",
+      "position": {
+        "x": 612,
+        "y": 204
+      },
+      "type": "@/control-change"
+    },
+    {
+      "id": "rkpjlBs-z",
+      "label": "bank",
+      "position": {
+        "x": 34,
+        "y": 102
+      },
+      "type": "xod/core/constant-number"
+    },
+    {
+      "boundValues": {
+        "BJ3-BVjWG": 126
+      },
+      "id": "rynuWBs-z",
+      "label": "control-change mono",
+      "position": {
+        "x": 476,
+        "y": 204
+      },
+      "type": "@/control-change"
+    }
+  ]
+}

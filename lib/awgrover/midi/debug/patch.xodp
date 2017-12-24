@@ -1,0 +1,25 @@
+{
+  "description": "For this to work, it must fire first. Putting in the top-left helps. Sets baud to 115200 for debugging",
+  "nodes": [
+    {
+      "boundValues": {
+        "__out__": "ON_BOOT"
+      },
+      "id": "HyACJAMzG",
+      "label": "dumy",
+      "position": {
+        "x": 68,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "id": "S183KZMMM",
+      "position": {
+        "x": 68,
+        "y": 204
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    }
+  ]
+}
