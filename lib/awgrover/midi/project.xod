@@ -1,6 +1,6 @@
 {
-  "description": "MIDI nodes: Note, CC, Prog Change. Please give feedback on https://forum.xod.io or https://github.com/awgrover/xod_lib",
+  "description": "MIDI nodes: Note, CC, Prog Change. Needs more install: https://github.com/awgrover/xod_lib/blob/master/README.md#user-content-awgrovermidi. Please give feedback on https://forum.xod.io or https://github.com/awgrover/xod_lib",
   "license": "gplv3",
   "name": "midi",
-  "version": "1.3.1"
+  "version": "1.3.2"
 }

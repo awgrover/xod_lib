@@ -41,9 +41,11 @@ void evaluate(Context ctx) {
     	xod::awgrover__midi::MIDI.sendControlChange(controller_number, control_value, channel);
       emitValue<output_sent>(ctx,1);
       // only if xod "Debugger" is on
-      DEBUG_SERIAL.print(millis());DEBUG_SERIAL.print(F(" "));
-      DEBUG_SERIAL.print(F("Sent CC/"));DEBUG_SERIAL.print(channel);
-      DEBUG_SERIAL.print(F(" "));DEBUG_SERIAL.print(controller_number);
-      DEBUG_SERIAL.print(F(" V "));DEBUG_SERIAL.println(control_value);
+      DEBUG_SendText(
+        Serial.print(millis());Serial.print(F(" "));
+        Serial.print(F("Sent CC/"));Serial.print(channel);
+        Serial.print(F(" "));Serial.print(controller_number);
+        Serial.print(F(" V "));Serial.println(control_value);
+      )
     }
 }

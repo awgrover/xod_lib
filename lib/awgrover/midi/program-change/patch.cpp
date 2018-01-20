@@ -39,8 +39,10 @@ void evaluate(Context ctx) {
       	xod::awgrover__midi::MIDI.sendProgramChange(program_number, channel);
         emitValue<output_sent>(ctx,1);
         // only if xod "Debugger" is on
-        DEBUG_SERIAL.print(millis());DEBUG_SERIAL.print(F(" "));
-        DEBUG_SERIAL.print(F("Sent progchg/"));DEBUG_SERIAL.println(channel);
-        DEBUG_SERIAL.print(F(" "));DEBUG_SERIAL.println(program_number);
+        DEBUG_SendText(
+          Serial.print(millis());Serial.print(F(" "));
+          Serial.print(F("Sent progchg/"));Serial.println(channel);
+          Serial.print(F(" "));Serial.println(program_number);
+        )
     }
 }

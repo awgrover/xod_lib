@@ -41,19 +41,23 @@ void evaluate(Context ctx) {
     	// note, velocity, channel
     	xod::awgrover__midi::MIDI.sendNoteOn(note, on_velocity, channel);
       // only if xod "Debugger" is on
-      DEBUG_SERIAL.print(millis());DEBUG_SERIAL.print(F(" "));
-      DEBUG_SERIAL.print(F("Sent midi-note "));DEBUG_SERIAL.print(note);
-      DEBUG_SERIAL.print(F("Vel "));DEBUG_SERIAL.println(on_velocity);	
+      DEBUG_SendText(
+        Serial.print(millis());Serial.print(F(" "));
+        Serial.print(F("Sent midi-note "));Serial.print(note);
+        Serial.print(F("Vel "));Serial.println(on_velocity);	
+      )
     }
     else if (isInputDirty<input_stop>(ctx)) {
         auto off_velocity = getValue<input_VelOff>(ctx);
     	// note, velocity, channel
     	xod::awgrover__midi::MIDI.sendNoteOff(note, off_velocity, channel);
       // only if xod "Debugger" is on
-      DEBUG_SERIAL.print(millis());DEBUG_SERIAL.print(F(" "));
-      DEBUG_SERIAL.print(F("Sent midi-note "));DEBUG_SERIAL.print(note);
-      DEBUG_SERIAL.print(F("Vel "));DEBUG_SERIAL.print(off_velocity);
-      DEBUG_SERIAL.println(F(" off"));
+      DEBUG_SendText(
+        Serial.print(millis());Serial.print(F(" "));
+        Serial.print(F("Sent midi-note "));Serial.print(note);
+        Serial.print(F("Vel "));Serial.print(off_velocity);
+        Serial.println(F(" off"));
+      )
     }
 
 }
