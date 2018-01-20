@@ -6,10 +6,28 @@ This (https://github.com/awgrover/xod_lib) is a library of nodes for it. Some ma
 
 # Installation
 
+## XOD Add Library
 1. Browse (https://xod.io/libs/) for "published" libraries, mine start with "awgrover"
 1. File menu, Add Library, type the name, like "awgrover/utils".
 1. should install.
 
+## awgrover/midi
+This requires FortySevenEffects/arduino_midi_library. A bit of a pain to install:
+1. run arduino-ide
+1. sketch:include library:manage-libraries...
+1. search for "MIDI", find "MIDI Library by Forty Seven Effects"
+1. latest version (has worked with 4.3.1, report problems please)
+1. "install"
+1. done with arduion-ide, you can close it
+1. Find your "Arduino/libraries" folder.
+1. It's "~/Arduino/libraries" on linux. Please send info on OS's not listed here.
+1. Find your "XOD IDE/resources" directory. On my debian linux, it's '/opt/XOD IDE/resources/arduino-libraries'
+1. You have to create a link (shortcut) from the arduino-library to the xod-arduino-lib. On linux it's:
+    sudo ln -s ~/Arduino/libraries/MIDI_Library '/opt/XOD IDE/resources/arduino-libraries'
+1. "Reload" in XOD
+1. Should be ready to go
+
+## Un-"published"
 I haven't "published" all of these yet, until then you have to put the 'awgrover' directory into the xod workspace lib manually.
 
 1. From this github repository https://github.com/awgrover/xod_lib
@@ -47,24 +65,6 @@ Reads digital signal value from board port. Can set input-pullup.
 Outputs either input value depending on condition
 ### awgrover/logical/string-compare
 Compares 2 strings, giving <, =, or > boolean output.
-### awgrover/midi/bank-program-change
-Bank-Select and Program-Change
-### awgrover/midi/control-change
-Set the inputs, send the control change on pulse ("send").
-### awgrover/midi/debug
-For this to work, it must fire first. Putting in the top-left helps. Sets baud to 115200 for debugging
-### awgrover/midi/example-compile-test
-
-### awgrover/midi/example-control-change
-Real simple examples
-### awgrover/midi/example-program-change
-
-### awgrover/midi/note
-Start/stop a note.
-### awgrover/midi/note-button
-A button starts the note (push) and stops on release. Uses xod/common-hardware/button
-### awgrover/midi/program-change
-Set the inputs, send on pulse ("send")
 ### awgrover/util/clock-per-second
 Produce n ticks/sec. aka Hz
 ### awgrover/util/log-data
@@ -80,7 +80,7 @@ On pulse or text, copy the text out. Set always=false to only copy if the text h
 ### awgrover/x-midi/bank-program-change
 Bank-Select and Program-Change
 ### awgrover/x-midi/control-change
-Set the inputs, send the control change on pulse ("send").
+Set the values, sends the control change on pulse ("send").
 ### awgrover/x-midi/debug
 For this to work, it must fire first. Putting in the top-left helps. Sets baud to 115200 for debugging
 ### awgrover/x-midi/example-control-change
@@ -88,8 +88,8 @@ Real simple examples
 ### awgrover/x-midi/example-program-change
 
 ### awgrover/x-midi/note
-Start/stop a note.
+explicitly start/stop a note. cf. -button
 ### awgrover/x-midi/note-button
 A button starts the note (push) and stops on release. Uses xod/common-hardware/button
 ### awgrover/x-midi/program-change
-Set the inputs, send on pulse ("send")
+Set the values, sent on pulse ("send")
