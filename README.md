@@ -47,6 +47,24 @@ Reads digital signal value from board port. Can set input-pullup.
 Outputs either input value depending on condition
 ### awgrover/logical/string-compare
 Compares 2 strings, giving <, =, or > boolean output.
+### awgrover/midi/bank-program-change
+Bank-Select and Program-Change
+### awgrover/midi/control-change
+Set the inputs, send the control change on pulse ("send").
+### awgrover/midi/debug
+For this to work, it must fire first. Putting in the top-left helps. Sets baud to 115200 for debugging
+### awgrover/midi/example-compile-test
+
+### awgrover/midi/example-control-change
+Real simple examples
+### awgrover/midi/example-program-change
+
+### awgrover/midi/note
+Start/stop a note.
+### awgrover/midi/note-button
+A button starts the note (push) and stops on release. Uses xod/common-hardware/button
+### awgrover/midi/program-change
+Set the inputs, send on pulse ("send")
 ### awgrover/util/clock-per-second
 Produce n ticks/sec. aka Hz
 ### awgrover/util/log-data
@@ -62,7 +80,7 @@ On pulse or text, copy the text out. Set always=false to only copy if the text h
 ### awgrover/x-midi/bank-program-change
 Bank-Select and Program-Change
 ### awgrover/x-midi/control-change
-Set the values, sends the control change on pulse ("send").
+Set the inputs, send the control change on pulse ("send").
 ### awgrover/x-midi/debug
 For this to work, it must fire first. Putting in the top-left helps. Sets baud to 115200 for debugging
 ### awgrover/x-midi/example-control-change
@@ -70,8 +88,8 @@ Real simple examples
 ### awgrover/x-midi/example-program-change
 
 ### awgrover/x-midi/note
-explicitly start/stop a note. cf. -button
+Start/stop a note.
 ### awgrover/x-midi/note-button
 A button starts the note (push) and stops on release. Uses xod/common-hardware/button
 ### awgrover/x-midi/program-change
-Set the values, sent on pulse ("send")
+Set the inputs, send on pulse ("send")

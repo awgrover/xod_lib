@@ -143,6 +143,131 @@ Compares 2 strings, giving <, =, or > boolean output.
 
 > **greater : boolean.**
 
+# awgrover/midi/bank-program-change
+Bank-Select and Program-Change
+## Inputs
+> **Prg# : number (1).**
+> Progrm Change Number
+
+> **MSB : number.**
+> MSB for bank select
+
+> **LSB : number.**
+> LSB for bank select
+
+> **Ch : number (1).**
+> MIDI Channel
+
+> **send : pulse.**
+> Send when triggered
+
+## Outputs
+> **sent : pulse.**
+> Pulse when sent
+
+# awgrover/midi/control-change
+Set the inputs, send the control change on pulse ("send").
+## Inputs
+> **CC : number (3).**
+> Controller Number
+
+> **Val : number.**
+> Controller Value
+
+> **Ch : number (1).**
+> MIDI Channel
+
+> **send : pulse.**
+> Send when triggered
+
+## Outputs
+> **sent : pulse.**
+> pulse when sent
+
+# awgrover/midi/debug
+For this to work, it must fire first. Putting in the top-left helps. Sets baud to 115200 for debugging
+## Inputs
+> **dumy : pulse (ON_BOOT).**
+
+## Outputs
+**none**
+# awgrover/midi/example-compile-test
+
+## Inputs
+**none**
+## Outputs
+**none**
+# awgrover/midi/example-control-change
+Real simple examples
+## Inputs
+**none**
+## Outputs
+**none**
+# awgrover/midi/example-program-change
+
+## Inputs
+**none**
+## Outputs
+**none**
+# awgrover/midi/note
+Start/stop a note.
+## Inputs
+> **Num : number (60).**
+> Note number
+
+> **Ch : number (1).**
+> MIDI Channel
+
+> **VelOn : number (64).**
+> Velocity Level (on). often volume, depends on the instrument
+
+> **VelOff : number.**
+> some instruments respond to off-velocity, or have decay. Normally 0
+
+> **play : pulse.**
+> Send NoteOn when triggered
+
+> **stop : pulse.**
+> Send NoteOff when triggered
+
+## Outputs
+**none**
+# awgrover/midi/note-button
+A button starts the note (push) and stops on release. Uses xod/common-hardware/button
+## Inputs
+> **port : number (10).**
+> pin for button
+
+> **No. : number (60).**
+> Note Number
+
+> **Ch : number (1).**
+> MIDI Channel
+
+> **VelOn : number (64).**
+> Velocity Level (on). Often volume, depends on the instrument
+
+> **VelOff : number.**
+> some instruments respond to off-velocity, or have decay. Normally 0
+
+## Outputs
+**none**
+# awgrover/midi/program-change
+Set the inputs, send on pulse ("send")
+## Inputs
+> **Prg : number (1).**
+> Program Change Number
+
+> **Ch : number (1).**
+> MIDI Channel
+
+> **send : pulse.**
+> Send when triggered
+
+## Outputs
+> **sent : pulse.**
+> Pulse when sent
+
 # awgrover/util/clock-per-second
 Produce n ticks/sec. aka Hz
 ## Inputs
@@ -242,35 +367,43 @@ On pulse or text, copy the text out. Set always=false to only copy if the text h
 # awgrover/x-midi/bank-program-change
 Bank-Select and Program-Change
 ## Inputs
-> **msb : number.**
+> **Prg# : number (1).**
+> Progrm Change Number
 
-> **lsb : number.**
+> **MSB : number.**
+> MSB for bank select
 
-> **program_number : number (1).**
+> **LSB : number.**
+> LSB for bank select
 
-> **channel : number (1).**
+> **Ch : number (1).**
+> MIDI Channel
 
 > **send : pulse.**
+> Send when triggered
 
 ## Outputs
 > **sent : pulse.**
-> Pulse on sent
+> Pulse when sent
 
 # awgrover/x-midi/control-change
-Set the values, sends the control change on pulse ("send").
+Set the inputs, send the control change on pulse ("send").
 ## Inputs
-> **controller_number : number (3).**
+> **CC : number (3).**
+> Controller Number
 
-> **control_value : number.**
+> **Val : number.**
+> Controller Value
 
-> **channel : number (1).**
+> **Ch : number (1).**
+> MIDI Channel
 
 > **send : pulse.**
-> sends the change
+> Send when triggered
 
 ## Outputs
 > **sent : pulse.**
-> pulse after sent
+> pulse when sent
 
 # awgrover/x-midi/debug
 For this to work, it must fire first. Putting in the top-left helps. Sets baud to 115200 for debugging
@@ -292,24 +425,25 @@ Real simple examples
 ## Outputs
 **none**
 # awgrover/x-midi/note
-explicitly start/stop a note. cf. -button
+Start/stop a note.
 ## Inputs
-> **note : number (60).**
-> see midi note numbers
+> **No. : number (60).**
+> Note number
 
-> **on_velocity : number (64).**
-> often volume, depends on the instrument
+> **Ch : number (1).**
+> MIDI Channel
 
-> **channel : number (1).**
+> **VelOn : number (64).**
+> Velocity Level (on). often volume, depends on the instrument
+
+> **VelOff : number.**
+> some instruments respond to off-velocity, or have decay. Normally 0
 
 > **play : pulse.**
-> start.send noteon
-
-> **off_velocity : number.**
-> some instruments respond to off-velocity, or have decay
+> Send NoteOn when triggered
 
 > **stop : pulse.**
-> stop. send noteoff
+> Send NoteOff when triggered
 
 ## Outputs
 **none**
@@ -319,29 +453,33 @@ A button starts the note (push) and stops on release. Uses xod/common-hardware/b
 > **port : number (10).**
 > pin for button
 
-> **note : number (60).**
-> see midi note numbers
+> **No. : number (60).**
+> Note Number
 
-> **on-velocity : number (64).**
-> often volume, depends on the instrument
+> **Ch : number (1).**
+> MIDI Channel
 
-> **channel : number (1).**
+> **VelOn : number (64).**
+> Velocity Level (on). Often volume, depends on the instrument
 
-> **off-velocity : number.**
-> some instruments respond to off-velocity, or have decay
+> **VelOff : number.**
+> some instruments respond to off-velocity, or have decay. Normally 0
 
 ## Outputs
 **none**
 # awgrover/x-midi/program-change
-Set the values, sent on pulse ("send")
+Set the inputs, send on pulse ("send")
 ## Inputs
-> **program_number : number (1).**
+> **Prg# : number (1).**
+> Program Change Number
 
-> **channel : number (1).**
+> **Ch : number (1).**
+> MIDI Channel
 
 > **send : pulse.**
+> Send when triggered
 
 ## Outputs
 > **sent : pulse.**
-> Pulse on sent
+> Pulse when sent
 
