@@ -33,11 +33,11 @@ struct State {
 void evaluate(Context ctx) {
     xod::awgrover__midi::midi_setup(); 
     
-    auto channel = getValue<input_channel>(ctx);
-    auto note = getValue<input_note>(ctx);
+    auto channel = getValue<input_Ch>(ctx);
+    auto note = getValue<input_Num>(ctx);
     
     if (isInputDirty<input_play>(ctx)) {
-        auto on_velocity = getValue<input_on_velocity>(ctx);
+        auto on_velocity = getValue<input_VelOn>(ctx);
     	// note, velocity, channel
     	xod::awgrover__midi::MIDI.sendNoteOn(note, on_velocity, channel);
       // only if xod "Debugger" is on
@@ -46,7 +46,7 @@ void evaluate(Context ctx) {
       DEBUG_SERIAL.print(F("Vel "));DEBUG_SERIAL.println(on_velocity);	
     }
     else if (isInputDirty<input_stop>(ctx)) {
-        auto off_velocity = getValue<input_off_velocity>(ctx);
+        auto off_velocity = getValue<input_VelOff>(ctx);
     	// note, velocity, channel
     	xod::awgrover__midi::MIDI.sendNoteOff(note, off_velocity, channel);
       // only if xod "Debugger" is on

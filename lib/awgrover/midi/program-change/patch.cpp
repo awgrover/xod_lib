@@ -34,8 +34,8 @@ void evaluate(Context ctx) {
      xod::awgrover__midi::midi_setup();
     
     if (isInputDirty<input_send>(ctx)) {
-        auto channel = getValue<input_channel>(ctx);
-        auto program_number = getValue<input_program_number>(ctx);
+        auto channel = getValue<input_Ch>(ctx);
+        auto program_number = getValue<input_Ch>(ctx);
       	xod::awgrover__midi::MIDI.sendProgramChange(program_number, channel);
         emitValue<output_sent>(ctx,1);
         // only if xod "Debugger" is on

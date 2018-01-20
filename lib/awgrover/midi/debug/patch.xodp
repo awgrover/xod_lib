@@ -1,4 +1,18 @@
 {
+  "comments": [
+    {
+      "content": "Turns on hackish debugging:\nLet's me monitor the midi messages on the usb-serial port on linux.\n\nSome debug messages are generated and sent as:\nuniversal system-exclusive 0x7E:0x00 \"unused\"\nblocks of text.\n\nAs well, the baud rate is set to 115200 because the midi-baud rate (31250) is unusual, and annoying on linux. That will almost certainly break any other MIDI device/software.\n",
+      "id": "SJb_I0xrG",
+      "position": {
+        "x": 204,
+        "y": 102
+      },
+      "size": {
+        "height": 153,
+        "width": 544
+      }
+    }
+  ],
   "description": "For this to work, it must fire first. Putting in the top-left helps. Sets baud to 115200 for debugging",
   "nodes": [
     {

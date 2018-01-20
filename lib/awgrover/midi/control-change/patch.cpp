@@ -34,9 +34,9 @@ void evaluate(Context ctx) {
     xod::awgrover__midi::midi_setup();
     
     if (isInputDirty<input_send>(ctx)) {
-      auto channel = getValue<input_channel>(ctx);
-      auto controller_number = getValue<input_controller_number>(ctx);
-      auto control_value = getValue<input_control_value>(ctx);
+      auto channel = getValue<input_Ch>(ctx);
+      auto controller_number = getValue<input_CC>(ctx);
+      auto control_value = getValue<input_Val>(ctx);
     	// note, velocity, channel
     	xod::awgrover__midi::MIDI.sendControlChange(controller_number, control_value, channel);
       emitValue<output_sent>(ctx,1);
