@@ -2,13 +2,13 @@
    "description" : "",
    "nodes" : [
       {
+         "id" : "i-adafruitneopixel",
+         "label" : "adafruitneopixel",
          "position" : {
             "x" : 68,
             "y" : 102
          },
-         "label" : "adafruitneopixel",
-         "type" : "@/input-adafruitneopixel",
-         "id" : "i-adafruitneopixel"
+         "type" : "@/input-adafruitneopixel"
       },
       {
          "id" : "i-n",
@@ -20,40 +20,40 @@
          "type" : "xod/patch-nodes/input-number"
       },
       {
+         "id" : "i-r",
+         "label" : "r",
          "position" : {
             "x" : 204,
             "y" : 102
          },
-         "label" : "r",
-         "type" : "xod/patch-nodes/input-number",
-         "id" : "i-r"
+         "type" : "xod/patch-nodes/input-number"
       },
       {
-         "type" : "xod/patch-nodes/input-number",
+         "id" : "i-g",
+         "label" : "g",
          "position" : {
             "x" : 272,
             "y" : 102
          },
-         "label" : "g",
-         "id" : "i-g"
+         "type" : "xod/patch-nodes/input-number"
       },
       {
+         "id" : "i-b",
+         "label" : "b",
          "position" : {
             "x" : 340,
             "y" : 102
          },
-         "type" : "xod/patch-nodes/input-number",
-         "label" : "b",
-         "id" : "i-b"
+         "type" : "xod/patch-nodes/input-number"
       },
       {
-         "position" : {
-            "y" : 102,
-            "x" : 408
-         },
-         "type" : "xod/patch-nodes/input-pulse",
+         "id" : "i-trigger",
          "label" : "trigger",
-         "id" : "i-trigger"
+         "position" : {
+            "x" : 408,
+            "y" : 102
+         },
+         "type" : "xod/patch-nodes/input-pulse"
       },
       {
          "id" : "cpp",
@@ -65,21 +65,21 @@
       },
       {
          "id" : "o-dev",
-         "type" : "@/output-adafruitneopixel",
+         "label" : "dev",
          "position" : {
-            "y" : 306,
-            "x" : 68
+            "x" : 68,
+            "y" : 306
          },
-         "label" : "dev"
+         "type" : "@/output-adafruitneopixel"
       },
       {
-         "position" : {
-            "y" : 306,
-            "x" : 136
-         },
-         "type" : "xod/patch-nodes/output-pulse",
+         "id" : "o-done",
          "label" : "done",
-         "id" : "o-done"
+         "position" : {
+            "x" : 136,
+            "y" : 306
+         },
+         "type" : "xod/patch-nodes/output-pulse"
       }
    ]
 }

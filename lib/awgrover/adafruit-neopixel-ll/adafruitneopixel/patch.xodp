@@ -1,17 +1,18 @@
 {
+   "description" : "constructor\nhttps://github.com/adafruit/Adafruit_NeoPixel\nArduino: Adafruit_NeoPixel\nXOD: @/input-adafruitneopixel\ncpp postfix: adafruitneopixel",
    "nodes" : [
       {
-         "label" : "n",
          "id" : "i-n",
+         "label" : "n",
          "position" : {
-            "y" : 102,
-            "x" : 68
+            "x" : 68,
+            "y" : 102
          },
          "type" : "xod/patch-nodes/input-number"
       },
       {
-         "label" : "p",
          "id" : "i-p",
+         "label" : "p",
          "position" : {
             "x" : 136,
             "y" : 102
@@ -19,40 +20,39 @@
          "type" : "xod/patch-nodes/input-number"
       },
       {
-         "type" : "xod/patch-nodes/input-number",
+         "id" : "i-t",
+         "label" : "t",
          "position" : {
             "x" : 204,
             "y" : 102
          },
-         "label" : "t",
-         "id" : "i-t"
+         "type" : "xod/patch-nodes/input-number"
       },
       {
+         "id" : "cpp",
          "position" : {
-            "y" : 204,
-            "x" : 68
+            "x" : 68,
+            "y" : 204
          },
-         "type" : "xod/patch-nodes/not-implemented-in-xod",
-         "id" : "cpp"
+         "type" : "xod/patch-nodes/not-implemented-in-xod"
       },
       {
          "id" : "o-adafruitneopixel",
          "label" : "adafruitneopixel",
-         "type" : "xod/patch-nodes/output-self",
          "position" : {
-            "y" : 306,
-            "x" : 68
-         }
+            "x" : 68,
+            "y" : 306
+         },
+         "type" : "xod/patch-nodes/output-self"
       },
       {
          "id" : "o-done",
          "label" : "done",
-         "type" : "xod/patch-nodes/output-pulse",
          "position" : {
             "x" : 136,
             "y" : 306
-         }
+         },
+         "type" : "xod/patch-nodes/output-pulse"
       }
-   ],
-   "description" : "constructor\nhttps://github.com/adafruit/Adafruit_NeoPixel\nArduino: Adafruit_NeoPixel\nXOD: @/input-adafruitneopixel\ncpp postfix: adafruitneopixel"
+   ]
 }

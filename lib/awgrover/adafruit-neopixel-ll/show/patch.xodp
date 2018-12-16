@@ -3,47 +3,47 @@
    "nodes" : [
       {
          "id" : "i-adafruitneopixel",
-         "type" : "@/input-adafruitneopixel",
+         "label" : "adafruitneopixel",
          "position" : {
-            "y" : 102,
-            "x" : 68
+            "x" : 68,
+            "y" : 102
          },
-         "label" : "adafruitneopixel"
+         "type" : "@/input-adafruitneopixel"
       },
       {
          "id" : "i-trigger",
          "label" : "trigger",
          "position" : {
-            "y" : 102,
-            "x" : 136
+            "x" : 136,
+            "y" : 102
          },
          "type" : "xod/patch-nodes/input-pulse"
       },
       {
-         "type" : "xod/patch-nodes/not-implemented-in-xod",
+         "id" : "cpp",
          "position" : {
             "x" : 68,
             "y" : 204
          },
-         "id" : "cpp"
+         "type" : "xod/patch-nodes/not-implemented-in-xod"
       },
       {
          "id" : "o-dev",
-         "type" : "@/output-adafruitneopixel",
+         "label" : "dev",
          "position" : {
             "x" : 68,
             "y" : 306
          },
-         "label" : "dev"
+         "type" : "@/output-adafruitneopixel"
       },
       {
-         "position" : {
-            "y" : 306,
-            "x" : 136
-         },
+         "id" : "o-done",
          "label" : "done",
-         "type" : "xod/patch-nodes/output-pulse",
-         "id" : "o-done"
+         "position" : {
+            "x" : 136,
+            "y" : 306
+         },
+         "type" : "xod/patch-nodes/output-pulse"
       }
    ]
 }

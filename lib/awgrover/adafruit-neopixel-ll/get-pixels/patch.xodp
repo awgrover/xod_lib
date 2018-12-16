@@ -12,11 +12,11 @@
       },
       {
          "id" : "i-trigger",
+         "label" : "trigger",
          "position" : {
             "x" : 136,
             "y" : 102
          },
-         "label" : "trigger",
          "type" : "xod/patch-nodes/input-pulse"
       },
       {
@@ -29,30 +29,30 @@
       },
       {
          "id" : "o-dev",
+         "label" : "dev",
          "position" : {
             "x" : 68,
             "y" : 306
          },
-         "label" : "dev",
          "type" : "@/output-adafruitneopixel"
       },
       {
+         "id" : "o-val",
          "label" : "val",
          "position" : {
-            "y" : 306,
-            "x" : 136
+            "x" : 136,
+            "y" : 306
          },
-         "type" : "xod/patch-nodes/output-number",
-         "id" : "o-val"
+         "type" : "xod/patch-nodes/output-number"
       },
       {
+         "id" : "o-done",
+         "label" : "done",
          "position" : {
             "x" : 204,
             "y" : 306
          },
-         "type" : "xod/patch-nodes/output-pulse",
-         "label" : "done",
-         "id" : "o-done"
+         "type" : "xod/patch-nodes/output-pulse"
       }
    ]
 }

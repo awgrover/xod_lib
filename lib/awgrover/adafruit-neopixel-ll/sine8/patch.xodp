@@ -1,58 +1,58 @@
 {
+   "description" : "",
    "nodes" : [
       {
-         "position" : {
-            "y" : 102,
-            "x" : 68
-         },
-         "type" : "@/input-adafruitneopixel",
+         "id" : "i-adafruitneopixel",
          "label" : "adafruitneopixel",
-         "id" : "i-adafruitneopixel"
+         "position" : {
+            "x" : 68,
+            "y" : 102
+         },
+         "type" : "@/input-adafruitneopixel"
       },
       {
-         "type" : "xod/patch-nodes/input-pulse",
+         "id" : "i-trigger",
+         "label" : "trigger",
          "position" : {
             "x" : 136,
             "y" : 102
          },
-         "label" : "trigger",
-         "id" : "i-trigger"
+         "type" : "xod/patch-nodes/input-pulse"
       },
       {
          "id" : "cpp",
-         "type" : "xod/patch-nodes/not-implemented-in-xod",
          "position" : {
-            "y" : 204,
-            "x" : 68
-         }
-      },
-      {
-         "position" : {
-            "y" : 306,
-            "x" : 68
+            "x" : 68,
+            "y" : 204
          },
-         "type" : "@/output-adafruitneopixel",
-         "label" : "dev",
-         "id" : "o-dev"
+         "type" : "xod/patch-nodes/not-implemented-in-xod"
       },
       {
-         "type" : "xod/patch-nodes/output-number",
+         "id" : "o-dev",
+         "label" : "dev",
+         "position" : {
+            "x" : 68,
+            "y" : 306
+         },
+         "type" : "@/output-adafruitneopixel"
+      },
+      {
+         "id" : "o-val",
+         "label" : "val",
          "position" : {
             "x" : 136,
             "y" : 306
          },
-         "label" : "val",
-         "id" : "o-val"
+         "type" : "xod/patch-nodes/output-number"
       },
       {
+         "id" : "o-done",
+         "label" : "done",
          "position" : {
             "x" : 204,
             "y" : 306
          },
-         "label" : "done",
-         "type" : "xod/patch-nodes/output-pulse",
-         "id" : "o-done"
+         "type" : "xod/patch-nodes/output-pulse"
       }
-   ],
-   "description" : ""
+   ]
 }
