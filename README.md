@@ -45,6 +45,72 @@ I haven't "published" all of these yet, until then you have to put the 'awgrover
 # Nodes 
 More detailed documentation at [NODES.md](/NODES.md)
 <span id="auto generated below here"></span>
+### awgrover/adafruit-neopixel-ll/adafruitneopixel
+constructor
+https://github.com/adafruit/Adafruit_NeoPixel
+Arduino: Adafruit_NeoPixel
+XOD: awgrover/adafruit-neopixel-ll/input-adafruitneopixel
+cpp postfix: adafruitneopixel
+### awgrover/adafruit-neopixel-ll/adafruitneopixel1
+constructor
+https://github.com/adafruit/Adafruit_NeoPixel
+Arduino: Adafruit_NeoPixel
+XOD: awgrover/adafruit-neopixel-ll/input-adafruitneopixel
+cpp postfix: adafruitneopixel
+### awgrover/adafruit-neopixel-ll/begin
+
+### awgrover/adafruit-neopixel-ll/can-show
+
+### awgrover/adafruit-neopixel-ll/clear
+
+### awgrover/adafruit-neopixel-ll/color
+
+### awgrover/adafruit-neopixel-ll/defer(adafruitneopixel)
+Allows to create feedback loops. Repeats a change of the input on the output right after the current transaction will complete.
+### awgrover/adafruit-neopixel-ll/equal(adafruitneopixel)
+Outputs true if `IN1` = `IN2`, and false otherwise
+### awgrover/adafruit-neopixel-ll/example-rgb-revelation
+Light up the first 3 pixels in Red, Green, Blue order.
+Nearest the Arduino should be Red, then Green, then Blue.
+This should help you decode the right RGB code to use (e.g. GRB, etc).
+### awgrover/adafruit-neopixel-ll/example-rgb-revelation1pixel
+Light up the first pixel in order: OFF, Red, Green, Blue.
+Like the 3 pixel revelation, but this only requires 1 pixel.
+This should help you decode the right RGB code to use (e.g. GRB, etc).
+### awgrover/adafruit-neopixel-ll/example-simple
+Turn all pixels light green, one by one.
+Repeat.
+Based on the Adafruit Neopixel example "simple",
+### awgrover/adafruit-neopixel-ll/gamma8
+
+### awgrover/adafruit-neopixel-ll/gate(adafruitneopixel)
+Allows values to pass through only if EN pin is set to true
+### awgrover/adafruit-neopixel-ll/get-brightness
+
+### awgrover/adafruit-neopixel-ll/get-pin
+
+### awgrover/adafruit-neopixel-ll/get-pixel-color
+
+### awgrover/adafruit-neopixel-ll/get-pixels
+
+### awgrover/adafruit-neopixel-ll/if-else(adafruitneopixel)
+Outputs either input value depending on condition
+### awgrover/adafruit-neopixel-ll/num-pixels
+
+### awgrover/adafruit-neopixel-ll/readme
+
+### awgrover/adafruit-neopixel-ll/set-pin
+
+### awgrover/adafruit-neopixel-ll/set-pixel-color
+
+### awgrover/adafruit-neopixel-ll/show
+
+### awgrover/adafruit-neopixel-ll/sine8
+
+### awgrover/adafruit-neopixel-ll/update-length
+
+### awgrover/adafruit-neopixel-ll/update-type
+
 ### awgrover/conversions/data-to-pulse
 Convert anything into a pulse
 ### awgrover/conversions/true-to-pulse

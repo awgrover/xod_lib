@@ -1,3 +1,248 @@
+# awgrover/adafruit-neopixel-ll/adafruitneopixel
+constructor
+https://github.com/adafruit/Adafruit_NeoPixel
+Arduino: Adafruit_NeoPixel
+XOD: awgrover/adafruit-neopixel-ll/input-adafruitneopixel
+cpp postfix: adafruitneopixel
+## Inputs
+> **n : number.**
+
+> **p : number.**
+
+> **t : number.**
+
+## Outputs
+> **adafruitneopixel : self.**
+
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/adafruitneopixel1
+constructor
+https://github.com/adafruit/Adafruit_NeoPixel
+Arduino: Adafruit_NeoPixel
+XOD: awgrover/adafruit-neopixel-ll/input-adafruitneopixel
+cpp postfix: adafruitneopixel
+## Inputs
+**none**
+## Outputs
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/begin
+
+## Inputs
+> **trigger : pulse.**
+
+## Outputs
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/can-show
+
+## Inputs
+> **trigger : pulse.**
+
+## Outputs
+> **val : boolean.**
+
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/clear
+
+## Inputs
+> **trigger : pulse.**
+
+## Outputs
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/color
+
+## Inputs
+**none**
+## Outputs
+> **val : number.**
+
+# awgrover/adafruit-neopixel-ll/defer(adafruitneopixel)
+Allows to create feedback loops. Repeats a change of the input on the output right after the current transaction will complete.
+## Inputs
+**none**
+## Outputs
+**none**
+# awgrover/adafruit-neopixel-ll/equal(adafruitneopixel)
+Outputs true if `IN1` = `IN2`, and false otherwise
+## Inputs
+**none**
+## Outputs
+> **OUT : boolean.**
+
+# awgrover/adafruit-neopixel-ll/example-rgb-revelation
+Light up the first 3 pixels in Red, Green, Blue order.
+Nearest the Arduino should be Red, then Green, then Blue.
+This should help you decode the right RGB code to use (e.g. GRB, etc).
+## Inputs
+**none**
+## Outputs
+**none**
+# awgrover/adafruit-neopixel-ll/example-rgb-revelation1pixel
+Light up the first pixel in order: OFF, Red, Green, Blue.
+Like the 3 pixel revelation, but this only requires 1 pixel.
+This should help you decode the right RGB code to use (e.g. GRB, etc).
+## Inputs
+**none**
+## Outputs
+**none**
+# awgrover/adafruit-neopixel-ll/example-simple
+Turn all pixels light green, one by one.
+Repeat.
+Based on the Adafruit Neopixel example "simple",
+## Inputs
+**none**
+## Outputs
+**none**
+# awgrover/adafruit-neopixel-ll/gamma8
+
+## Inputs
+> **trigger : pulse.**
+
+## Outputs
+> **val : number.**
+
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/gate(adafruitneopixel)
+Allows values to pass through only if EN pin is set to true
+## Inputs
+> **EN : boolean.**
+> Whether values should pass through
+
+## Outputs
+**none**
+# awgrover/adafruit-neopixel-ll/get-brightness
+
+## Inputs
+> **trigger : pulse.**
+
+## Outputs
+> **val : number.**
+
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/get-pin
+
+## Inputs
+> **trigger : pulse.**
+
+## Outputs
+> **val : number.**
+
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/get-pixel-color
+
+## Inputs
+> **trigger : pulse.**
+
+## Outputs
+> **val : number.**
+
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/get-pixels
+
+## Inputs
+> **trigger : pulse.**
+
+## Outputs
+> **val : number.**
+
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/if-else(adafruitneopixel)
+Outputs either input value depending on condition
+## Inputs
+> **COND : boolean.**
+> Condition value
+
+## Outputs
+**none**
+# awgrover/adafruit-neopixel-ll/num-pixels
+
+## Inputs
+> **trigger : pulse.**
+
+## Outputs
+> **val : number.**
+
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/readme
+
+## Inputs
+**none**
+## Outputs
+**none**
+# awgrover/adafruit-neopixel-ll/set-pin
+
+## Inputs
+> **p : number.**
+
+> **trigger : pulse.**
+
+## Outputs
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/set-pixel-color
+
+## Inputs
+> **n : number.**
+
+> **r : number.**
+
+> **g : number.**
+
+> **b : number.**
+
+> **trigger : pulse.**
+
+## Outputs
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/show
+
+## Inputs
+> **trigger : pulse.**
+
+## Outputs
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/sine8
+
+## Inputs
+> **trigger : pulse.**
+
+## Outputs
+> **val : number.**
+
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/update-length
+
+## Inputs
+> **n : number.**
+
+> **trigger : pulse.**
+
+## Outputs
+> **done : pulse.**
+
+# awgrover/adafruit-neopixel-ll/update-type
+
+## Inputs
+> **t : number.**
+
+> **trigger : pulse.**
+
+## Outputs
+> **done : pulse.**
+
 # awgrover/conversions/data-to-pulse
 Convert anything into a pulse
 ## Inputs
