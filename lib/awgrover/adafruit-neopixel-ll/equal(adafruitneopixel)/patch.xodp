@@ -1,0 +1,43 @@
+{
+   "nodes" : [
+      {
+         "boundLiterals" : {
+            "__in__" : "False"
+         },
+         "id" : "H1E8AuSPkZ",
+         "type" : "xod/patch-nodes/output-boolean",
+         "label" : "OUT",
+         "position" : {
+            "x" : 68,
+            "y" : 204
+         }
+      },
+      {
+         "id" : "HJG8C_SPkb",
+         "label" : "IN1",
+         "type" : "awgrover/adafruit-neopixel-ll/input-adafruitneopixel",
+         "position" : {
+            "y" : 0,
+            "x" : 102
+         }
+      },
+      {
+         "id" : "abstract",
+         "type" : "xod/patch-nodes/not-implemented-in-xod",
+         "position" : {
+            "x" : 100,
+            "y" : 100
+         }
+      },
+      {
+         "position" : {
+            "x" : 68,
+            "y" : 0
+         },
+         "id" : "rJXICuSwyW",
+         "type" : "awgrover/adafruit-neopixel-ll/input-adafruitneopixel",
+         "label" : "IN2"
+      }
+   ],
+   "description" : "Outputs true if `IN1` = `IN2`, and false otherwise"
+}

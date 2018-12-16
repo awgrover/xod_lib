@@ -1,0 +1,22 @@
+{
+   "description" : "",
+   "nodes" : [
+      {
+         "id" : "cpp",
+         "position" : {
+            "y" : 102,
+            "x" : 68
+         },
+         "type" : "xod/patch-nodes/not-implemented-in-xod"
+      },
+      {
+         "position" : {
+            "x" : 68,
+            "y" : 204
+         },
+         "type" : "xod/patch-nodes/output-number",
+         "label" : "val",
+         "id" : "o-val"
+      }
+   ]
+}

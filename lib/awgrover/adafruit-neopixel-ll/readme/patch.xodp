@@ -1,0 +1,16 @@
+{
+   "comments" : [
+      {
+         "size" : {
+            "width" : 510,
+            "height" : 255
+         },
+         "content" : "awgrover/adafruit-neopixel-ll\nArduino library for controlling single-wire-based LED pixels and strip.\n\nMechanically converted by https://forum.xod.io/u/awgrover using github.com:awgrover/arduino-2-xod from:\nAdafruit NeoPixel (Adafruit_NeoPixel) by Adafruit. Version 1.1.7\nhttps://github.com/adafruit/Adafruit_NeoPixel",
+         "id" : "readme",
+         "position" : {
+            "y" : 0,
+            "x" : 0
+         }
+      }
+   ]
+}

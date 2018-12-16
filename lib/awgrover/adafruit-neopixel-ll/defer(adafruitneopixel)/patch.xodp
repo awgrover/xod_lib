@@ -1,0 +1,31 @@
+{
+   "description" : "Allows to create feedback loops. Repeats a change of the input on the output right after the current transaction will complete.",
+   "nodes" : [
+      {
+         "id" : "BJI7P8t9Z",
+         "label" : "IN",
+         "type" : "awgrover/adafruit-neopixel-ll/input-adafruitneopixel",
+         "position" : {
+            "x" : 0,
+            "y" : 0
+         }
+      },
+      {
+         "position" : {
+            "y" : 204,
+            "x" : 0
+         },
+         "id" : "HJhXDIY9-",
+         "type" : "awgrover/adafruit-neopixel-ll/output-adafruitneopixel",
+         "label" : "OUT"
+      },
+      {
+         "type" : "xod/patch-nodes/not-implemented-in-xod",
+         "id" : "rkFQwUYc-",
+         "position" : {
+            "x" : 0,
+            "y" : 102
+         }
+      }
+   ]
+}

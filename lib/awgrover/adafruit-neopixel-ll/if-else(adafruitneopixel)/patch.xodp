@@ -1,0 +1,53 @@
+{
+   "description" : "Outputs either input value depending on condition",
+   "nodes" : [
+      {
+         "position" : {
+            "y" : 224,
+            "x" : 10
+         },
+         "description" : "Outputs value of `T` if `COND` is true, and `F` otherwise",
+         "id" : "S13xLCuHvkW",
+         "type" : "awgrover/adafruit-neopixel-ll/output-adafruitneopixel",
+         "label" : "R"
+      },
+      {
+         "description" : "Condition value",
+         "position" : {
+            "y" : 16,
+            "x" : 10
+         },
+         "type" : "xod/patch-nodes/input-boolean",
+         "label" : "COND",
+         "id" : "S1yZIA_rDJZ"
+      },
+      {
+         "type" : "xod/patch-nodes/not-implemented-in-xod",
+         "id" : "abstract",
+         "position" : {
+            "x" : 100,
+            "y" : 100
+         }
+      },
+      {
+         "type" : "awgrover/adafruit-neopixel-ll/input-adafruitneopixel",
+         "label" : "F",
+         "id" : "r1AgIROHDJW",
+         "position" : {
+            "x" : 266,
+            "y" : 16
+         },
+         "description" : "Value to be output if condition is false"
+      },
+      {
+         "position" : {
+            "y" : 16,
+            "x" : 138
+         },
+         "description" : "Value to be output if condition is true",
+         "label" : "T",
+         "type" : "awgrover/adafruit-neopixel-ll/input-adafruitneopixel",
+         "id" : "ryTeUROHD1b"
+      }
+   ]
+}
