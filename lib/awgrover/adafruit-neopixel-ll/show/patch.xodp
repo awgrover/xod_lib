@@ -3,7 +3,7 @@
    "nodes" : [
       {
          "id" : "i-adafruitneopixel",
-         "type" : "awgrover/adafruit-neopixel-ll/input-adafruitneopixel",
+         "type" : "@/input-adafruitneopixel",
          "position" : {
             "y" : 102,
             "x" : 68
@@ -29,7 +29,7 @@
       },
       {
          "id" : "o-dev",
-         "type" : "awgrover/adafruit-neopixel-ll/output-adafruitneopixel",
+         "type" : "@/output-adafruitneopixel",
          "position" : {
             "x" : 68,
             "y" : 306

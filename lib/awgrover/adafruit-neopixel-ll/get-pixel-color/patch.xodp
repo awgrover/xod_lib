@@ -7,7 +7,7 @@
             "y" : 102,
             "x" : 68
          },
-         "type" : "awgrover/adafruit-neopixel-ll/input-adafruitneopixel",
+         "type" : "@/input-adafruitneopixel",
          "id" : "i-adafruitneopixel"
       },
       {
@@ -33,7 +33,7 @@
             "x" : 68,
             "y" : 306
          },
-         "type" : "awgrover/adafruit-neopixel-ll/output-adafruitneopixel",
+         "type" : "@/output-adafruitneopixel",
          "id" : "o-dev"
       },
       {

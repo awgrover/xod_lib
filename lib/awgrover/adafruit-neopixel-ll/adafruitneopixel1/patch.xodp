@@ -13,7 +13,7 @@
             "x" : 68,
             "y" : 204
          },
-         "type" : "awgrover/adafruit-neopixel-ll/output-adafruitneopixel",
+         "type" : "@/output-adafruitneopixel",
          "id" : "o-dev",
          "label" : "dev"
       },
@@ -27,5 +27,5 @@
          "type" : "xod/patch-nodes/output-pulse"
       }
    ],
-   "description" : "constructor\nhttps://github.com/adafruit/Adafruit_NeoPixel\nArduino: Adafruit_NeoPixel\nXOD: awgrover/adafruit-neopixel-ll/input-adafruitneopixel\ncpp postfix: adafruitneopixel"
+   "description" : "constructor\nhttps://github.com/adafruit/Adafruit_NeoPixel\nArduino: Adafruit_NeoPixel\nXOD: @/input-adafruitneopixel\ncpp postfix: adafruitneopixel"
 }

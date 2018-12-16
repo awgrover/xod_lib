@@ -54,5 +54,5 @@
          }
       }
    ],
-   "description" : "constructor\nhttps://github.com/adafruit/Adafruit_NeoPixel\nArduino: Adafruit_NeoPixel\nXOD: awgrover/adafruit-neopixel-ll/input-adafruitneopixel\ncpp postfix: adafruitneopixel"
+   "description" : "constructor\nhttps://github.com/adafruit/Adafruit_NeoPixel\nArduino: Adafruit_NeoPixel\nXOD: @/input-adafruitneopixel\ncpp postfix: adafruitneopixel"
 }
