@@ -1,0 +1,10 @@
+{
+   "name" : "conversions",
+   "description" : "utility conversions to bridge different worlds: data-to-pulse, true-to-pulse",
+   "authors" : [
+      "awgrover",
+      "https://forum.xod.io/u/awgrover"
+   ],
+   "version" : "1.0.0",
+   "license" : "GPLv3"
+}
