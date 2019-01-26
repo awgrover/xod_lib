@@ -23,7 +23,14 @@ our %cppType = (
     );
 
 sub debug(&) {
-    warn "[DEBUG ". (caller(0))[2]."] ". &{$_[0]}."\n" if $ENV{'DEBUG'};
+    if ($ENV{'DEBUG'}) {
+      my @lines = &{$_[0]};
+      my $at = (caller(0))[2];
+      warn "[DEBUG $at] ". $lines[0]."\n";
+      for ( @lines[1..(@lines-1)] ) {
+        warn "[DEBUG ".(' ' x length("".$at))."] ". $_ . "\n";
+        }
+      }
     }
 
 sub warning {
@@ -276,7 +283,8 @@ sub process_patchfile {
 
     my $patch_decl = xodp($full_patch_path);
     # warn "json: ".Dumper($patch_decl)." "; use Data::Dumper;
-    debug { "Read $full_patch_path: ". join(" ", sort keys %$patch_decl) . ": ".substr($patch_decl->{'description'},0,100) };
+    debug { "Read $full_patch_path: ". join(" ", sort keys %$patch_decl) . ": " };
+    debug { map { chomp; "\t\"$_\"" } split "\n", $patch_decl->{'description'} };
 
     my $has_native = 0;
     my $has_non_xod_patch = 0;
