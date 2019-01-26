@@ -191,7 +191,7 @@ sub patch_to_lib {
             }
         my $actualworkspace = (-d $newlibpath) ? "." : $workspace; # could be relative to here
 
-        debug { "  in workspace: $newlibpath..." };
+        debug { "  in library $newlibpath..." };
         my $partct = split('/', $newlibpath) - 1;
         if ($partct == 2) {
             $newlibpath = "$newlibpath/".basename(dirname($full_patch_path));
@@ -214,12 +214,11 @@ sub patch_to_lib {
         }
 
     debug { "Into lib $newlibpath..." };
-    system('mkdir', '-p', $newlibpath) && exit($?);
+    system('mkdir', $newlibpath) && exit($?); # lib has to exist
 
     my ($patch_decl, $has_native, $inputs, $outputs) = process_patchfile( $full_patch_path );
 
-    mv_xodp($newlibpath, $full_patch_path, $patch_decl, $has_native);
-    mv_cpp($newlibpath, $full_patch_path, $has_native);
+    mv_patch($newlibpath, $full_patch_path, $patch_decl, $has_native);
 
     rename_nodes( $newlibpath, $full_patch_path ); 
     }
@@ -260,15 +259,6 @@ sub rename_nodes {
 
 
   # don't overwrite existing
-  }
-
-sub mv_cpp {
-  # just copy the patch.cpp
-  my ($newlibpath, $full_patch_path, $has_native) = @_;
-  if ( -e "$full_patch_path/patch.cpp" ) {
-    system('mv', "$full_patch_path/patch.cpp", "$newlibpath");
-    warn "#" .($switches->{'n'} ? "(didn't)" : '') . " move to $newlibpath/patch.cpp";
-    }
   }
 
 sub xodp {
@@ -344,11 +334,13 @@ sub process_patchfile {
 sub to_json_string {
   my ($xodp) = @_;
   # canonical, etc. "standard xodp"
-  to_json($xodp, {utf8=>1, pretty => 1, canonical=>1, indent_length =>2});
+  my $str = to_json($xodp, {utf8=>1, pretty => 1, canonical=>1}); # can't: , indent_length =>2});
+  $str =~ s/^((:?   )+)/ '  ' x (length($1)\/3) /egm;
+  $str;
   }
 
-sub mv_xodp {
-    # mv the .xodp to new location
+sub mv_patch {
+    # mv the patch dir to a new location
     my ($newlibpath, $full_patch_path, $patch_decl, $has_native) = @_;
 
     my $patchfile = "$newlibpath/".basename($full_patch_path);
@@ -357,14 +349,18 @@ sub mv_xodp {
     warning "Needs Description" if !$patch_decl->{'description'};
 
     if (! $switches->{'n'}) {
-      system( 'mv', $full_patch_path, $patchfile );
+      system( 'mv', dirname($full_patch_path), $patchfile );
       }
     warn "#" .($switches->{'n'} ? "(didn't)" : '') . " move to $patchfile\n";
     }
 
 sub find_patch_or_failsearch {
     my ($project_path, $patch_name) = @_;
-    my $found = find_patch($project_path, $patch_name);
+    debug { "workspace $workspace" };
+    my $found = 
+      find_patch($project_path, $patch_name) ||
+      find_patch($workspace, $patch_name)
+      ;
     return $found if $found;
 
     $patch_name = "$project_path/$patch_name" if $project_path;
@@ -385,8 +381,11 @@ sub find_patch_or_failsearch {
     # proj/patch
     my ($projpart,$patchpart) = (basename(dirname($patch_name)), basename($patch_name));
     # $projpart = '*' if $projpart eq '.';
+    debug {"  search '$projpart'/'$patchpart' "};
     return if $projpart ne '.' &&
-        (_find_patch_or_failsearch("$workspace/$projpart/*$patchpart*") ||
+        (
+        _find_patch_or_failsearch("$workspace/$projpart/$patchpart") ||
+        _find_patch_or_failsearch("$workspace/$projpart/*$patchpart*") ||
         _find_patch_or_failsearch("$workspace/*$projpart*/*$patchpart*") ||
         _find_patch_or_failsearch("$workspace/$projpart/*") ||
         _find_patch_or_failsearch("$workspace/*$projpart*/*") ||
