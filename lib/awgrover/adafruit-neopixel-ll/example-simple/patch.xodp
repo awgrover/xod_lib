@@ -49,7 +49,7 @@
       }
     },
     {
-      "content": "You should set this to the number of pixels,\nOr there will be a delay before the pattern repeats,\nor only some of the pixels will be used.",
+      "content": "Set this to the number of pixels on the strip,\nOr there will be a delay before the pattern repeats,\nor only some of the pixels will be used.",
       "id": "H12khtVJN",
       "position": {
         "x": -238,
@@ -57,7 +57,7 @@
       },
       "size": {
         "height": 51,
-        "width": 408
+        "width": 442
       }
     },
     {
@@ -217,7 +217,7 @@
       }
     },
     {
-      "content": "SETUP",
+      "content": "SETUP Device",
       "id": "SkiNpt4JN",
       "position": {
         "x": -272,
@@ -253,7 +253,7 @@
       }
     },
     {
-      "content": "You should set this to the correct pin",
+      "content": "You should set this to the correct pin for the data-in",
       "id": "rJ4TdFEyV",
       "position": {
         "x": -238,
@@ -262,18 +262,6 @@
       "size": {
         "height": 51,
         "width": 170
-      }
-    },
-    {
-      "content": "Double-click to edit comment",
-      "id": "rkPtD9VJN",
-      "position": {
-        "x": 34,
-        "y": 102
-      },
-      "size": {
-        "height": 51,
-        "width": 136
       }
     },
     {

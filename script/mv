@@ -97,6 +97,7 @@ sub search_project {
     }
 
 sub patch_to_lib {
+    # Move the patch
     # project patch lib # project/patch -> lib
     # patch lib # patch -> lib # deduce project from path
 
@@ -210,16 +211,14 @@ sub patch_to_lib {
 
     my ($patch_decl, $has_native, $inputs, $outputs) = process_patchfile( $full_patch_path );
 
-    make_patchfile($newlibpath, $full_patch_path, $patch_decl, $has_native);
+    mv_xodp($newlibpath, $full_patch_path, $patch_decl, $has_native);
+    mv_cpp($newlibpath, $full_patch_path, $has_native);
 
-    if (!$switches->{'patch-only'}) {
-        mv_cpp($newlibpath, $full_patch_path, $has_native);
-        }
     rename_nodes( $newlibpath, $full_patch_path ); 
     }
 
 sub rename_nodes {
-  # Fix all refernces to the patch in the old project to the lib
+  # Fix all references to the patch in the old project to the lib
   my ($newlibpath, $full_patch_path) = @_;
   my $patch_dir = dirname($full_patch_path);
   my $libpatchdir = dirname($newlibpath);
@@ -260,26 +259,10 @@ sub mv_cpp {
   # just copy the patch.cpp
   my ($newlibpath, $full_patch_path, $has_native) = @_;
   if ( -e "$full_patch_path/patch.cpp" ) {
-    if (!$switches->{'patch-only'}) {
-      system('mv', "$full_patch_path/patch.cpp", "$newlibpath");
-      }
+    system('mv', "$full_patch_path/patch.cpp", "$newlibpath");
     warn "#" .($switches->{'n'} ? "(didn't)" : '') . " move to $newlibpath/patch.cpp";
     }
   }
-
-sub emit_inputs_outputs {
-    my ($inputs, $outputs) = @_;
-
-    say "## inputs" if @$inputs;
-    foreach my $in (@$inputs) {
-        say getValue($in)." ".is_dirty($in);
-        }
-
-    say "## outputs" if @$outputs;
-    foreach my $out (@$outputs) {
-        say emitValue($out)
-        }
-    }
 
 sub xodp {
   my ($patch_path) = @_;
@@ -356,8 +339,8 @@ sub to_json_string {
   to_json($xodp, {utf8=>1, pretty => 1, canonical=>1, indent_length =>2});
   }
 
-sub make_patchfile {
-    # copy the .xodp to new location
+sub mv_xodp {
+    # mv the .xodp to new location
     my ($newlibpath, $full_patch_path, $patch_decl, $has_native) = @_;
 
     my $patchfile = "$newlibpath/".basename($full_patch_path);
@@ -370,132 +353,6 @@ sub make_patchfile {
       }
     warn "#" .($switches->{'n'} ? "(didn't)" : '') . " move to $patchfile\n";
     }
-
-sub make_cpp {
-    # use skeleton to create a .cpp in the $newlibpath
-    my ($newlibpath, $full_patch_path, $has_native, $inputs, $outputs) = @_;
-
-    if ($has_native) {
-        # make .cpp template
-        backup_skeleton( "$newlibpath/any.cpp" );
-
-        my $fh = IO::File->new( "$newlibpath/any.cpp", 'w') || die($!);
-        print $fh skeleton_cpp($full_patch_path, $inputs, $outputs); 
-        $fh->close if !(-e "$newlibpath/any.cpp");
-
-        if (!revert_backup_ifsame( "$newlibpath/any.cpp" )) {
-            warn "# wrote $newlibpath/any.cpp\n";
-            }
-        else {
-            warn "# unchanged $newlibpath/any.cpp\n";
-            }
-        }
-    else {
-        warning "Unneeded .cpp in $newlibpath" if bsd_glob( "$newlibpath/*.cpp" );
-        }
-
-    # could do git checks
-    }
-
-sub largest_n_skeleton_bak {
-    my ($fname) = @_;
-    my $n = 0;
-    foreach ( bsd_glob( "$fname.*.bak" ) ) {
-        $n = 0;
-        if (/(\d+)\.bak$/) {
-            $n = $1 if ($1 > $n);
-            }
-        }
-    return $n;
-    }
-
-sub backup_skeleton {
-    my ($fname) = @_;
-    return if !-e $fname;
-    return if -z $fname;
-
-    my $n = largest_n_skeleton_bak($fname) + 1;
-    system( 'cp', $fname, "$fname.$n.bak" );
-    debug { "backup $fname to $fname.$n.bak" };
-    }
-
-sub revert_backup_ifsame {
-    my ($fname) = @_;
-    return undef if !-e $fname;
-
-    my $n = largest_n_skeleton_bak($fname);
-    return undef if !-e "$fname.$n.bak";
-    if ( ! system( 'diff', '-q', $fname, "$fname.$n.bak" ) ) { # not diff
-        debug { "revert $fname to $fname.$n.bak" };
-        system( 'mv', "$fname.$n.bak", $fname );
-        return 1;
-        }
-    return undef;
-    }
-
-sub getValue {
-    # format the getvalue statement
-    my ($input_info) = @_;
-    sprintf( '%s newValue = getValue<input_%s>(ctx); // %s', ($cppType{$input_info->{'type'}} || 'auto'), $input_info->{'name'}, $input_info->{'type'} );
-    }
-
-sub is_dirty {
-    my ($input_info) = @_;
-    # formatting
-    sprintf( 'if (isInputDirty<input_%s>(ctx)) {', $input_info->{'name'} );
-    }
-
-sub emitValue {
-    my ($out_info) = @_;
-    sprintf( 'emitValue<output_%s>(ctx, /* a \'%s\' %s */);', $out_info->{'name'}, $out_info->{'type'}, ($cppType{$out_info->{'type'}} || '?') );
-    }
-
-sub skeleton_cpp {
-    my ($full_patch_path, $inputs, $outputs) = @_;
-    my $template = join("", <DATA>);
-    
-    $template =~ s/\$FROM/$full_patch_path/g;
-    my $now = gmtime()." (utc)";
-    $template =~ s/\$DATE/$now/g;
-
-    my @emits;
-    foreach my $out (@$outputs) {
-        push @emits, '    '.emitValue($out);
-        }
-
-    my $insert_vars = sub {
-        my $indent = $1;
-        my @intext;
-        foreach my $in (@$inputs) {
-            my $var = "input_".$in->{'name'};
-            push @intext, $indent.is_dirty($in);
-            if ($in->{'type'} eq 'pulse') {
-                push @intext, sprintf( $indent.'    // pulse. unwrap the \'if\' for implicit "is dirty this pulse"' );
-                }
-            else {
-                push @intext, $indent.'    '.getValue($in);
-                }
-            push @intext, map { "$indent$_" } @emits;
-            if (!@$outputs) {
-                push @intext, $indent.'    /* Do Something */';
-                }
-            push @intext,$indent."    }";
-            push @intext,'';
-            }
-        
-        join( "\n",@intext );
-        };
-    $template =~ s/^([ \t]*)\$EACHIN/&$insert_vars()/egm;
-
-    if (@$outputs) {
-        $template =~ s/^(\s*)\$GEN_EMIT/"$1".join("\n$1",@emits)/egm;
-        }
-    else {
-        $template =~ s/^(\s*)\$GEN_EMIT/$1\/* Do Something because at least one person was dirty *\//gm;
-        }
-    return $template;
-    }
-
 
 sub find_patch_or_failsearch {
     my ($project_path, $patch_name) = @_;
@@ -558,77 +415,8 @@ sub _find_patch_or_failsearch {
 
     }
 
-sub do_mv {
-    my ($old, $new) = @_;
-    die "Expected \$old \$new\n" if !$new || !$old;
-
-    # paths are __lib__/$ns/$cat/$lib
-    # or $ns/$cat/$lib
-    $old =~ s/\/$//; # we rely on "clean" name
-    $new =~ s/\/$//; # we rely on "clean" name
-
-    my $new_lib_name = $new."";
-    $new_lib_name =~ s/^(\.\/)?__lib__\///; # canonical w/o lib/
-    debug { "new_lib_name '$new_lib_name'" };
-    my $new_path = "__lib__/$new_lib_name";
-    if ( split('/', $new_lib_name) != 3) {
-       die "Unlikely new-name, expected __lib__/\$ns/\$cat/\$lib or \$ns/\$cat/\$lib\n";
-       }
-
-    warning "Already exists: ./$new_path" if (-e $new_path); # relative
-    warning "Already exists: $workspace/$new_path" if (-e "$workspace/$new_path"); # relative
-
-    my $old_lib_name = $old."";
-    $old_lib_name =~ s/^(\.\/)?__lib__\///; # canonical w/o __lib__/
-    debug { "old_lib_name '$old_lib_name'" };
-    my $old_path = "__lib__/$old_lib_name";
-    my $last_real_path;
-    for my $prefix ( ( ".", "$workspace" )) {
-        my $extant = "$prefix/$old_path";
-        next if ! -e $extant;
-        if ( $last_real_path eq Cwd::abs_path( $extant ) ) {
-            warning "skipped: $extant is the same as $last_real_path";
-            next;
-            }
-        $last_real_path = Cwd::abs_path( $extant );
-
-        debug { "Extant old $extant..." };
-        debug { "mv $extant $prefix/$new_path" };
-        # system('mv', $extant, "$prefix/$new_path" ) && die($?);
-        }
-    
-    debug { "relink lib-edit project" };
-    system('make', 'lib2patch') && die($?);
-
-    my $esc_old = $old_lib_name."";
-    $esc_old =~ s/\//\\\//g;
-    my $esc_new = $new_lib_name."";
-    $esc_new =~ s/\//\\\//g;
-    debug { "Edit $old_lib_name -> $new_lib_name" };
-    foreach my $file ( `find $workspace $workspace/lib ./__lib__ ./examples -name '*.xodp'` ) {
-        chomp $file;
-        system('grep', '-H', '-n', "\"$old_lib_name\"", "$file")
-        || system( 'sed', '-i', "s/\"$esc_old\"/\"$esc_new\"/g", "$file");
-        }
-    }
-
 sub main {
     given ($ARGV[0]) {
-        when ('mv') {
-            shift @ARGV;
-            do_mv( @ARGV );
-            exit 0;
-            }
-        when ('template') {
-          shift @ARGV;
-          my $where = "$workspace/".(shift @ARGV);
-          say $where;
-          my ($patch_decl, $has_native, $inputs, $outputs) = process_patchfile( "$where/patch.xodp" );
-          make_cpp($where, $where, 1, $inputs, $outputs);
-          emit_inputs_outputs( $inputs, $outputs );
-          exit 0;
-          }
-
         when (/^-/) {
             # ok
             }
@@ -640,15 +428,17 @@ sub main {
    $switches=awgrover::Getopt::GetOptions
                 (
                 '' => <<'EOS',
-This is a mess, does a bunch of stuff to make a patch from a template, etc.
---- [options] project patch libpath # project/patch -> libname
-      project # path in ~/xod. so normally just the name
+Move a "patch" in a project to a lib (fixes up old references in project).
+Does not know how to cope with custom-types yet.
+--- [options] project patch libpath # project/patch -> lib
+      project # name in ~/xod, or full path
       patch # dir in project, or dir/something.xodp
---- [options] patch-path newlibpath
-      patch-path # path to patch directory or .xodp
+      libpath # name in ~/xod/__lib__, destination
+--- [options] patch-path libpath # patch -> lib, deduces project-portion
+      patch-path # full path to .../$project/$path[/patch.xodp]
+      libpath # name in ~/xod/__lib__, destination
 EOS
                 'help|h|H'=>'this',
-                'patch-only|xodp-only|p' => 'Only remake the .xodp, leave the cpp alone',
                 'n' => "don't make changes",
                 );
 
@@ -656,31 +446,3 @@ EOS
     }
 
 main();
-
-# Template for .cpp, see skeleton_cpp()
-__DATA__
-// Converted from the patch $FROM
-
-{{#global}}
-//#include <Servo.h>
-{{/global}}
-
-struct State {
-    // Number sample = NAN;
-};
-
-{{ GENERATED_CODE }}
-
-void evaluate(Context ctx) {
-    // State* state = getState(ctx);
-    
-    $EACHIN
-
-    // if (newValue != state->sample) // only emit if state changed
-    // if (getValue<output_OUT>(ctx) != state->sample) // only emit if state changed
-
-    $GEN_EMIT
-
-    state->sample = newValue; // save new state
-}
-
