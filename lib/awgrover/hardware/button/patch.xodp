@@ -1,0 +1,43 @@
+{
+  "description": "This button signals up & down. The signal is immediate (debounce inhibits signals for 20msec). Assumes normally-open switch. Does input-pullup.",
+  "nodes": [
+    {
+      "description": "any pin. other side of switch should be to ground",
+      "id": "B1Z2YRrZM",
+      "label": "port",
+      "position": {
+        "x": 34,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "description": "pulse when button is released (opened)",
+      "id": "BkUV5AS-f",
+      "label": "open",
+      "position": {
+        "x": 102,
+        "y": 204
+      },
+      "type": "xod/patch-nodes/output-pulse"
+    },
+    {
+      "description": "pulse when button is pushed (closed)",
+      "id": "Hk9mqCSWz",
+      "label": "close",
+      "position": {
+        "x": 34,
+        "y": 204
+      },
+      "type": "xod/patch-nodes/output-pulse"
+    },
+    {
+      "id": "S1ksYCSbM",
+      "position": {
+        "x": 34,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    }
+  ]
+}

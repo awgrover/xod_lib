@@ -252,6 +252,13 @@ sub rename_nodes {
         say $fh to_json_string($xodp);
         $fh->close;
         }
+      else {
+        if ($ENV{'DEBUG'}) {
+          say "--- $patch";
+          say to_json_string($xodp);
+          say "---";
+          }
+        }
       }
       warn "#" .($switches->{'n'} ? "(didn't)" : '') . " update $changed type in $patch\n" if $changed;
     }
@@ -349,7 +356,7 @@ sub mv_patch {
     warning "Needs Description" if !$patch_decl->{'description'};
 
     if (! $switches->{'n'}) {
-      system( 'mv', dirname($full_patch_path), $patchfile );
+      system( 'mv', dirname($full_patch_path), dirname($patchfile) );
       }
     warn "#" .($switches->{'n'} ? "(didn't)" : '') . " move to $patchfile\n";
     }
