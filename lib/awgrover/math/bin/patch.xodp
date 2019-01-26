@@ -1,0 +1,241 @@
+{
+  "comments": [
+    {
+      "content": "if between, select i\nelse select i+1",
+      "id": "H1dlMbH7V",
+      "position": {
+        "x": 170,
+        "y": 306
+      },
+      "size": {
+        "height": 51,
+        "width": 272
+      }
+    }
+  ],
+  "description": "Bins the input-value:\n0 if v < inf, 1 if v < r1, 2 if < r2, etc.\nNB: r's are decreasing",
+  "links": [
+    {
+      "id": "BJL5MLUQ4",
+      "input": {
+        "nodeId": "H1l0bZHQV",
+        "pinKey": "r1AgIROHDJW"
+      },
+      "output": {
+        "nodeId": "Hyf30gSQN",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "Bk99f8IX4",
+      "input": {
+        "nodeId": "H1l0bZHQV",
+        "pinKey": "ryTeUROHD1b"
+      },
+      "output": {
+        "nodeId": "rJiXkWrXN",
+        "pinKey": "SyomIRurDJ-"
+      }
+    },
+    {
+      "id": "Bke5ZLUm4",
+      "input": {
+        "nodeId": "S16tZ88mN",
+        "pinKey": "SJqZ8COrDkW"
+      },
+      "output": {
+        "nodeId": "rJndJ-BQE",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "S11XNL8mN",
+      "input": {
+        "nodeId": "SyRbVL8QN",
+        "pinKey": "HJCfI0dBDkb"
+      },
+      "output": {
+        "nodeId": "rkKZ488XV",
+        "pinKey": "H1E8AuSPkZ"
+      }
+    },
+    {
+      "id": "SJgNybrX4",
+      "input": {
+        "nodeId": "rJiXkWrXN",
+        "pinKey": "BJnQUR_BwyZ"
+      },
+      "output": {
+        "nodeId": "Hyf30gSQN",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "SkPfN887N",
+      "input": {
+        "nodeId": "rkKZ488XV",
+        "pinKey": "HJG8C_SPkb"
+      },
+      "output": {
+        "nodeId": "rJndJ-BQE",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "SyBM4LI7V",
+      "input": {
+        "nodeId": "rkKZ488XV",
+        "pinKey": "rJXICuSwyW"
+      },
+      "output": {
+        "nodeId": "rJFdkWr7N",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "r1E7V8LmN",
+      "input": {
+        "nodeId": "H1l0bZHQV",
+        "pinKey": "S1yZIA_rDJZ"
+      },
+      "output": {
+        "nodeId": "SyRbVL8QN",
+        "pinKey": "SJyXI0OrD1-"
+      }
+    },
+    {
+      "id": "r1ikEUImE",
+      "input": {
+        "nodeId": "S16tZ88mN",
+        "pinKey": "HJjZLRdBw1-"
+      },
+      "output": {
+        "nodeId": "rJFdkWr7N",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "rkYRZbS7V",
+      "input": {
+        "nodeId": "H1UU1ZrX4",
+        "pinKey": "__in__"
+      },
+      "output": {
+        "nodeId": "H1l0bZHQV",
+        "pinKey": "S13xLCuHvkW"
+      }
+    },
+    {
+      "id": "ryZXVLLXN",
+      "input": {
+        "nodeId": "SyRbVL8QN",
+        "pinKey": "BJaG80urD1-"
+      },
+      "output": {
+        "nodeId": "S16tZ88mN",
+        "pinKey": "HktZUCdrPkZ"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "description": "Which r1 is this less than?",
+      "id": "H1UU1ZrX4",
+      "label": "bin",
+      "position": {
+        "x": 0,
+        "y": 408
+      },
+      "type": "xod/patch-nodes/output-number"
+    },
+    {
+      "id": "H1l0bZHQV",
+      "position": {
+        "x": 68,
+        "y": 306
+      },
+      "type": "xod/core/if-else"
+    },
+    {
+      "description": "The first bin (v < inf)  will be this, so v < r1 == this+1",
+      "id": "Hyf30gSQN",
+      "label": "bin0",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "S16tZ88mN",
+      "position": {
+        "x": 102,
+        "y": 102
+      },
+      "type": "xod/core/less"
+    },
+    {
+      "id": "Sy1LHZSX4",
+      "position": {
+        "x": 476,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/tabtest"
+    },
+    {
+      "id": "SyRbVL8QN",
+      "position": {
+        "x": 102,
+        "y": 204
+      },
+      "type": "xod/core/or"
+    },
+    {
+      "description": "value to bin",
+      "id": "rJFdkWr7N",
+      "label": "v",
+      "position": {
+        "x": -102,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "boundLiterals": {
+        "HkqmLAOrD1W": "1"
+      },
+      "id": "rJiXkWrXN",
+      "position": {
+        "x": 0,
+        "y": 204
+      },
+      "type": "xod/core/add"
+    },
+    {
+      "id": "rJj0NWS7V",
+      "position": {
+        "x": 238,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/variadic-1"
+    },
+    {
+      "description": "Decreasing values for the bins",
+      "id": "rJndJ-BQE",
+      "label": "r1",
+      "position": {
+        "x": 170,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "rkKZ488XV",
+      "position": {
+        "x": 204,
+        "y": 102
+      },
+      "type": "xod/core/equal"
+    }
+  ]
+}
