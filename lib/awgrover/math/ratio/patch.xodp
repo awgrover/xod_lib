@@ -123,6 +123,9 @@
       "type": "xod/core/multiply"
     },
     {
+      "boundLiterals": {
+        "BypX80uSD1Z": "1"
+      },
       "id": "SkBeN279mE",
       "label": "1 -",
       "position": {

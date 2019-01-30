@@ -103,24 +103,33 @@ sub search_project {
     warn "No projects found\n" if $i==0;
     }
 
-sub patch_to_lib {
-    # Move the patch
-    # project patch lib # project/patch -> lib
-    # patch lib # patch -> lib # deduce project from path
+sub move_or_rename {
+    # Move/rename the patch
+    # path/patch path # moves to other project|lib, same name
+    # path/patch [path/]patch # renames to [other] project|lib
+    # path is [absolutepath/]projectname, or [absolutepath/lib|__lib_/]author/libname
+    # Changes to a lib require possibly fixup of all other projects
+    # And "our" libraries
+    # And so require '-a author' for the lib prefix of things that might need fixing
+    # It's a lib if __lib__/... or 1/2/3 or lib/...
 
-    # FIXME: if 2 then patch, new
-    # if 3 then project patch new
-    debug { "ARGV '".join("' '",@ARGV)."'" };
 
-    my $expected_more = sub {
-        # debug { "test argv ".scalar(@ARGV)." '".join("' '",@ARGV)."'" };
-        if (@ARGV==0) {
-            warn "Expected patchpath,newlibpath or projectpath,patchpath,newlibpath\n";
-            exit 1;
-            }
-        };
+    if (@ARGV != 2) {
+      warn "Expected a from & to\n";
+      exit 1;
+      }
 
-    &$expected_more();
+    my $from = path_to_patch($ARGV[0]);
+    if (!$from->exists) {
+      warn "Source needs to be a patch (has .xodp inside): $from->path\n";
+      exit 2
+      }
+
+    my $to = path_to_patch($ARGV[1], $from); # might be relative to $from
+    if ($to->exists) {
+      warn "Destination already exists, don't know how to deal with replace nor what to update: $to->path\n";
+      exit 2
+      }
 
     my $full_patch_path;
 
@@ -154,6 +163,7 @@ sub patch_to_lib {
         shift @ARGV;
         }
     debug { "Have patch $full_patch_path" };
+    exit 99
 
     &$expected_more();
 
@@ -444,6 +454,7 @@ sub main {
                 '' => <<'EOS',
 Move a "patch" in a project to a lib (fixes up old references in project).
 Does not know how to cope with custom-types yet.
+(general would be path/patch [path][/patch] for mv/rename project/lib)
 --- [options] project patch libpath # project/patch -> lib
       project # name in ~/xod, or full path
       patch # dir in project, or dir/something.xodp
@@ -451,12 +462,16 @@ Does not know how to cope with custom-types yet.
 --- [options] patch-path libpath # patch -> lib, deduces project-portion
       patch-path # full path to .../$project/$path[/patch.xodp]
       libpath # name in ~/xod/__lib__, destination
+
+--- [options] -a author libpath/patch newpatchname # rename, short form of:
+--- [options] -a author libpath/patch newlib/newpatchname # mv to another library, fixes all projects, fixes all -a libs
 EOS
+                'author|a=s' => 'author prefix part for libs',
                 'help|h|H'=>'this',
                 'n' => "don't make changes",
                 );
 
-    patch_to_lib;
+    move_or_rename;
     }
 
 main();
