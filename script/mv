@@ -13,14 +13,9 @@ use JSON;
 use awgrover::Getopt;
 use Carp;
 
-our $workspace = "/home/".$ENV{'USER'}.'/xod';
+$SIG{__DIE__} = sub { Carp::confess @_ };
+
 our $switches;
-our %cppType = (
-    string => 'XString',
-    number => 'int|uint8_t|float',
-    boolean => 'Logic|boolean',
-    pulse => 'Logic|boolean',
-    );
 
 sub debug(&) {
     if ($ENV{'DEBUG'}) {
@@ -33,9 +28,414 @@ sub debug(&) {
       }
     }
 
+sub FIXME {
+  my $at = (caller(0))[2];
+  warn "[--FIXME-- $at] ", @_, "\n";
+  }
+
 sub warning {
     warn "WARNING ",@_,"\n";
     }
+
+package XODPatch;
+  use Class::MethodMaker 
+    [ 
+    new => [ qw( -init new )],
+    scalar => [ 
+      'parent', # a XODProject/lib
+      'name', # patchname
+      '_xodp', # cached .xodp
+      ],
+    ];
+
+  use Carp;
+  use JSON;
+
+  sub debug(&){ goto &main::debug; }
+  sub warning { goto &main::warning; }
+  sub FIXME{ goto &main::FIXME; }
+
+  sub init {
+    my $self=shift;
+    my ($parent, $name) = @_;
+    $self->parent($parent);
+    $self->name($name);
+    debug { "XODPatch from ".$self->parent->short_name.": ".$self->name };
+    }
+
+  sub type { 'patch' }
+
+  sub path { 
+    my $self = shift;
+    $self->parent->path . "/" . $self->name;
+    }
+
+  sub exists {
+    # does the patch actually exist
+    my $self=shift;
+    -e $self->path . "/patch.xodp";
+    }
+
+  sub short_name {
+    my $self=shift;
+    $self->parent->short_name . "/". $self->name;
+    }
+
+  sub mv {
+    my $self=shift;
+    my ($to, %keyargs) = @_;
+    my $author = $keyargs{'author'};
+
+    debug { "mv ".$self->short_name." -> ".$to->short_name };
+
+    if (!$self->exists) {
+          warn "# Source patch doesn't exist: ".$self->path."/patch.xodp\n";
+          exit 2;
+          }
+    if ($to->exists || -e($to->path) ) {
+          warn "# Destination patch/dir already exists, don't know how to replace and update names in that case: ".$to->path."\n";
+          exit 2;
+          }
+
+    # my $full_patch_path; # TO patch to .xodp
+    #my $newlibpath = shift @ARGV; # FROM just libpath
+    #my ($patch_decl, $has_native, $inputs, $outputs) = process_patchfile( $full_patch_path );
+    #mv_patch($newlibpath, $full_patch_path, $patch_decl, $has_native);
+
+    # in this project/lib
+    $self->parent->rename_nodes( $self, $to ); # Fail if $from has other @/
+
+    if ($self->parent->is_library) {
+      # from a library means editing all other projects & libs
+
+      for my $proj ( @{XODProject->projects} ) {
+        $proj->rename_nodes( $self, $to );
+        }
+
+      if (! $author) {
+        warning "Can't edit libraries without an author.";
+        }
+      else {
+        for my $lib ( @{XODProject->libraries($author)} ) {
+          next if $lib->short_name eq $self->short_name;
+
+          $lib->rename_nodes( $self, $to );
+          }
+        }
+      }
+    }
+
+  sub xodp_path { shift->path . "/patch.xodp"; }
+
+  sub xodp {
+    my $self=shift;
+
+    return $self->_xodp if $self->_xodp;
+
+    my $xodp_path = $self->xodp_path;
+    #debug {"read json patch $xodp_path" };
+    confess "no such ".$xodp_path if ! -e $xodp_path;
+    local @ARGV = $xodp_path;
+    $self->_xodp( decode_json(join("",<>)) );
+    }
+
+  sub nodes {
+    shift->xodp->{'nodes'} || [];
+    }
+
+  sub save {
+    my $self=shift;
+    if (!$self->_xodp) {
+      die "Can't save, never read the xodp ".$self->short_name;
+      }
+
+    my $str = to_json($self->_xodp, {utf8=>1, pretty => 1, canonical=>1}); # can't: , indent_length =>2});
+    $str =~ s/^((:?   )+)/ '  ' x (length($1)\/3) /egm; # indent 2
+    $str =~ s/("[^"]+") :/\1:/gm;
+
+    my $fh = IO::File->new( $self->xodp_path, 'w') || die($!);
+    print $fh $str;
+    $fh->close || die($!);
+    }
+
+# end XODPatch
+
+package XODProject;
+  # Anything that has project.xod: project/library
+  # Use .factory(path) to make the right subclass if thing already exists
+  use Class::MethodMaker 
+    [ 
+    new => [ qw( -init new )],
+    scalar => [ 
+      'path', # canonical path
+      ],
+    ];
+
+  use File::Basename qw(basename dirname);
+  use Carp;
+
+
+  our $workspace = Cwd::abs_path("/home/".$ENV{'USER'}.'/xod');
+
+  sub debug(&){ goto &main::debug; }
+  sub warning { goto &main::warning; }
+  sub FIXME{ goto &main::FIXME; }
+
+  sub type { 'project' }
+
+  sub factory {
+    # given a path, return the right kind of object: project|lib
+    # Do not try to classify to patch
+
+    my $self=shift; # class|object
+    my ($path) = @_;
+    debug {"# Factory classify: '$path'"};
+
+    if (!-e $path) {
+      # guess from pattern
+
+      my $partct = split('/', $path);
+      debug {"  # non-extant, parts $partct"};
+
+      if ($partct == 1) {
+        # project
+        debug { "Assume new xodproject: 1 part path" };
+        XODProject->new( "$workspace/$path" );
+        }
+      elsif ($partct == 2) {
+        # author/lib
+        debug { "Assume a library: 2 part path" };
+        XODLibrary->new( "$workspace/__lib__/$path" );
+        }
+      elsif ($partct == 3 && $path !~ /(^|\/)lib\// ) {
+        # don't classify to patches
+        die "Can't classify non-extant path, expected project or author/lib: $path";
+        }
+      elsif ( $path =~ /(^|\/)lib\// || index(Cwd::abs_path($path), "$workspace/__lib__") == 0 ) {
+        # In lib, could be library, or a patch
+        $path =~ /\b(lib|__lib__)\//;
+        my $libname = $';
+        debug { "Assume in lib|__lib__: classify $'" };
+        
+        $partct = split('/', $libname);
+
+        if ($partct == 2) {
+          # author/lib
+          debug { "Assume new xodlibrary in lib/|__lib__ /a/b" };
+          XODLibrary->new( $path );
+          }
+        else {
+          die "For non-extant path, expected author/name parts after lib|__lib__: $path" ;
+          }
+        }
+      elsif ( index(Cwd::abs_path($path), $workspace) == 0 ) {
+        # not lib, so project something
+        my $projname = substr( length($workspace."/"), Cwd::abs_path( $path ));
+        debug { "Assume new xodproject: in ~/xod/$projname" };
+        
+        $partct = split('/', $projname);
+
+        if ($partct == 1) {
+          # project
+          debug { "Assume new project in workspace/a" };
+          XODProject->new( "$workspace/$path" );
+          }
+        else {
+          die "Can't classify the non-extant path in workspace, expected project: $path";
+          }
+        }
+      else {
+        die "Can't classify the non-extant path, should look like project, author/lib, ~/xod/project, or something in lib|__lib__: $path";
+        }
+      }
+    }
+
+  sub init {
+    my $self=shift;
+    my ($path, @keyargs) = @_;
+    # keyargs:
+    my %keyargs = @keyargs;
+    $self->path( Cwd::abs_path($path) );
+    die "Couldn't figure abs_path('$path'), didn't give prefix to workspace?" if !$self->path;
+    }
+
+  sub patch {
+    # patch object in project
+    my $self=shift;
+    my ($patchname) = @_;
+    #debug {"making patch"};
+    XODPatch->new($self, $patchname );
+    }
+
+  sub is_project {
+      my $self=shift;
+      $self->type eq 'project';
+      }
+
+  sub is_library {
+      my $self=shift;
+      $self->type eq 'library';
+      }
+
+  sub exists {
+    # does the project/lib actually exist
+    my $self=shift;
+    -e $self->path . "/project.xod";
+    }
+
+  sub path_tail {
+    # 1 for project, 2 for lib
+    my $self=shift;
+    my ($ct, $apath) = @_;
+    my @parts = basename($apath);
+
+    my $dir = dirname($apath);
+    for ((1..($ct-1))) {
+      unshift @parts, basename($dir);
+      $dir = dirname($dir);
+      }
+
+    join("/", @parts);
+    }
+
+  sub short_name {
+    my $self=shift;
+    basename($self->path);
+    }
+
+  sub rename_nodes {
+    # just rename references in ourselves
+
+    my $self=shift;
+    my ($from, $to) = @_;
+
+    debug { "Rename in ".($self->type)." ".$self->short_name." ".$from->short_name." -> ".$to->short_name };
+
+    my $new_node_name = $to->short_name;
+    my $old_node_name = $from->short_name;
+
+    # if same proj/library
+    if ($self->short_name eq $to->parent->short_name) {
+      debug { "# same to so @" };
+      $new_node_name = '@/' . $to->name;
+      }
+    # if same proj/library
+    if ($self->short_name eq $from->parent->short_name) {
+      debug { "# same from so @" };
+      $old_node_name = '@/' . $from->name;
+      }
+
+    debug { "# rename in ".($self->type)." ".$self->short_name.", ".$old_node_name." -> $new_node_name" };
+
+    for my $apatch ( @{ $self->patches() } ) {
+      #debug { "Consider ".$apatch->short_name };
+
+      my $nodes = $apatch->nodes;
+      if (! @$nodes) {
+        warning "No nodes in ".$apatch->short_name;
+        next;
+        }
+
+      my @nodes_to_edit = grep { 
+        # we edit and grep at same time
+        if ( $_->{'type'} eq $old_node_name ) {
+          $_->{'type'} = $new_node_name;
+          }
+        else {
+          undef;
+          }
+        } @{$apatch->nodes};
+      #debug { "  nodes w/ $old_node_name ".@nodes_to_edit };
+      next if !@nodes_to_edit;
+
+      debug { "  edited ".$apatch->short_name." xodp type $old_node_name : ".@nodes_to_edit };
+        
+      $apatch->save;
+      debug {"  updated xodp ".$apatch->short_name };
+      }
+    }
+
+  sub patches {
+    # in this project
+    my $self=shift;
+
+    my @patches;
+    for my $projpath (glob($self->path . '/*')) {
+      next if !-d $projpath;
+
+      push @patches, $self->patch( basename($projpath) );
+      warning "patch from glob, but not exists: ".$patches[-1]->path  if !$patches[-1]->exists;
+      pop @patches if !$patches[-1]->exists;
+      }
+    return \@patches;
+    }
+
+  sub projects {
+    # just list 'em
+    my $self=shift; # class|object
+
+    my @projects;
+    for my $projpath (glob("$workspace/*")) {
+      next if !-d $projpath;
+      next if $projpath =~ /\/__lib__\//;
+
+      push @projects, XODProject->new( $projpath );
+      }
+    return \@projects;
+    }
+
+  sub libraries {
+    # just list 'em: requires 'author'
+    my $self=shift;
+    my ($author) = @_;
+
+    my @libs;
+    for my $libpath (glob("$workspace/__lib__/$author/*")) {
+      next if !-d $libpath;
+      push @libs, XODLibrary->new( $libpath );
+      }
+    return \@libs;
+    }
+
+#end XODPatch
+
+package XODLibrary;
+  # A thing that has a project.xod, but has other library semantics:
+  # 3 level name
+  #...
+
+  use Carp;
+
+  use base('XODProject');
+  sub debug(&) { goto &main::debug; }
+  sub warning { goto &main::warning; }
+  sub FIXME { goto &main::FIXME; }
+
+  sub init {
+    my $self=shift;
+    my ($path) = @_;
+    
+    my $partct = split('/', $path);
+    if ($partct == 2) {
+      debug {"Assume in __lib__ 2part"};
+      $self->SUPER::init( "$workspace/__lib__/$path" );
+      }
+    else {
+      $self->SUPER::init($path);
+      }
+    }
+
+  sub type {'library'}
+
+  sub short_name {
+    my $self=shift;
+    $self->path_tail(2, $self->path);
+    }
+
+
+# end XODLibrary
+
+package main;
 
 sub find_project {
     my ($want) = @_;
@@ -53,40 +453,6 @@ sub find_project {
         }
     }
 
-sub find_patch {
-    my ($project, $want) = @_;
-    debug { "Look for patch '$project' / '$want'..."; };
-    my $full_path = !$project ? $want : "$project/$want"; # allows ./
-    debug { "  start with path $full_path"; };
-    if (-d $full_path) {
-        debug { "  it's a dir..." };
-        $full_path .= "/patch.xodp"
-        }
-
-    if ($full_path =~ /\.xodp$/) {
-        debug { "  at $full_path?" };
-        if (-e $full_path) {
-            debug { "  found patch $full_path" };
-            return $full_path
-            }
-        else {
-            debug { "  no patch at path $full_path" };
-            return undef;
-            }
-        }
-
-    $full_path .= ".xodp";
-    debug { "  at + .xodp?" };
-    if (-e $full_path) { 
-        debug { "  found patch $full_path" };
-        return $full_path
-        }
-    else {
-        debug { "  no patch at path $full_path" };
-        return undef;
-        }
-    }
-
 sub search_project {
     my ($want) = @_;
     debug { "Search in $workspace for ~$want/project.xod..."; };
@@ -100,8 +466,21 @@ sub search_project {
         $project =~ s/^\Q$workspace\E\///;
         say "\t$project";
         }
-    warn "No projects found\n" if $i==0;
+    warning "No projects found\n" if $i==0;
     }
+
+sub path_to_patch {
+  my ($path, $relative_path) = @_;
+
+  my $partct = split('/', $path);
+  if ($partct==1 && $relative_path) {
+    $relative_path->patch($path);
+    }
+
+  else {
+    XODPatch->new($path, author=>$switches->{'author'});
+    }
+  }
 
 sub move_or_rename {
     # Move/rename the patch
@@ -119,164 +498,28 @@ sub move_or_rename {
       exit 1;
       }
 
-    my $from = path_to_patch($ARGV[0]);
-    if (!$from->exists) {
-      warn "Source needs to be a patch (has .xodp inside): $from->path\n";
+    my $from = XODProject->factory( dirname($ARGV[0]) )->patch( basename($ARGV[0]) );
+    if ( $from->parent->is_library && !$switches->{'author'} ) {
+      warn "Need a '-a \$author' to edit libraries";
       exit 2
       }
 
-    my $to = path_to_patch($ARGV[1], $from); # might be relative to $from
-    if ($to->exists) {
-      warn "Destination already exists, don't know how to deal with replace nor what to update: $to->path\n";
-      exit 2
+    # patch -> rel
+    # proj/patch
+    # auth/lib/patch
+
+    my $to;
+
+    if ( $ARGV[1] !~ /\// ) {
+      $to = $from->parent->patch( $ARGV[1] ); # relative
       }
-
-    my $full_patch_path;
-
-    # $patch_path, $newpath
-    if (@ARGV==2 || @ARGV==1) {
-        $full_patch_path = find_patch_or_failsearch(undef, $ARGV[0]);
-        }
-    if ($full_patch_path) {
-        debug { 'ARGV was $patch_name, $newpath' };
-        shift @ARGV; # so next is newlib
-        }
-
     else {
-        debug { 'ARGV must be $project_path, $patch_name, $newpath' };
-
-        # find or search...
-        my $project_path = $ARGV[0];
-        my $full_project_path = find_project($project_path);
-        if (!$full_project_path) {
-            warning "No such project $project_path";
-            search_project($project_path); # FIXME: should do phonetic/typo matching
-            exit(1);
-            }
-        shift @ARGV;
-
-        &$expected_more();
-
-        # search patchname->fullpath
-        my $patch_name = $ARGV[0];
-        $full_patch_path = find_patch_or_failsearch($full_project_path, $patch_name);
-        shift @ARGV;
-        }
-    debug { "Have patch $full_patch_path" };
-    exit 99
-
-    &$expected_more();
-
-    # check newpath in lib, maybe warn
-    my $newlibpath = shift @ARGV;
-    # __lib__/$name/$path, $name/$path (in __lib__), existing, no $name part, no $path part
-    # with .cpp or .xodp
-    # ./.... obviates __lib__/ test
-
-    debug { "Figure new lib path..." };
-    if ($newlibpath =~ /\.(cpp|xodp)/) {
-        debug { "  strip .cpp/.xodp file parth" };
-        $newlibpath = dirname($newlibpath);
-        }
-
-    if ($newlibpath !~ /^__lib__\// && ($newlibpath =~ /^\.\// || (-d $newlibpath)) ) {
-        # relative, or existing, so I guess you mean it
-        # But if you say __lib__/...., and it's relative to cwd(), then you don't "really mean it"
-        # no fixup
-        debug { "  newlib .||-d: '$newlibpath'..." };
-        my $canonpath = Cwd::abs_path($newlibpath); # assume this is the salient path # was File::Spec->canonpath( $newlibpath );
-        $canonpath =~ /__lib__\//;
-        my ($beforelib, $justlibpath) = ($`.$& || ($& ? '' : $newlibpath."/"),$');
-        my $partct = split('/', $justlibpath);
-        if ($newlibpath =~ /^__lib__(\/|$)/ || $partct != 3 ) {
-            my @possible = ('$owner', '$libname', '$patchname');
-            debug { "    partct $partct of $justlibpath of canon $canonpath" };
-            my $meantmore = join("/", @possible[ ($partct)..$#possible ]);
-            warning "You probably meant $beforelib$meantmore, because this is not deep enough under __lib__/";
-            }
-        }
-    else {
-        if ($newlibpath !~ /^__lib__\//) {
-            $newlibpath = "__lib__/$newlibpath" 
-            }
-        my $actualworkspace = (-d $newlibpath) ? "." : $workspace; # could be relative to here
-
-        debug { "  in library $newlibpath..." };
-        my $partct = split('/', $newlibpath) - 1;
-        if ($partct == 2) {
-            $newlibpath = "$newlibpath/".basename(dirname($full_patch_path));
-            debug { "  imply patch name from source patch name " };
-            $partct = 3;
-            }
-        if ($partct != 3) {
-            warn 'libraries have three level names: $owner/$libname/$patchname'."\n";
-            if (-d $newlibpath) {
-                warn "maybe you meant one of\n";
-                foreach ( bsd_glob("$actualworkspace/$newlibpath/*") ) {
-                    $_ =~ s/^\Q$actualworkspace\E\/__lib__\///;
-                    warn "\t$_\n";
-                    }
-                warn "\tor $newlibpath/\$somepatchname\n";
-                }
-            exit(1);
-            }
-        $newlibpath = "$actualworkspace/$newlibpath";
-        }
-
-    debug { "Into lib $newlibpath..." };
-    system('mkdir', $newlibpath) && exit($?); # lib has to exist
-
-    my ($patch_decl, $has_native, $inputs, $outputs) = process_patchfile( $full_patch_path );
-
-    mv_patch($newlibpath, $full_patch_path, $patch_decl, $has_native);
-
-    rename_nodes( $newlibpath, $full_patch_path ); 
-    }
-
-sub rename_nodes {
-  # Fix all references to the patch in the old project to the lib
-  my ($newlibpath, $full_patch_path) = @_;
-  my $patch_dir = dirname($full_patch_path);
-  my $libpatchdir = dirname($newlibpath);
-
-  # The patches in $full_patch_path/.. are @/basename()
-  my $nodename = basename($patch_dir);
-  my $project = dirname($patch_dir);
-  my $libname = basename(dirname($libpatchdir))."/".basename($libpatchdir);
-  my $lib_patch_name = "$libname/$nodename";
-  debug {"Change old @/$nodename to $lib_patch_name"};
-
-  my $patch_ct = 0;
-  foreach my $patch ( glob("$project/*/patch.xodp") ) {
-    $patch_ct += 1;
-    my $xodp = xodp( $patch );
-    my $changed = 0;
-    for my $node (@{$xodp->{'nodes'}}) {
-      next if $node->{'type'} ne "@/$nodename";
-      $node->{'type'} = $lib_patch_name;
-      $changed += 1;
+      $to = XODPatch->new( $ARGV[1] );  
       }
-    if ($changed) {
-      if (!$switches->{'n'}) {
-        my $fh = IO::File->new( $patch, 'w') || die($!);
-        say $fh to_json_string($xodp);
-        $fh->close;
-        }
-      else {
-        if ($ENV{'DEBUG'}) {
-          say "--- $patch";
-          say to_json_string($xodp);
-          say "---";
-          }
-        }
-      }
-      warn "#" .($switches->{'n'} ? "(didn't)" : '') . " update $changed type in $patch\n" if $changed;
+
+    $from->mv( $to, author => $switches->{'author'} );
+
     }
-  debug { "Checked $patch_ct patches"};
-
-
-  # don't overwrite existing
-  }
 
 sub xodp {
   my ($patch_path) = @_;
@@ -369,74 +612,6 @@ sub mv_patch {
       system( 'mv', dirname($full_patch_path), dirname($patchfile) );
       }
     warn "#" .($switches->{'n'} ? "(didn't)" : '') . " move to $patchfile\n";
-    }
-
-sub find_patch_or_failsearch {
-    my ($project_path, $patch_name) = @_;
-    debug { "workspace $workspace" };
-    my $found = 
-      find_patch($project_path, $patch_name) ||
-      find_patch($workspace, $patch_name)
-      ;
-    return $found if $found;
-
-    $patch_name = "$project_path/$patch_name" if $project_path;
-    debug { "Search for patches '$patch_name'..." };
-
-    # proj/patch/x.xodp
-    if ($patch_name =~ /\.xodp$/) {
-        $patch_name = dirname($patch_name);
-        debug { "  trim off file part: $patch_name..." };
-        }
-
-    # proj/*.xod
-    if ($patch_name =~ /\.xod$/ ) {
-        $patch_name = dirname($patch_name)."/*";
-        debug { "  trim off file part: $patch_name..." };
-        }
-
-    # proj/patch
-    my ($projpart,$patchpart) = (basename(dirname($patch_name)), basename($patch_name));
-    # $projpart = '*' if $projpart eq '.';
-    debug {"  search '$projpart'/'$patchpart' "};
-    return if $projpart ne '.' &&
-        (
-        _find_patch_or_failsearch("$workspace/$projpart/$patchpart") ||
-        _find_patch_or_failsearch("$workspace/$projpart/*$patchpart*") ||
-        _find_patch_or_failsearch("$workspace/*$projpart*/*$patchpart*") ||
-        _find_patch_or_failsearch("$workspace/$projpart/*") ||
-        _find_patch_or_failsearch("$workspace/*$projpart*/*") ||
-        _find_patch_or_failsearch("$workspace/*/$patchpart*") ||
-        _find_patch_or_failsearch("$workspace/*/*$patchpart*")
-        ) && exit(1);
-
-    # patch
-    (_find_patch_or_failsearch("$workspace/*/$patchpart") ||
-    _find_patch_or_failsearch("$workspace/*/*$patchpart*")
-    ) && exit(1);
-
-    _find_patch_or_failsearch("$workspace/*/*") && exit(1);
-    warn("No patches found\n");
-    exit(1)
-    }
-
-sub _find_patch_or_failsearch {
-    my ($search) = @_;
-
-    debug { "  try '$search'..." };
-
-    my $i=0;
-    foreach (bsd_glob("$search/*.xodp")) {
-        if (!$i) {
-            say "## Maybe you meant patches:";
-            $i=1;
-            }
-        my $where = dirname($_);
-        $where =~ s/^\Q$workspace\E\///;
-        say "\t".$where;
-        }
-    return $i!=0;
-
     }
 
 sub main {
