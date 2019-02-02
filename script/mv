@@ -88,6 +88,8 @@ package XODPatch;
 
     debug { "mv ".$self->short_name." -> ".$to->short_name };
 
+    my $project_ct;
+
     if (!$self->exists) {
           warn "# Source patch doesn't exist: ".$self->path."/patch.xodp\n";
           exit 2;
@@ -103,13 +105,21 @@ package XODPatch;
     #mv_patch($newlibpath, $full_patch_path, $patch_decl, $has_native);
 
     # in this project/lib
-    $self->parent->rename_nodes( $self, $to ); # Fail if $from has other @/
+    my $patch_ct = $self->parent->rename_nodes( $self, $to ); # Fail if $from has other @/
+    if ($patch_ct) {
+      warn "# edited ".$self->parent->short_name." patches $patch_ct\n";
+      $project_ct += 1 
+      }
 
     if ($self->parent->is_library) {
       # from a library means editing all other projects & libs
 
       for my $proj ( @{XODProject->projects} ) {
-        $proj->rename_nodes( $self, $to );
+        $patch_ct = $proj->rename_nodes( $self, $to );
+        if ($patch_ct) {
+          warn "# edited ".$proj->short_name." patches $patch_ct\n";
+          $project_ct += 1 
+          }
         }
 
       if (! $author) {
@@ -119,10 +129,15 @@ package XODPatch;
         for my $lib ( @{XODProject->libraries($author)} ) {
           next if $lib->short_name eq $self->short_name;
 
-          $lib->rename_nodes( $self, $to );
+          $patch_ct = $lib->rename_nodes( $self, $to );
+          if ($patch_ct) {
+            warn "# edited ".$lib->short_name." patches $patch_ct\n";
+            $project_ct += 1 
+            }
           }
         }
       }
+    warn "# edited projects/libs: $project_ct\n" if $project_ct;
     }
 
   sub xodp_path { shift->path . "/patch.xodp"; }
@@ -135,12 +150,33 @@ package XODPatch;
     my $xodp_path = $self->xodp_path;
     #debug {"read json patch $xodp_path" };
     confess "no such ".$xodp_path if ! -e $xodp_path;
+    if (-d $xodp_path) {
+      warning "Was a directory: ".$xodp_path;
+      $self->_xodp( undef );
+      return undef;
+      }
+
+    if (!$self->exists) {
+      $self->_xodp( {} ); # for new
+      return $self->_xodp
+      }
+
     local @ARGV = $xodp_path;
-    $self->_xodp( decode_json(join("",<>)) );
+    my $rez = eval { $self->_xodp( decode_json(join("",<>)) ); };
+    if ($@) {
+      warn "In ".$self->xodp_path." : ";
+      warn $@;
+      exit 1;
+      }
+    warning "No json in $xodp_path" if !$rez;
+    #debug {"json ".$rez};
+    $rez;
     }
 
   sub nodes {
-    shift->xodp->{'nodes'} || [];
+    my $self=shift;
+    return undef if ! $self->xodp;
+    $self->xodp->{'nodes'} || ( $self->xodp->{'nodes'} = [] );
     }
 
   sub save {
@@ -151,11 +187,16 @@ package XODPatch;
 
     my $str = to_json($self->_xodp, {utf8=>1, pretty => 1, canonical=>1}); # can't: , indent_length =>2});
     $str =~ s/^((:?   )+)/ '  ' x (length($1)\/3) /egm; # indent 2
-    $str =~ s/("[^"]+") :/\1:/gm;
+    $str =~ s/("[^"]+") :/$1:/gm;
 
-    my $fh = IO::File->new( $self->xodp_path, 'w') || die($!);
-    print $fh $str;
-    $fh->close || die($!);
+    my $is_new = !$self->exists;
+
+    if (! $switches->{'n'}) {
+      my $fh = IO::File->new( $self->xodp_path, 'w') || die($!);
+      print $fh $str;
+      $fh->close || die($!);
+      }
+    warn "# ".($switches->{'n'} ? "(didn't) " : '').($is_new ? 'saved' : 'updated' )." ".$self->short_name."/patch.xodp\n";
     }
 
 # end XODPatch
@@ -327,10 +368,12 @@ package XODProject;
 
     debug { "# rename in ".($self->type)." ".$self->short_name.", ".$old_node_name." -> $new_node_name" };
 
+    my $patch_ct;
+
     for my $apatch ( @{ $self->patches() } ) {
       #debug { "Consider ".$apatch->short_name };
 
-      my $nodes = $apatch->nodes;
+      my $nodes = $apatch->nodes || [];
       if (! @$nodes) {
         warning "No nodes in ".$apatch->short_name;
         next;
@@ -348,11 +391,13 @@ package XODProject;
       #debug { "  nodes w/ $old_node_name ".@nodes_to_edit };
       next if !@nodes_to_edit;
 
+      $patch_ct += 1;
       debug { "  edited ".$apatch->short_name." xodp type $old_node_name : ".@nodes_to_edit };
         
       $apatch->save;
-      debug {"  updated xodp ".$apatch->short_name };
       }
+    debug {"  edited patches $patch_ct"} if $patch_ct;
+    $patch_ct;
     }
 
   sub patches {
@@ -364,7 +409,7 @@ package XODProject;
       next if !-d $projpath;
 
       push @patches, $self->patch( basename($projpath) );
-      warning "patch from glob, but not exists: ".$patches[-1]->path  if !$patches[-1]->exists;
+      warning "patch from globbing, but no patch.xodp exists: ".$patches[-1]->path  if !$patches[-1]->exists;
       pop @patches if !$patches[-1]->exists;
       }
     return \@patches;
