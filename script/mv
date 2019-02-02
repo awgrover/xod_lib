@@ -99,13 +99,18 @@ package XODPatch;
           exit 2;
           }
 
-    # my $full_patch_path; # TO patch to .xodp
-    #my $newlibpath = shift @ARGV; # FROM just libpath
-    #my ($patch_decl, $has_native, $inputs, $outputs) = process_patchfile( $full_patch_path );
-    #mv_patch($newlibpath, $full_patch_path, $patch_decl, $has_native);
+    my $patch_ct;
 
-    # in this project/lib
-    my $patch_ct = $self->parent->rename_nodes( $self, $to ); # Fail if $from has other @/
+    $self->_mv( $to );
+    $patch_ct = $to->rename_at_types( $self->parent );
+    $patch_ct += $to->rename_relative_types; # if they now refer to $to->parent, make '@'
+    if ($patch_ct) {
+      warn "# edited ".$to->short_name." nodes $patch_ct\n";
+      $project_ct += 1 
+      }
+
+    # in this patch's parent
+    $patch_ct = $self->parent->rename_nodes( $self, $to );
     if ($patch_ct) {
       warn "# edited ".$self->parent->short_name." patches $patch_ct\n";
       $project_ct += 1 
@@ -149,7 +154,7 @@ package XODPatch;
 
     my $xodp_path = $self->xodp_path;
     #debug {"read json patch $xodp_path" };
-    confess "no such ".$xodp_path if ! -e $xodp_path;
+
     if (-d $xodp_path) {
       warning "Was a directory: ".$xodp_path;
       $self->_xodp( undef );
@@ -192,11 +197,96 @@ package XODPatch;
     my $is_new = !$self->exists;
 
     if (! $switches->{'n'}) {
+      system('mkdir','-p',$self->path) and die($?);
       my $fh = IO::File->new( $self->xodp_path, 'w') || die($!);
       print $fh $str;
       $fh->close || die($!);
       }
     warn "# ".($switches->{'n'} ? "(didn't) " : '').($is_new ? 'saved' : 'updated' )." ".$self->short_name."/patch.xodp\n";
+    }
+
+  sub _mv {
+    # just the mv the patch dir to a new location
+    my $self=shift;
+    my ($to) = @_;
+
+    debug { "  will create ".$to->short_name };
+    die "No destination ".$to->parent->path if !$to->parent->exists;
+    die "Already exists as destination ".$to->short_name."  ".$to->path if $to->exists || -e($to->parent->path . '/' . $to->name);
+    
+    warning "Needs Description" if !$self->xodp->{'description'};
+
+    if (! $switches->{'n'}) {
+      system( 'mv', $self->path, $to->path ) and die($?);
+      }
+    else {
+      # the appearance?
+      $to->_xodp( $self->xodp );
+      }
+    warn "#" .($switches->{'n'} ? "(didn't)" : '') . " move ".$self->short_name." -> ".$to->short_name."\n";
+    }
+
+  sub rename_relative_types {
+    # if they now refer to $self->parent, make '@'
+    my $self=shift;
+    my $nodes = $self->nodes || [];
+    if (! @$nodes) {
+      warning "No nodes in ".$self->short_name;
+      return;
+      }
+
+    my @nodes_to_edit = grep { 
+      # we edit and grep at same time
+      if ( index($_->{'type'}, $self->parent->short_name) == 0 ) {
+        $_->{'type'} = "@/" . basename( $_->{'type'} );
+        }
+      else {
+        undef;
+        }
+      } @$nodes;
+    debug { "  nodes w/ new parent ".@nodes_to_edit };
+    return undef if !@nodes_to_edit;
+
+    debug { "  edited ".$self->short_name." xodp type to @/ : ".@nodes_to_edit };
+      
+    $self->save;
+    return 1;
+    }
+
+  sub rename_at_types {
+    # rename all @/type to $to/type
+    my $self=shift;
+    my ( $to_project ) = @_;
+
+    if ($self->parent->short_name eq $to_project->short_name) {
+      debug { "@ doesn't change if still in same project" };
+      return undef;
+      }
+
+    my $nodes = $self->nodes || [];
+    if (! @$nodes) {
+      warning "No nodes in ".$self->short_name;
+      next;
+      }
+
+    my @nodes_to_edit = grep { 
+      # we edit and grep at same time
+      if ( $_->{'type'} =~ /^\@\// ) {
+        # to_project really needs to be a library if there are any @/ types in self
+        die "You can't change an @ in ".$self->short_name." to refer to another project: ".$to_project.short_name if $to_project->is_project;
+        $_->{'type'} = $to_project->short_name . "/" . $';
+        }
+      else {
+        undef;
+        }
+      } @$nodes;
+    #debug { "  nodes w/ @ ".@nodes_to_edit };
+    return undef if !@nodes_to_edit;
+
+    debug { "  edited ".$self->short_name." xodp type @/ back to ".$to_project->short_name." : ".@nodes_to_edit };
+      
+    $self->save;
+    return 1;
     }
 
 # end XODPatch
@@ -373,6 +463,7 @@ package XODProject;
     for my $apatch ( @{ $self->patches() } ) {
       #debug { "Consider ".$apatch->short_name };
 
+      # FIXME: probably should be in XODPatch as rename_type(...)
       my $nodes = $apatch->nodes || [];
       if (! @$nodes) {
         warning "No nodes in ".$apatch->short_name;
@@ -387,7 +478,7 @@ package XODProject;
         else {
           undef;
           }
-        } @{$apatch->nodes};
+        } @$nodes;
       #debug { "  nodes w/ $old_node_name ".@nodes_to_edit };
       next if !@nodes_to_edit;
 
@@ -569,7 +660,7 @@ sub move_or_rename {
 sub xodp {
   my ($patch_path) = @_;
   local @ARGV = $patch_path;
-  confess "no such $patch_path" if ! -e $patch_path;
+  die "no such $patch_path" if ! -e $patch_path;
   decode_json(join("",<>));
   }
 
@@ -644,20 +735,6 @@ sub to_json_string {
   $str;
   }
 
-sub mv_patch {
-    # mv the patch dir to a new location
-    my ($newlibpath, $full_patch_path, $patch_decl, $has_native) = @_;
-
-    my $patchfile = "$newlibpath/".basename($full_patch_path);
-    debug { "  will create ".basename($patchfile) };
-    
-    warning "Needs Description" if !$patch_decl->{'description'};
-
-    if (! $switches->{'n'}) {
-      system( 'mv', dirname($full_patch_path), dirname($patchfile) );
-      }
-    warn "#" .($switches->{'n'} ? "(didn't)" : '') . " move to $patchfile\n";
-    }
 
 sub main {
     given ($ARGV[0]) {
