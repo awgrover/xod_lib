@@ -2,8 +2,17 @@
   "description": "Outputs either input value depending on condition",
   "nodes": [
     {
-      "boundValues": {
-        "__in__": 0
+      "description": "covered by generic if-else",
+      "id": "BJqX1nXNV",
+      "position": {
+        "x": 306,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/deprecated"
+    },
+    {
+      "boundLiterals": {
+        "__in__": "\"0\""
       },
       "description": "Outputs value of `T` if `COND` is true, and `F` otherwise",
       "id": "S13xLCuHvkW",

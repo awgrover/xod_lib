@@ -1,5 +1,5 @@
 {
-  "description": "On pulse or number, copy the number out. Set always=false to only copy if the number has changed. Acts like casting pulse to number",
+  "description": "use `buffer` and `pulse-on-change`\n\nOn pulse or number, copy the number out. Set always=false to only copy if the number has changed. Acts like casting pulse to number",
   "nodes": [
     {
       "description": "Also copy on a pulse\n",
@@ -12,8 +12,8 @@
       "type": "xod/patch-nodes/input-pulse"
     },
     {
-      "boundValues": {
-        "__out__": true
+      "boundLiterals": {
+        "__out__": "True"
       },
       "description": "On pulse or number, copy 'number'. If false, only copy when 'number' changes.\n ",
       "id": "BJMH8gwjb",
@@ -33,6 +33,14 @@
         "y": 0
       },
       "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "HkKWlhXV4",
+      "position": {
+        "x": 442,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/deprecated"
     },
     {
       "description": "The 'number' ",

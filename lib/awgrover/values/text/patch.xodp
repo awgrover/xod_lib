@@ -1,5 +1,5 @@
 {
-  "description": "On pulse or text, copy the text out. Set always=false to only copy if the text has changed. Acts like casting pulse to text",
+  "description": "use `buffer` and `pulse-on-change`\n\n\nOn pulse or text, copy the text out. Set always=false to only copy if the text has changed. Acts like casting pulse to text",
   "nodes": [
     {
       "description": "Also copy on a pulse\n",
@@ -12,8 +12,8 @@
       "type": "xod/patch-nodes/input-pulse"
     },
     {
-      "boundValues": {
-        "__out__": true
+      "boundLiterals": {
+        "__out__": "True"
       },
       "description": "On pulse or text, copy 'text'. If false, only copy when 'text' changes.\n ",
       "id": "BJMH8gwjb",
@@ -60,6 +60,14 @@
         "y": 102
       },
       "type": "xod/patch-nodes/not-implemented-in-xod"
+    },
+    {
+      "id": "rJYSg3QVE",
+      "position": {
+        "x": 476,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/deprecated"
     }
   ]
 }

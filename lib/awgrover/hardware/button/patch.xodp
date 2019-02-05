@@ -1,5 +1,5 @@
 {
-  "description": "This button signals up & down. The signal is immediate (debounce inhibits signals for 20msec). Assumes normally-open switch. Does input-pullup.",
+  "description": "never implemented.\n\nThis button signals up & down. The signal is immediate (debounce inhibits signals for 20msec). Assumes normally-open switch. Does input-pullup.",
   "nodes": [
     {
       "description": "any pin. other side of switch should be to ground",

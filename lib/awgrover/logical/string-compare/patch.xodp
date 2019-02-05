@@ -1,5 +1,5 @@
 {
-  "description": "Compares 2 strings, giving <, =, or > boolean output.",
+  "description": "generic equal should work.\n\nCompares 2 strings, giving <, =, or > boolean output.",
   "nodes": [
     {
       "id": "B1ADpTI3b",
@@ -18,6 +18,14 @@
         "y": 102
       },
       "type": "xod/patch-nodes/input-string"
+    },
+    {
+      "id": "Hy-uJhmVE",
+      "position": {
+        "x": 442,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/deprecated"
     },
     {
       "id": "HyyK6TI2b",

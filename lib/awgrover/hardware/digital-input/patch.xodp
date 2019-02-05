@@ -1,5 +1,5 @@
 {
-  "description": "Reads digital signal value from board port. Can set input-pullup.",
+  "description": "Use xod/hardware/digital-input.\n\nReads digital signal value from board port. Can set input-pullup.",
   "nodes": [
     {
       "description": "Number of a board digital port to read from",
@@ -30,8 +30,16 @@
       "type": "xod/patch-nodes/input-boolean"
     },
     {
-      "boundValues": {
-        "__in__": 0
+      "id": "Hyqk-h7VV",
+      "position": {
+        "x": 408,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/deprecated"
+    },
+    {
+      "boundLiterals": {
+        "__in__": "0"
       },
       "description": "The latest read value: 0 or 1",
       "id": "SyBtREhlW",
@@ -43,8 +51,8 @@
       "type": "xod/patch-nodes/output-number"
     },
     {
-      "boundValues": {
-        "__out__": "CONTINUOUSLY"
+      "boundLiterals": {
+        "__out__": "Continuously"
       },
       "description": "Triggers new read",
       "id": "SyKd0E2x-",
