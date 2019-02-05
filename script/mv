@@ -48,6 +48,7 @@ package XODPatch;
       ],
     ];
 
+  use File::Basename qw(basename dirname);
   use Carp;
   use JSON;
 
@@ -60,7 +61,7 @@ package XODPatch;
     my ($parent, $name) = @_;
     $self->parent($parent);
     $self->name($name);
-    debug { "XODPatch from ".$self->parent->short_name.": ".$self->name };
+    #debug { "XODPatch from ".$self->parent->short_name.": ".$self->name };
     }
 
   sub type { 'patch' }
@@ -88,7 +89,7 @@ package XODPatch;
 
     debug { "mv ".$self->short_name." -> ".$to->short_name };
 
-    my $project_ct;
+    my @project_ct;
 
     if (!$self->exists) {
           warn "# Source patch doesn't exist: ".$self->path."/patch.xodp\n";
@@ -106,24 +107,26 @@ package XODPatch;
     $patch_ct += $to->rename_relative_types; # if they now refer to $to->parent, make '@'
     if ($patch_ct) {
       warn "# edited ".$to->short_name." nodes $patch_ct\n";
-      $project_ct += 1 
+      push @project_ct, $to->short_name;
       }
 
     # in this patch's parent
+    debug {"rename in this ".$self->parent->short_name };
     $patch_ct = $self->parent->rename_nodes( $self, $to );
     if ($patch_ct) {
       warn "# edited ".$self->parent->short_name." patches $patch_ct\n";
-      $project_ct += 1 
+      push @project_ct, $self->parent->short_name;
       }
 
     if ($self->parent->is_library) {
       # from a library means editing all other projects & libs
 
+      debug {"rename in projects (since we modified a library)" };
       for my $proj ( @{XODProject->projects} ) {
         $patch_ct = $proj->rename_nodes( $self, $to );
         if ($patch_ct) {
           warn "# edited ".$proj->short_name." patches $patch_ct\n";
-          $project_ct += 1 
+          push @project_ct, $proj->short_name;
           }
         }
 
@@ -131,18 +134,24 @@ package XODPatch;
         warning "Can't edit libraries without an author.";
         }
       else {
+        debug {"rename in $author/* libraries (since we modified a library)" };
         for my $lib ( @{XODProject->libraries($author)} ) {
           next if $lib->short_name eq $self->short_name;
 
           $patch_ct = $lib->rename_nodes( $self, $to );
           if ($patch_ct) {
             warn "# edited ".$lib->short_name." patches $patch_ct\n";
-            $project_ct += 1 
+            push @project_ct, $lib->short_name;
             }
           }
         }
       }
-    warn "# edited projects/libs: $project_ct\n" if $project_ct;
+
+    if (@project_ct) {
+      my %names; @names{ @project_ct } = (undef,);
+      say join(" ", sort keys %names)."\n";
+      warn "# edited projects/libs: ".@project_ct."\n";
+      }
     }
 
   sub xodp_path { shift->path . "/patch.xodp"; }
@@ -182,6 +191,12 @@ package XODPatch;
     my $self=shift;
     return undef if ! $self->xodp;
     $self->xodp->{'nodes'} || ( $self->xodp->{'nodes'} = [] );
+    }
+
+  sub comments {
+    my $self=shift;
+    return undef if ! $self->xodp;
+    $self->xodp->{'comments'} || ( $self->xodp->{'comments'} = [] );
     }
 
   sub save {
@@ -230,8 +245,8 @@ package XODPatch;
     # if they now refer to $self->parent, make '@'
     my $self=shift;
     my $nodes = $self->nodes || [];
-    if (! @$nodes) {
-      warning "No nodes in ".$self->short_name;
+    if (! @$nodes && ! @{$self->comments}) {
+      warning "No nodes or comments in ".$self->short_name;
       return;
       }
 
@@ -244,10 +259,11 @@ package XODPatch;
         undef;
         }
       } @$nodes;
-    debug { "  nodes w/ new parent ".@nodes_to_edit };
     return undef if !@nodes_to_edit;
+    #debug { "nodes w/ new parent because the type == ".$self->parent->short_name.'/*' };
+    #debug { "nodes w/ new parent ". join(", ", map {$_->{'type'} } @nodes_to_edit) };
 
-    debug { "  edited ".$self->short_name." xodp type to @/ : ".@nodes_to_edit };
+    debug { "edited ".$self->short_name." xodp type to @/ : ".@nodes_to_edit };
       
     $self->save;
     return 1;
@@ -264,8 +280,8 @@ package XODPatch;
       }
 
     my $nodes = $self->nodes || [];
-    if (! @$nodes) {
-      warning "No nodes in ".$self->short_name;
+    if (! @$nodes && ! @{$self->comments}) {
+      warning "No nodes/comments in ".$self->short_name;
       next;
       }
 
@@ -379,6 +395,69 @@ package XODProject;
         die "Can't classify the non-extant path, should look like project, author/lib, ~/xod/project, or something in lib|__lib__: $path";
         }
       }
+
+    # existing dir
+    else { 
+      debug { "  # Derive from extant..." };
+
+      if ( $path =~ /(^|\/)(lib|__lib__)\// || index(Cwd::abs_path($path), "$workspace/__lib__/") == 0 ) {
+        debug { "  # library lib|__lib__" };
+        $path =~ /(^|\/)(lib|__lib__)\//;
+        my $project_path = $';
+        my $partct = split('/', $project_path);
+
+        if ($partct == 2) {
+          debug { "  # just lib: 2 parts" };
+          my $rez = XODLibrary->new( $path );
+          warning "No project.xod in $path" if !$rez->exists;
+          $rez;
+          }
+
+        elsif ($partct = 3) {
+          debug { "  # patch: 3 parts" };
+          my $rez = XODLibrary->new( dirname($path) )->patch( basename($path) );
+          warning "No patch.xodp in $path" if !$rez->exists;
+          $rez;
+          }
+        }
+
+      elsif ( index(Cwd::abs_path($path), "$workspace/") == 0 ) {
+        debug { "  # project in workspace" };
+        my $project_path = substr( Cwd::abs_path($path), length("$workspace/") );
+        my $partct = split('/', $project_path);
+
+        if ($partct == 1) {
+          debug { "  # just project: 1 parts" };
+          my $rez = XODProject->new( $path );
+          warning "No project.xod in $path" if !$rez->exists;
+          $rez;
+          }
+
+        elsif ($partct == 2) {
+          debug { "  # patch: 2 parts" };
+          my $rez = XODProject->new( dirname($path) )->patch( basename($path) );
+          warning "No patch.xodp in $path" if !$rez->exists;
+          $rez;
+          }
+        }
+      
+      else {
+        debug { "  # assume project elsewhere" };
+        if (-e "$path/patch.xodp") {
+          debug { "  # patch.xodp" };
+          XODProject->new( dirname($path) )->patch( basename($path) );
+          }
+        elsif (-e "$path/project.xod") {
+          debug { "  # project.xod" };
+          XODProject->new( $path );
+          }
+        else {
+          my $rez = XODProject->new( $path );
+          warning "No project.xod in $path" if !$rez->exists;
+          $rez;
+          }
+        }
+      }
     }
 
   sub init {
@@ -440,7 +519,7 @@ package XODProject;
     my $self=shift;
     my ($from, $to) = @_;
 
-    debug { "Rename in ".($self->type)." ".$self->short_name." ".$from->short_name." -> ".$to->short_name };
+    # debug { "Rename in ".($self->type)." ".$self->short_name." ".$from->short_name." -> ".$to->short_name };
 
     my $new_node_name = $to->short_name;
     my $old_node_name = $from->short_name;
@@ -456,7 +535,7 @@ package XODProject;
       $old_node_name = '@/' . $from->name;
       }
 
-    debug { "# rename in ".($self->type)." ".$self->short_name.", ".$old_node_name." -> $new_node_name" };
+    #debug { "# rename in ".($self->type)." ".$self->short_name.", ".$old_node_name." -> $new_node_name" };
 
     my $patch_ct;
 
@@ -465,8 +544,8 @@ package XODProject;
 
       # FIXME: probably should be in XODPatch as rename_type(...)
       my $nodes = $apatch->nodes || [];
-      if (! @$nodes) {
-        warning "No nodes in ".$apatch->short_name;
+      if (! @$nodes && !@{$apatch->comments ||[]}) {
+        warning "No nodes/comments in ".$apatch->short_name;
         next;
         }
 
@@ -483,7 +562,8 @@ package XODProject;
       next if !@nodes_to_edit;
 
       $patch_ct += 1;
-      debug { "  edited ".$apatch->short_name." xodp type $old_node_name : ".@nodes_to_edit };
+      #debug { "  edited ".$apatch->short_name." xodp type $old_node_name : ".@nodes_to_edit };
+      debug { "# rename in ".$apatch->short_name.", ".$old_node_name." -> $new_node_name" };
         
       $apatch->save;
       }
@@ -513,7 +593,9 @@ package XODProject;
     my @projects;
     for my $projpath (glob("$workspace/*")) {
       next if !-d $projpath;
-      next if $projpath =~ /\/__lib__\//;
+      # no __xx__
+      my $subdir = basename($projpath);
+      next if $subdir =~ /^__/;
 
       push @projects, XODProject->new( $projpath );
       }
@@ -540,9 +622,11 @@ package XODLibrary;
   # 3 level name
   #...
 
+  use base('XODProject');
+
+  use File::Basename qw(basename dirname);
   use Carp;
 
-  use base('XODProject');
   sub debug(&) { goto &main::debug; }
   sub warning { goto &main::warning; }
   sub FIXME { goto &main::FIXME; }
@@ -568,6 +652,10 @@ package XODLibrary;
     $self->path_tail(2, $self->path);
     }
 
+  sub author {
+    my $self=shift;
+    dirname($self->short_name);
+    }
 
 # end XODLibrary
 
@@ -635,9 +723,16 @@ sub move_or_rename {
       }
 
     my $from = XODProject->factory( dirname($ARGV[0]) )->patch( basename($ARGV[0]) );
-    if ( $from->parent->is_library && !$switches->{'author'} ) {
-      warn "Need a '-a \$author' to edit libraries";
-      exit 2
+
+    my $author;
+    if ( $from->parent->is_library) { 
+      if (!$switches->{'author'} ) {
+        $author = $from->parent->author;
+        warning "assuming $author, to edit all libraries of that author";
+        }
+      else {
+        $author = $switches->{'author'};
+        }
       }
 
     # patch -> rel
@@ -650,10 +745,17 @@ sub move_or_rename {
       $to = $from->parent->patch( $ARGV[1] ); # relative
       }
     else {
-      $to = XODPatch->new( $ARGV[1] );  
+      $to = XODProject->factory( $ARGV[1] );  
       }
 
-    $from->mv( $to, author => $switches->{'author'} );
+    # if to is just a project|lib, this is "move, same name"
+    if (! $to->isa('XODPatch')) {
+      $to = $to->patch( $from->name );
+      }
+
+    debug { "to ".$to->short_name };
+
+    $from->mv( $to, author => $author );
 
     }
 
