@@ -1,4 +1,5 @@
 {
+  "description": "Split the value:\na + b = v",
   "links": [
     {
       "id": "B1weEhm57V",
@@ -80,11 +81,12 @@
   ],
   "nodes": [
     {
+      "description": "(1-split) * v : the rest of the value",
       "id": "BJzeE2XqmE",
       "label": "b",
       "position": {
-        "x": 33,
-        "y": 305
+        "x": 34,
+        "y": 306
       },
       "type": "xod/patch-nodes/output-number"
     },
@@ -106,11 +108,12 @@
       "type": "xod/core/multiply"
     },
     {
+      "description": "split * v",
       "id": "S1bx4hQqXE",
       "label": "a",
       "position": {
-        "x": -1,
-        "y": 305
+        "x": 0,
+        "y": 306
       },
       "type": "xod/patch-nodes/output-number"
     },
@@ -135,11 +138,12 @@
       "type": "xod/core/subtract"
     },
     {
+      "description": "0..1",
       "id": "SkxgV3QcQ4",
       "label": "split",
       "position": {
-        "x": 33,
-        "y": -1
+        "x": 34,
+        "y": 0
       },
       "type": "xod/patch-nodes/input-number"
     }
