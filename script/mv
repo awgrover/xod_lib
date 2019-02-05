@@ -148,9 +148,9 @@ package XODPatch;
       }
 
     if (@project_ct) {
-      my %names; @names{ @project_ct } = (undef,);
+      my %names; @names{ $self->short_name, $to->short_name, @project_ct } = (undef,);
       say join(" ", sort keys %names)."\n";
-      warn "# edited projects/libs: ".@project_ct."\n";
+      warn "# edited projects/libs: ".(keys %names)."\n";
       }
     }
 
@@ -351,14 +351,19 @@ package XODProject;
         }
       elsif ($partct == 2) {
         # author/lib
-        debug { "Assume a library: 2 part path" };
+        debug { "Assume a new library: 2 part path" };
         XODLibrary->new( "$workspace/__lib__/$path" );
         }
-      elsif ($partct == 3 && $path !~ /(^|\/)lib\// ) {
-        # don't classify to patches
-        die "Can't classify non-extant path, expected project or author/lib: $path";
+      elsif ($partct == 3) {
+        if ($path =~ /(^|\/)(lib|__lib__)\// ) {
+          debug { "Assume a new library-patch: 3 part path" };
+          XODLibrary->new( dirname($path) )->patch( basename($path) );
+          }
+        else {
+          die "Can't classify non-extant path, expected project or author/lib[/patch]: $path";
+          }
         }
-      elsif ( $path =~ /(^|\/)lib\// || index(Cwd::abs_path($path), "$workspace/__lib__") == 0 ) {
+      elsif ( $path =~ /(^|\/)(lib|__lib__)\// || index(Cwd::abs_path($path), "$workspace/__lib__") == 0 ) {
         # In lib, could be library, or a patch
         $path =~ /\b(lib|__lib__)\//;
         my $libname = $';
@@ -370,6 +375,10 @@ package XODProject;
           # author/lib
           debug { "Assume new xodlibrary in lib/|__lib__ /a/b" };
           XODLibrary->new( $path );
+          }
+        elsif ($partct = 3) {
+          debug { "Assume new library-patch in lib/|__lib__ /a/b" };
+          XODLibrary->new( dirname($path) )->patch( basename($path) );
           }
         else {
           die "For non-extant path, expected author/name parts after lib|__lib__: $path" ;
@@ -752,11 +761,15 @@ sub move_or_rename {
     if (! $to->isa('XODPatch')) {
       $to = $to->patch( $from->name );
       }
+    
+    if (!$to->parent->exists) {
+      warn "Destination ".$to->parent->type." doesn't exist: ".$to->parent->path;
+      exit 2;
+      }
 
     debug { "to ".$to->short_name };
 
     $from->mv( $to, author => $author );
-
     }
 
 sub xodp {
