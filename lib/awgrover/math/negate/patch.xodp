@@ -1,0 +1,53 @@
+{
+  "links": [
+    {
+      "id": "BJMxwY7VE",
+      "input": {
+        "nodeId": "SJR1PKQNN",
+        "pinKey": "__in__"
+      },
+      "output": {
+        "nodeId": "Byy1DFmV4",
+        "pinKey": "HyRmUCdBDkZ"
+      }
+    },
+    {
+      "id": "BJf1Pt7VN",
+      "input": {
+        "nodeId": "Byy1DFmV4",
+        "pinKey": "rkJ4URuHDJ-"
+      },
+      "output": {
+        "nodeId": "HyKC8YQN4",
+        "pinKey": "__out__"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "Byy1DFmV4",
+      "label": "0 -",
+      "position": {
+        "x": 238,
+        "y": 102
+      },
+      "type": "xod/core/subtract"
+    },
+    {
+      "id": "HyKC8YQN4",
+      "position": {
+        "x": 238,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "SJR1PKQNN",
+      "position": {
+        "x": 238,
+        "y": 204
+      },
+      "type": "xod/patch-nodes/output-number"
+    }
+  ]
+}
