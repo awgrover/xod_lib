@@ -112,7 +112,8 @@ package XODPatch;
 
     # in this patch's parent
     debug {"rename in this ".$self->parent->short_name };
-    $patch_ct = $self->parent->rename_nodes( $self, $to );
+    $patch_ct = $self->parent->rename_types( $self, $to );
+
     if ($patch_ct) {
       warn "# edited ".$self->parent->short_name." patches $patch_ct\n";
       push @project_ct, $self->parent->short_name;
@@ -123,7 +124,7 @@ package XODPatch;
 
       debug {"rename in projects (since we modified a library)" };
       for my $proj ( @{XODProject->projects} ) {
-        $patch_ct = $proj->rename_nodes( $self, $to );
+        $patch_ct = $proj->rename_types( $self, $to );
         if ($patch_ct) {
           warn "# edited ".$proj->short_name." patches $patch_ct\n";
           push @project_ct, $proj->short_name;
@@ -138,7 +139,7 @@ package XODPatch;
         for my $lib ( @{XODProject->libraries($author)} ) {
           next if $lib->short_name eq $self->short_name;
 
-          $patch_ct = $lib->rename_nodes( $self, $to );
+          $patch_ct = $lib->rename_types( $self, $to );
           if ($patch_ct) {
             warn "# edited ".$lib->short_name." patches $patch_ct\n";
             push @project_ct, $lib->short_name;
@@ -235,7 +236,7 @@ package XODPatch;
       system( 'mv', $self->path, $to->path ) and die($?);
       }
     else {
-      # the appearance?
+      # the appearance of having moved
       $to->_xodp( $self->xodp );
       }
     warn "#" .($switches->{'n'} ? "(didn't)" : '') . " move ".$self->short_name." -> ".$to->short_name."\n";
@@ -303,6 +304,24 @@ package XODPatch;
       
     $self->save;
     return 1;
+    }
+
+  sub custom_type {
+    # as if the implied type were a real patch
+    my $self=shift;
+    my ($direction) = @_;
+    die "Expected input|output: '$direction'" if $direction !~ /^(input|output)$/;
+
+    die "Don't ask for the name of '$direction' custom type if not custom-type: ".$self->short_name if !$self->is_custom_type;
+    $self->parent->patch( $direction."-".$self->name );
+    }
+
+  sub is_custom_type {
+    my $self=shift;
+    for my $node ( @{ $self->nodes ||[] } ) {
+      return 1 if ( $node->{'type'} eq 'xod/patch-nodes/output-self' );
+      }
+    return undef;
     }
 
 # end XODPatch
@@ -522,8 +541,29 @@ package XODProject;
     basename($self->path);
     }
 
-  sub rename_nodes {
+  sub rename_types {
     # just rename references in ourselves
+    # but, for the from->to, and implied custom_types
+
+    my $self = shift;
+    my ($from, $to) = @_;
+
+    my $patch_ct = $self->_rename_types( $from, $to );
+
+    if ($from->is_custom_type) {
+      for my $direction (qw(input output)) {
+        my $fromcustom = $from->custom_type($direction);
+        my $tocustom = $to->custom_type($direction);
+        debug {"rename ".$fromcustom->short_name." to ".$tocustom->short_name };
+        $patch_ct += $self->_rename_types( $fromcustom, $tocustom );
+        }
+      }
+
+    return $patch_ct;
+    }
+
+  sub _rename_types {
+    # just the from->to
 
     my $self=shift;
     my ($from, $to) = @_;
@@ -535,12 +575,12 @@ package XODProject;
 
     # if same proj/library
     if ($self->short_name eq $to->parent->short_name) {
-      debug { "# same to so @" };
+      #debug { "# same to so @" };
       $new_node_name = '@/' . $to->name;
       }
     # if same proj/library
     if ($self->short_name eq $from->parent->short_name) {
-      debug { "# same from so @" };
+      #debug { "# same from so @" };
       $old_node_name = '@/' . $from->name;
       }
 

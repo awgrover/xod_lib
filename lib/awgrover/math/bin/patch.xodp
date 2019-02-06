@@ -1,0 +1,241 @@
+{
+  "comments": [
+    {
+      "content": "if between, select i\nelse select i+1",
+      "id": "rJBxN2zQX44",
+      "position": {
+        "x": 271,
+        "y": 305
+      },
+      "size": {
+        "height": 51,
+        "width": 272
+      }
+    }
+  ],
+  "description": "Classify `v` by range\n0 if < r1, \"0..r1\"\n1 if >= r1, \"r1..r2\"\n2 if >= r2, etc.",
+  "links": [
+    {
+      "id": "B1ggEnzQm4E",
+      "input": {
+        "nodeId": "HyFVnGXQE4",
+        "pinKey": "rJXICuSwyW"
+      },
+      "output": {
+        "nodeId": "BJH42MXX44",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "BytAf7XVN",
+      "input": {
+        "nodeId": "By5aMXXV4",
+        "pinKey": "rJg00Nhe-"
+      },
+      "output": {
+        "nodeId": "BJH42MXX44",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "H10Nhfm7VV",
+      "input": {
+        "nodeId": "Hk842M7XE4",
+        "pinKey": "BJnQUR_BwyZ"
+      },
+      "output": {
+        "nodeId": "B1bVhGQ7E4",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "Sk6NnG7QNE",
+      "input": {
+        "nodeId": "HJNNnGXQN4",
+        "pinKey": "HJCfI0dBDkb"
+      },
+      "output": {
+        "nodeId": "HyFVnGXQE4",
+        "pinKey": "H1E8AuSPkZ"
+      }
+    },
+    {
+      "id": "SkvRfXmE4",
+      "input": {
+        "nodeId": "By5aMXXV4",
+        "pinKey": "HJbACN3gb"
+      },
+      "output": {
+        "nodeId": "BJdVhfXQVN",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "rJJxN2fQQNV",
+      "input": {
+        "nodeId": "HyFVnGXQE4",
+        "pinKey": "HJG8C_SPkb"
+      },
+      "output": {
+        "nodeId": "BJdVhfXQVN",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "rJZlN3GQmNV",
+      "input": {
+        "nodeId": "BJeV2MQ7N4",
+        "pinKey": "S1yZIA_rDJZ"
+      },
+      "output": {
+        "nodeId": "HJNNnGXQN4",
+        "pinKey": "SJyXI0OrD1-"
+      }
+    },
+    {
+      "id": "rJdyXXQNN",
+      "input": {
+        "nodeId": "HJNNnGXQN4",
+        "pinKey": "BJaG80urD1-"
+      },
+      "output": {
+        "nodeId": "By5aMXXV4",
+        "pinKey": "B19RYS3lW"
+      }
+    },
+    {
+      "id": "rk5E2fQQNE",
+      "input": {
+        "nodeId": "BJeV2MQ7N4",
+        "pinKey": "r1AgIROHDJW"
+      },
+      "output": {
+        "nodeId": "B1bVhGQ7E4",
+        "pinKey": "__out__"
+      }
+    },
+    {
+      "id": "rkXgVhfX7VN",
+      "input": {
+        "nodeId": "r14nGmQ4N",
+        "pinKey": "__in__"
+      },
+      "output": {
+        "nodeId": "BJeV2MQ7N4",
+        "pinKey": "S13xLCuHvkW"
+      }
+    },
+    {
+      "id": "rkjNhfmmNN",
+      "input": {
+        "nodeId": "BJeV2MQ7N4",
+        "pinKey": "ryTeUROHD1b"
+      },
+      "output": {
+        "nodeId": "Hk842M7XE4",
+        "pinKey": "SyomIRurDJ-"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "description": "The first bin (v < r1 or -inf..r1)  will be this.\nUsually just defualt 0.",
+      "id": "B1bVhGQ7E4",
+      "label": "bin0",
+      "position": {
+        "x": 101,
+        "y": -1
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "description": "value to bin",
+      "id": "BJH42MXX44",
+      "label": "v",
+      "position": {
+        "x": -1,
+        "y": -1
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "BJQEhz7X4N",
+      "position": {
+        "x": 577,
+        "y": 101
+      },
+      "type": "xod/patch-nodes/tabtest"
+    },
+    {
+      "description": "Increasing values for the bins.\nnb: v >= r1",
+      "id": "BJdVhfXQVN",
+      "label": "r1",
+      "position": {
+        "x": 271,
+        "y": -1
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "BJeV2MQ7N4",
+      "position": {
+        "x": 169,
+        "y": 305
+      },
+      "type": "xod/core/if-else"
+    },
+    {
+      "id": "By5aMXXV4",
+      "position": {
+        "x": 204,
+        "y": 102
+      },
+      "type": "xod/core/greater"
+    },
+    {
+      "id": "HJNNnGXQN4",
+      "position": {
+        "x": 203,
+        "y": 203
+      },
+      "type": "xod/core/or"
+    },
+    {
+      "boundLiterals": {
+        "HkqmLAOrD1W": "1"
+      },
+      "id": "Hk842M7XE4",
+      "position": {
+        "x": 101,
+        "y": 203
+      },
+      "type": "xod/core/add"
+    },
+    {
+      "id": "HyFVnGXQE4",
+      "position": {
+        "x": 305,
+        "y": 101
+      },
+      "type": "xod/core/equal"
+    },
+    {
+      "description": "Which r1 is this >= than?",
+      "id": "r14nGmQ4N",
+      "label": "bin",
+      "position": {
+        "x": 101,
+        "y": 407
+      },
+      "type": "xod/patch-nodes/output-number"
+    },
+    {
+      "id": "rywVhfmQVE",
+      "position": {
+        "x": 339,
+        "y": -1
+      },
+      "type": "xod/patch-nodes/variadic-1"
+    }
+  ]
+}
