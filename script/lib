@@ -1,0 +1,71 @@
+#!/usr/bin/env perl
+
+use strict; use warnings; no warnings 'uninitialized'; use 5.012; no if ($^V ge v5.18.0), warnings => 'experimental::smartmatch';
+
+use awgrover::Getopt;
+
+our $switches;
+
+use lib 'script';
+use XODProject;
+
+package main;
+
+sub do_check_published {
+    # have I published the latest version?
+    # --- author/lib ...
+    # --- author ... # all
+    
+    for my $lib ( @ARGV ) {
+        debug {"Consider $lib"};
+
+        # either author | .../lib/author
+        if ($lib !~ /\//) {
+            my $author = $lib;
+            debug { "all libs for $author" };
+            die "not implemented";
+            }
+        else {
+            check_one_lib($lib);
+            }
+        }
+    }
+
+sub check_one_lib {
+    my ($path) = @_;
+    warn "switches ".Dumper($switches); use Data::Dumper;
+
+    my $lib = XODLibrary->new($path, %$switches);
+    debug { "For ".$lib->path };
+
+    $lib->check_vs_published;
+    }
+
+# search for something
+# do I have the latest version?
+
+sub main {
+    
+   my $command = shift @ARGV;
+
+   $switches=awgrover::Getopt::GetOptions
+                (
+                '' => <<'EOS',
+--- check author|author/lib # compare dir vs. "published" libs
+EOS
+                'no-remote|nr' => "don't do remote fetch",
+                'force' => "force fetch regardless of cache/date",
+                'help|h|H'=>'this',
+                'n' => "don't make changes",
+                );
+
+    given ($command) {
+        when ('check') {
+            do_check_published;
+            }
+        default {
+            die "Try --help\n";
+            }
+        }
+    }
+main;
