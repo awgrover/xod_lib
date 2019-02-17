@@ -1,0 +1,86 @@
+{
+  "nodes": [
+    {
+      "description": "Pulses when something went wrong and all string was not written",
+      "id": "H1GisndsQE",
+      "label": "ERR",
+      "position": {
+        "x": 102,
+        "y": 306
+      },
+      "type": "xod/patch-nodes/output-pulse"
+    },
+    {
+      "boundLiterals": {
+        "__out__": "Never"
+      },
+      "description": "Triggers write of a string into UART",
+      "id": "H1oonOsmE",
+      "label": "SEND",
+      "position": {
+        "x": 68,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    },
+    {
+      "description": "String to be sent into UART.\nCould contain \"\\r\\n\" symbols to sent few lines.",
+      "id": "HJbji3dsQE",
+      "label": "DATA",
+      "position": {
+        "x": 170,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-string"
+    },
+    {
+      "description": "Pulses when all String has been written",
+      "id": "S17ssn_s74",
+      "label": "DONE",
+      "position": {
+        "x": 68,
+        "y": 306
+      },
+      "type": "xod/patch-nodes/output-pulse"
+    },
+    {
+      "id": "S1iCrFsmV",
+      "position": {
+        "x": 340,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/variadic-1"
+    },
+    {
+      "id": "rJevPFomN",
+      "position": {
+        "x": 34,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    },
+    {
+      "description": "An UART object",
+      "id": "rJgjj2OomE",
+      "label": "UART",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "type": "xod/uart/input-uart"
+    },
+    {
+      "boundLiterals": {
+        "__out__": "Never"
+      },
+      "description": "for variadic, leave unconnected",
+      "id": "ry8iRuomE",
+      "label": "x_err",
+      "position": {
+        "x": 102,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-pulse"
+    }
+  ]
+}

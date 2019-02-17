@@ -1,0 +1,56 @@
+{
+  "comments": [
+    {
+      "content": "In cpp because it's faster,\nand more straight forward",
+      "id": "B1O9sGLSV",
+      "position": {
+        "x": 374,
+        "y": 102
+      },
+      "size": {
+        "height": 51,
+        "width": 238
+      }
+    }
+  ],
+  "description": "Exponential smoothing\nThe result lags the value, smoothing out ",
+  "nodes": [
+    {
+      "description": " 1/α  where α is the smoothing factor\nanalogous to `n` samples.\nTakes about 3n samples to reach 95% of a stable value.",
+      "id": "B1zjuMUSN",
+      "label": "n",
+      "position": {
+        "x": 238,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "BynFsfLHN",
+      "position": {
+        "x": 272,
+        "y": 102
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    },
+    {
+      "description": "each value",
+      "id": "S16sdzUHV",
+      "label": "v",
+      "position": {
+        "x": 272,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "S1ETszIr4",
+      "label": "smooth",
+      "position": {
+        "x": 272,
+        "y": 204
+      },
+      "type": "xod/patch-nodes/output-number"
+    }
+  ]
+}
