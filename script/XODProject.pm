@@ -2,7 +2,51 @@ use strict; use warnings; no warnings 'uninitialized'; use 5.010; no if ($^V ge 
 
 use XODDebug;
 
+package XODProjectCommon; # just for common stuff
+  use JSON;
+
+  sub debug(&){ goto &main::debug; }
+  sub warning { goto &main::warning; }
+  sub FIXME{ goto &main::FIXME; }
+
+  sub json_file {
+    my $self=shift;
+    my ($file) = @_;
+
+    if (!$self->exists) {
+      return {};
+      }
+
+    my $path = $self->path . "/$file";
+    #debug {"read json patch $path" };
+
+    if (-d $path) {
+      warning "Was a directory: ".$path;
+      return undef;
+      }
+
+    $self->from_json_file($path);
+    }
+
+  sub from_json_file {
+    my $self = shift;
+    my ($path) = @_;
+
+    local @ARGV = $path;
+    my $rez = eval {  decode_json(join("",<>)); };
+    if ($@) {
+      warn "In ".$path." : ";
+      warn $@;
+      exit 1;
+      }
+    warning "No json in $path" if !$rez;
+    $rez;
+    }
+# END XODProjectCommon
+
 package XODPatch;
+  use base('XODProjectCommon');
+
   use Class::MethodMaker 
     [ 
     new => [ qw( -init new )],
@@ -271,6 +315,9 @@ package XODPatch;
 package XODProject;
   # Anything that has project.xod: project/library
   # Use .factory(path) to make the right subclass if thing already exists
+
+  use base('XODProjectCommon');
+
   use Class::MethodMaker 
     [ 
     new => [ qw( -init new )],
@@ -629,41 +676,7 @@ package XODProject;
     $self->_project_xod;
     }
 
-  sub json_file {
-    my $self=shift;
-    my ($file) = @_;
-
-    if (!$self->exists) {
-      return {};
-      }
-
-    my $path = $self->path . "/$file";
-    #debug {"read json patch $path" };
-
-    if (-d $path) {
-      warning "Was a directory: ".$path;
-      return undef;
-      }
-
-    $self->from_json_file($path);
-    }
-
-  sub from_json_file {
-    my $self = shift;
-    my ($path) = @_;
-
-    local @ARGV = $path;
-    my $rez = eval {  decode_json(join("",<>)); };
-    if ($@) {
-      warn "In ".$path." : ";
-      warn $@;
-      exit 1;
-      }
-    warning "No json in $path" if !$rez;
-    $rez;
-    }
-
-#end XODPatch
+#end XODProject
 
 package XODLibrary;
   # A thing that has a project.xod, but has other library semantics:

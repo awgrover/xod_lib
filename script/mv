@@ -22,51 +22,6 @@ use XODProject;
 
 package main;
 
-sub find_project {
-    my ($want) = @_;
-    debug { "Look for project in $workspace for $want/project.xod..."; };
-    # FIXME strip project.xod, strip workspace, ... or converse rather
-    # If it's a patch, strip it back to project
-    # allow relative to here (./)
-    if (-e "$workspace/$want/project.xod") {
-        debug { "  found project '$workspace'/'$want'" };
-        "$workspace/$want";
-        }
-    else {
-        debug { "  not found project '$want'" };
-        undef;
-        }
-    }
-
-sub search_project {
-    my ($want) = @_;
-    debug { "Search in $workspace for ~$want/project.xod..."; };
-    my $i=0;
-    foreach (bsd_glob( "$workspace/*$want*/project.xod", GLOB_NOCASE )) {
-        if (!$i) {
-            say "## Maybe you meant projects:";
-            $i=1;
-            }
-        my $project = dirname($_);
-        $project =~ s/^\Q$workspace\E\///;
-        say "\t$project";
-        }
-    warning "No projects found\n" if $i==0;
-    }
-
-sub path_to_patch {
-  my ($path, $relative_path) = @_;
-
-  my $partct = split('/', $path);
-  if ($partct==1 && $relative_path) {
-    $relative_path->patch($path);
-    }
-
-  else {
-    XODPatch->new($path, author=>$switches->{'author'});
-    }
-  }
-
 sub move_or_rename {
     # Move/rename the patch
     # path/patch path # moves to other project|lib, same name
@@ -76,7 +31,6 @@ sub move_or_rename {
     # And "our" libraries
     # And so require '-a author' for the lib prefix of things that might need fixing
     # It's a lib if __lib__/... or 1/2/3 or lib/...
-
 
     if (@ARGV != 2) {
       warn "Expected a from & to\n";
