@@ -1,0 +1,390 @@
+{
+  "comments": [
+    {
+      "content": "<- Start with 8 bits\nand 0.2 multiply ->\n\nShould see lowest value on built-in LED\n\n<- Then try 14\nand 0.4 ->\nLED should be a LOT dimmer.\nLook closely!",
+      "id": "HyXKxMz5q",
+      "position": {
+        "units": "slots",
+        "x": 0,
+        "y": 0
+      },
+      "size": {
+        "height": 2,
+        "units": "slots",
+        "width": 5
+      }
+    },
+    {
+      "content": "Only for SAMD21 and SAMD51 based boards.\n\n\"Upload And Debug\"\nIf the \"count\" \"watch\" node doesn't show anything:\n1. Wait 30 seconds\n2. If still not \"watch\"ing, \"Upload and debug\" a second time.",
+      "id": "rJ-JZzz95",
+      "position": {
+        "units": "slots",
+        "x": -11,
+        "y": 0
+      },
+      "size": {
+        "height": 2,
+        "units": "slots",
+        "width": 6
+      }
+    },
+    {
+      "content": "<- \"debug\" is working when this starts counting",
+      "id": "rkorXff95",
+      "position": {
+        "units": "slots",
+        "x": 5,
+        "y": 5
+      },
+      "size": {
+        "height": 1,
+        "units": "slots",
+        "width": 4
+      }
+    },
+    {
+      "content": "Should be false ->\nIf true, then there was an error, probably serial-write-resolution() is not supported for this board.",
+      "id": "HJVOQGGcq",
+      "position": {
+        "units": "slots",
+        "x": -6,
+        "y": 5
+      },
+      "size": {
+        "height": 2,
+        "units": "slots",
+        "width": 5
+      }
+    },
+    {
+      "content": "Change the \"bits\" above, and:\nShould be false ->\nIf true, then serial-write-resolution() is not supported for this board.",
+      "id": "SkQ3XGM99",
+      "position": {
+        "units": "slots",
+        "x": -11,
+        "y": 3
+      },
+      "size": {
+        "height": 2,
+        "units": "slots",
+        "width": 6
+      }
+    },
+    {
+      "content": "Test analog-write-resolution.\nBy inspection of brightness of builtin-led.\nIf builtin-led is not PWM, attach external LED and adjust the led-port.",
+      "id": "SylHEGz95",
+      "position": {
+        "units": "slots",
+        "x": -9,
+        "y": -1
+      },
+      "size": {
+        "height": 1,
+        "units": "slots",
+        "width": 13
+      }
+    },
+    {
+      "content": "Here's where to set the LED port for an external LED. Use a PWM port. \"D13\" is usually the built-in LED, which is often PWM on SAMD boards.",
+      "id": "ByopEfM9q",
+      "position": {
+        "units": "slots",
+        "x": -10,
+        "y": 4
+      },
+      "size": {
+        "height": 1,
+        "units": "slots",
+        "width": 9
+      }
+    },
+    {
+      "content": "<- Edit these WHILE it is running",
+      "id": "SyyLHzMc9",
+      "position": {
+        "units": "slots",
+        "x": 7,
+        "y": 0
+      },
+      "size": {
+        "height": 1,
+        "units": "slots",
+        "width": 6
+      }
+    }
+  ],
+  "links": [
+    {
+      "id": "Hynub-fq9",
+      "input": {
+        "nodeId": "SyqI-bGc5",
+        "pinKey": "rkSWsDxz_G"
+      },
+      "output": {
+        "nodeId": "BkyacxM59",
+        "pinKey": "HyoPMlfc5"
+      }
+    },
+    {
+      "id": "Hk1rS-Mq9",
+      "input": {
+        "nodeId": "HJ_ESZf55",
+        "pinKey": "B1GfLR_SPk-"
+      },
+      "output": {
+        "nodeId": "SyqI-bGc5",
+        "pinKey": "SkZowlzOM"
+      }
+    },
+    {
+      "id": "HJrBrZG5q",
+      "input": {
+        "nodeId": "ByJ8Rezc9",
+        "pinKey": "HyYh1a3LZ"
+      },
+      "output": {
+        "nodeId": "HJ_ESZf55",
+        "pinKey": "BkQzLCurwJZ"
+      }
+    },
+    {
+      "id": "SJFDUZzcc",
+      "input": {
+        "nodeId": "BkyacxM59",
+        "pinKey": "r1t0WeGq5"
+      },
+      "output": {
+        "nodeId": "S1yDI-f9q",
+        "pinKey": "ByfGSDjQE"
+      }
+    },
+    {
+      "id": "BkPpqbM59",
+      "input": {
+        "nodeId": "B1b3qWzcq",
+        "pinKey": "HJAq-A_8-"
+      },
+      "output": {
+        "nodeId": "ByJ8Rezc9",
+        "pinKey": "rJxhvs_Lx7"
+      }
+    },
+    {
+      "id": "SJFTcbfcc",
+      "input": {
+        "nodeId": "SyT-5WMq5",
+        "pinKey": "HkXK-dGob"
+      },
+      "output": {
+        "nodeId": "B1b3qWzcq",
+        "pinKey": "r1yhZRd8W"
+      }
+    },
+    {
+      "id": "rJZm7sWGqc",
+      "input": {
+        "nodeId": "rJQQoWzqc",
+        "pinKey": "HkXK-dGob"
+      },
+      "output": {
+        "nodeId": "S1gQ7iZf5q",
+        "pinKey": "rJagQXblS"
+      }
+    },
+    {
+      "id": "BywmiZf9c",
+      "input": {
+        "nodeId": "S1gQ7iZf5q",
+        "pinKey": "Hygwgm7Wgr"
+      },
+      "output": {
+        "nodeId": "ByJ8Rezc9",
+        "pinKey": "rJxhvs_Lx7"
+      }
+    },
+    {
+      "id": "SyTP1zM95",
+      "input": {
+        "nodeId": "HJ_ESZf55",
+        "pinKey": "SJ4zUC_BD1-"
+      },
+      "output": {
+        "nodeId": "B1DD1GGcq",
+        "pinKey": "ByfGSDjQE"
+      }
+    },
+    {
+      "id": "B1WmoQGMcc",
+      "input": {
+        "nodeId": "SkQomMz9c",
+        "pinKey": "HkXK-dGob"
+      },
+      "output": {
+        "nodeId": "Bye7oXfGqc",
+        "pinKey": "rJagQXblS"
+      }
+    },
+    {
+      "id": "SJus7Mfq9",
+      "input": {
+        "nodeId": "Bye7oXfGqc",
+        "pinKey": "Hygwgm7Wgr"
+      },
+      "output": {
+        "nodeId": "BkyacxM59",
+        "pinKey": "HyoPMlfc5"
+      }
+    },
+    {
+      "id": "HyrpUGz59",
+      "input": {
+        "nodeId": "SyqI-bGc5",
+        "pinKey": "H1gboDlzOM"
+      },
+      "output": {
+        "nodeId": "Sk-68fMq9",
+        "pinKey": "ByfGSDjQE"
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "boundLiterals": {
+        "r1t0WeGq5": "10"
+      },
+      "id": "BkyacxM59",
+      "position": {
+        "units": "slots",
+        "x": -2,
+        "y": 1
+      },
+      "type": "@/analog-write-resolution"
+    },
+    {
+      "boundLiterals": {
+        "B1oqkTnIb": "D13"
+      },
+      "id": "ByJ8Rezc9",
+      "position": {
+        "units": "slots",
+        "x": -1,
+        "y": 4
+      },
+      "type": "xod/common-hardware/led"
+    },
+    {
+      "boundLiterals": {
+        "H1gboDlzOM": "0.5"
+      },
+      "id": "SyqI-bGc5",
+      "position": {
+        "units": "slots",
+        "x": -1,
+        "y": 2
+      },
+      "type": "xod/waves/saw-wave"
+    },
+    {
+      "boundLiterals": {
+        "SJ4zUC_BD1-": "0.1"
+      },
+      "id": "HJ_ESZf55",
+      "position": {
+        "units": "slots",
+        "x": 0,
+        "y": 3
+      },
+      "type": "xod/core/multiply"
+    },
+    {
+      "boundLiterals": {
+        "ByfGSDjQE": "8"
+      },
+      "id": "S1yDI-f9q",
+      "position": {
+        "units": "slots",
+        "x": -2,
+        "y": 0
+      },
+      "type": "xod/debug/tweak-number"
+    },
+    {
+      "id": "SyT-5WMq5",
+      "position": {
+        "units": "slots",
+        "x": 3,
+        "y": 5
+      },
+      "type": "xod/debug/watch"
+    },
+    {
+      "id": "B1b3qWzcq",
+      "position": {
+        "units": "slots",
+        "x": 3,
+        "y": 4
+      },
+      "type": "xod/core/count"
+    },
+    {
+      "id": "rJQQoWzqc",
+      "position": {
+        "units": "slots",
+        "x": 0,
+        "y": 5
+      },
+      "type": "xod/debug/watch"
+    },
+    {
+      "id": "S1gQ7iZf5q",
+      "position": {
+        "units": "slots",
+        "x": -1,
+        "y": 5
+      },
+      "type": "xod/core/has-error"
+    },
+    {
+      "boundLiterals": {
+        "ByfGSDjQE": "0.2"
+      },
+      "id": "B1DD1GGcq",
+      "position": {
+        "units": "slots",
+        "x": 5,
+        "y": 0
+      },
+      "type": "xod/debug/tweak-number"
+    },
+    {
+      "id": "SkQomMz9c",
+      "position": {
+        "units": "slots",
+        "x": -3,
+        "y": 3
+      },
+      "type": "xod/debug/watch"
+    },
+    {
+      "id": "Bye7oXfGqc",
+      "position": {
+        "units": "slots",
+        "x": -4,
+        "y": 3
+      },
+      "type": "xod/core/has-error"
+    },
+    {
+      "boundLiterals": {
+        "ByfGSDjQE": "0.5"
+      },
+      "id": "Sk-68fMq9",
+      "position": {
+        "units": "slots",
+        "x": 6,
+        "y": 2
+      },
+      "type": "xod/debug/tweak-number"
+    }
+  ]
+}

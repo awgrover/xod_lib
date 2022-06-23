@@ -1,0 +1,35 @@
+{
+  "nodes": [
+    {
+      "description": "8,10,12,14,16 bits, depending on hardware",
+      "id": "r1t0WeGq5",
+      "label": "BITS",
+      "position": {
+        "units": "slots",
+        "x": 0,
+        "y": 0
+      },
+      "type": "xod/patch-nodes/input-number"
+    },
+    {
+      "id": "SyAfGlM95",
+      "position": {
+        "units": "slots",
+        "x": 0,
+        "y": 1
+      },
+      "type": "xod/patch-nodes/not-implemented-in-xod"
+    },
+    {
+      "description": "To signal that the change has been made.\nError if board doesn't support analogWriteResolution()",
+      "id": "HyoPMlfc5",
+      "label": "READY",
+      "position": {
+        "units": "slots",
+        "x": 0,
+        "y": 2
+      },
+      "type": "xod/patch-nodes/output-pulse"
+    }
+  ]
+}
