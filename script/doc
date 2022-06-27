@@ -156,7 +156,7 @@ sub insert_toc {
 
       # add desription fragment to last header
       if ($last_header && /^<p>([^<]+)</) {
-        push $last_header, substr($1, 0, 80);
+        #push $last_header, substr($1, 0, 80);
         $last_header = undef;
         }
         

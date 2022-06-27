@@ -45,26 +45,74 @@ I haven't "published" all of these yet, until then you have to put the 'awgrover
 # Nodes 
 More detailed documentation at [NODES.md](/NODES.md)
 <span id="auto generated below here"></span>
+### awgrover/adafruit-mma8451-library-ll/adafruitmma8451
+constructor
+Default range is supposed ot be 2G, but get-range says 4G.
+### awgrover/adafruit-mma8451-library-ll/defer(adafruitmma8451)
+Allows to create feedback loops. Repeats a change of the input on the output right after the current transaction will complete.
+### awgrover/adafruit-mma8451-library-ll/equal(adafruitmma8451)
+Outputs true if `IN1` = `IN2`, and false otherwise
+### awgrover/adafruit-mma8451-library-ll/example-xyz-orientation
+
+### awgrover/adafruit-mma8451-library-ll/gate(adafruitmma8451)
+Allows values to pass through only if EN pin is set to true
+### awgrover/adafruit-mma8451-library-ll/get-data-rate
+
+### awgrover/adafruit-mma8451-library-ll/get-orientation
+
+### awgrover/adafruit-mma8451-library-ll/get-range
+Returns 2,4,8 (G).
+(Not the `range` bit values)
+### awgrover/adafruit-mma8451-library-ll/if-else(adafruitmma8451)
+Outputs either input value depending on condition
+### awgrover/adafruit-mma8451-library-ll/range
+values for `range` of set-range.
+### awgrover/adafruit-mma8451-library-ll/read-xyz
+Get the current xyz as -1..1.
+Mapped from -range..range.
+cf. `read-xyz-g`
+### awgrover/adafruit-mma8451-library-ll/read-xyz-accel
+Get the current xyz in m/sec^2
+### awgrover/adafruit-mma8451-library-ll/read-xyz-g
+Get the current xyz in G's
+(1 = 9.8m/s^2).
+cf. `read-zyz-accel` for 0..1 scale.
+### awgrover/adafruit-mma8451-library-ll/readme
+
+### awgrover/adafruit-mma8451-library-ll/set-data-rate
+
+### awgrover/adafruit-mma8451-library-ll/set-range
+set the range 2,4,8 G.
+Higher sensitivey at 2G
 ### awgrover/adafruit-neopixel-ll/adafruitneopixel
 constructor
 https://github.com/adafruit/Adafruit_NeoPixel
 Arduino: Adafruit_NeoPixel
-XOD: awgrover/adafruit-neopixel-ll/input-adafruitneopixel
+XOD: @/input-adafruitneopixel
 cpp postfix: adafruitneopixel
 ### awgrover/adafruit-neopixel-ll/adafruitneopixel1
 constructor
 https://github.com/adafruit/Adafruit_NeoPixel
 Arduino: Adafruit_NeoPixel
-XOD: awgrover/adafruit-neopixel-ll/input-adafruitneopixel
+XOD: @/input-adafruitneopixel
 cpp postfix: adafruitneopixel
 ### awgrover/adafruit-neopixel-ll/begin
 
+### awgrover/adafruit-neopixel-ll/black
+convenience color: off
+### awgrover/adafruit-neopixel-ll/brightness
+naive brightnes * (r,g,b)
 ### awgrover/adafruit-neopixel-ll/can-show
 
 ### awgrover/adafruit-neopixel-ll/clear
 
-### awgrover/adafruit-neopixel-ll/color
-
+### awgrover/adafruit-neopixel-ll/color-fade
+`val` over the range maps to brightness the color.
+### awgrover/adafruit-neopixel-ll/color-order
+Use  example-rgb-revelation to discover the color-order.
+Set one of the 1-x's to true.
+Set one of  the 2-x's to true.
+The third is deduced.
 ### awgrover/adafruit-neopixel-ll/defer(adafruitneopixel)
 Allows to create feedback loops. Repeats a change of the input on the output right after the current transaction will complete.
 ### awgrover/adafruit-neopixel-ll/equal(adafruitneopixel)
@@ -81,6 +129,8 @@ This should help you decode the right RGB code to use (e.g. GRB, etc).
 Turn all pixels light green, one by one.
 Repeat.
 Based on the Adafruit Neopixel example "simple",
+### awgrover/adafruit-neopixel-ll/extract-rgb
+Get red, green, blue elements of rgb color
 ### awgrover/adafruit-neopixel-ll/gamma8
 
 ### awgrover/adafruit-neopixel-ll/gate(adafruitneopixel)
@@ -95,13 +145,21 @@ Allows values to pass through only if EN pin is set to true
 
 ### awgrover/adafruit-neopixel-ll/if-else(adafruitneopixel)
 Outputs either input value depending on condition
+### awgrover/adafruit-neopixel-ll/if-else(rgb-color)
+Outputs either input value depending on condition
 ### awgrover/adafruit-neopixel-ll/num-pixels
 
 ### awgrover/adafruit-neopixel-ll/readme
 
+### awgrover/adafruit-neopixel-ll/rgb-color
+composite rgb+white object
+0..1 values
+_a rgbw should auto calculate w_
 ### awgrover/adafruit-neopixel-ll/set-pin
 
 ### awgrover/adafruit-neopixel-ll/set-pixel-color
+
+### awgrover/adafruit-neopixel-ll/set-pixel-color-rgb
 
 ### awgrover/adafruit-neopixel-ll/show
 
@@ -110,6 +168,52 @@ Outputs either input value depending on condition
 ### awgrover/adafruit-neopixel-ll/update-length
 
 ### awgrover/adafruit-neopixel-ll/update-type
+
+### awgrover/analog-write-resolution/analog-write-resolution
+Set the bit resolution of the PWM (analogWrite) for SAMD21 and SAMD51 boards. i.e. analogWriteResolution(). Usually  8..16 bits.
+### awgrover/analog-write-resolution/example-analog-write-resolution
+Example showing bit-resolution on an LED.
+Read the comments for instructions.
+### awgrover/buffer1/buffer1
+Make a buffer of n bytes.
+Only at beginning of program.
+Allocates from the heap.
+You must check ERR: means not-enough-free-memory
+### awgrover/buffer1/buffer1x
+Make a buffer of n bytes.
+Only at beginning of program.
+Allocates from the heap.
+You must check ERR: means not-enough-free-memory
+### awgrover/buffer1/debug-dump
+Dump the buffer to the console if debugging is on
+### awgrover/buffer1/defer(buffer1)
+Allows to create feedback loops. Repeats a change of the input on the output right after the current transaction will complete.
+### awgrover/buffer1/equal(buffer1)
+Outputs true if `IN1` = `IN2`, and false otherwise
+### awgrover/buffer1/example-1
+
+### awgrover/buffer1/fill
+Fill the entire buffer with a value.
+Default fill is 0.
+### awgrover/buffer1/gate(buffer1)
+Allows values to pass through only if EN pin is set to true
+### awgrover/buffer1/get-byte
+
+### awgrover/buffer1/get-word
+
+### awgrover/buffer1/if-else(buffer1)
+Outputs either input value depending on condition
+### awgrover/buffer1/length
+
+### awgrover/buffer1/set-byte
+
+### awgrover/buffer1/set-word
+
+### awgrover/buffer1/tutorial
+
+### awgrover/buffer1/tutorial-cpp
+
+### awgrover/buffer1/val-pulse-err
 
 ### awgrover/conversions/data-to-pulse
 Convert anything into a pulse
@@ -124,13 +228,36 @@ Simplified count: 0 to 1 by INC. Then repeat. Default is 256 steps suitable for 
 ### awgrover/count/steps
 counts from 0 to LIMIT in N steps. e.g. 0..1000 in 255 steps. sawtooth.
 ### awgrover/hardware/button
+never implemented.
+
 This button signals up & down. The signal is immediate (debounce inhibits signals for 20msec). Assumes normally-open switch. Does input-pullup.
 ### awgrover/hardware/digital-input
+Use xod/hardware/digital-input.
+
 Reads digital signal value from board port. Can set input-pullup.
 ### awgrover/logical/if-else-string
 Outputs either input value depending on condition
 ### awgrover/logical/string-compare
+generic equal should work.
+
 Compares 2 strings, giving <, =, or > boolean output.
+### awgrover/math/bin
+Classify `v` by range
+0 if < r1, "0..r1"
+1 if >= r1, "r1..r2"
+2 if >= r2, etc.
+### awgrover/math/bin-decreasing
+Bins the input-value:
+0 if v < inf, 1 if v < r1, 2 if < r2, etc.
+NB: r's are decreasing
+### awgrover/math/exponential-smooth
+Exponential smoothing
+The result lags the value, smoothing out
+### awgrover/math/negate
+
+### awgrover/math/ratio
+Split the value:
+a + b = v
 ### awgrover/midi/bank-program-change
 Bank-Select and Program-Change
 ### awgrover/midi/control-change
@@ -149,31 +276,43 @@ Start/stop a note.
 A button starts the note (push) and stops on release. Uses xod/common-hardware/button
 ### awgrover/midi/program-change
 Set the inputs, send on pulse ("send")
+### awgrover/pulse/bit-mask
+Set n least-significant bits
+### awgrover/pulse/example-set-bits
+
+### awgrover/pulse/pass-pulses
+Block pulses until `EN`
+Then `RST` blocks again
+### awgrover/pulse/pass-strategies
+Notes on passing/gating values/pulses/etc.
+### awgrover/pulse/set-bits
+Set the bit corresponding to a pulse, on the least-significant end.
+e.g. p1,p2,p3 would set 00000111
+### awgrover/pulse/set-lsb
+On pulse, set the lsb.
+Cf. set-bits
+### awgrover/pulse/wait-all
+Wait for all pulses to accumulate.
+### awgrover/pulse/x-testing-area
+
 ### awgrover/util/clock-per-second
 Produce n ticks/sec. aka Hz
 ### awgrover/util/log-data
 Output the DATA on the console-log, possibly followed by a space. End-of-line is optional. So you can output more than 1 thing per line.
 ### awgrover/util/timestamp
 output "[time] prefix data". So you can see when it happened, what it's for (prefix). Unlike console-log, this outputs on prefix, or data. Of course, also on trig.
+### awgrover/util/write-string
+
 ### awgrover/values/boolean
+Use `buffer` or flip-flop.
+
 On pulse or boolean, copy the boolean out. Set always=false to only copy if the boolean has changed. Acts like casting pulse to boolean
 ### awgrover/values/number
+use `buffer` and `pulse-on-change`
+
 On pulse or number, copy the number out. Set always=false to only copy if the number has changed. Acts like casting pulse to number
 ### awgrover/values/text
-On pulse or text, copy the text out. Set always=false to only copy if the text has changed. Acts like casting pulse to text
-### awgrover/x-midi/bank-program-change
-Bank-Select and Program-Change
-### awgrover/x-midi/control-change
-Set the inputs, send the control change on pulse ("send").
-### awgrover/x-midi/debug
-For this to work, it must fire first. Putting in the top-left helps. Sets baud to 115200 for debugging
-### awgrover/x-midi/example-control-change
-Real simple examples
-### awgrover/x-midi/example-program-change
+use `buffer` and `pulse-on-change`
 
-### awgrover/x-midi/note
-Start/stop a note.
-### awgrover/x-midi/note-button
-A button starts the note (push) and stops on release. Uses xod/common-hardware/button
-### awgrover/x-midi/program-change
-Set the inputs, send on pulse ("send")
+
+On pulse or text, copy the text out. Set always=false to only copy if the text has changed. Acts like casting pulse to text
