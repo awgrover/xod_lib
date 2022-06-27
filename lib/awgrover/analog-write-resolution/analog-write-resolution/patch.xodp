@@ -1,4 +1,5 @@
 {
+  "description": "Set the bit resolution of the PWM (analogWrite) for SAMD21 and SAMD51 boards. i.e. analogWriteResolution(). Usually  8..16 bits.",
   "nodes": [
     {
       "description": "8,10,12,14,16 bits, depending on hardware",

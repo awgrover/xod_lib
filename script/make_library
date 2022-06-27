@@ -641,11 +641,14 @@ sub main {
                 (
                 '' => <<'EOS',
 This is a mess, does a bunch of stuff to make a patch from a template, etc.
---- [options] project patch libpath # project/patch -> libname
-      project # path in ~/xod. so normally just the name
-      patch # dir in project, or dir/something.xodp
---- [options] patch-path newlibpath
-      patch-path # path to patch directory or .xodp
+--- OBSOLETE, use `script/mv`. 'mv' $old $new # -> rename extant library patch, paths are $author/$libname/$patchname
+--- 'template' $project/$patch # -> $project/$patch/patch.cpp # skeleton from patch.xodp inputs/outputs
+# Make a lib from a patch, either in cwd, or installed xod
+--- [options] $project $patch $libpath # project/patch -> libname. relative means to here, __lib__/... means ~/xod
+      $project # path in ~/xod. so normally just the name
+      $patch # dir in project, or dir/something.xodp
+--- [options] $patch-path $newlibpath # same, but path-to-patch -> libname
+      $patch-path # path to patch directory or .xodp
 EOS
                 'help|h|H'=>'this',
                 'patch-only|xodp-only|p' => 'Only remake the .xodp, leave the cpp alone',

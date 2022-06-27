@@ -1,0 +1,6 @@
+{
+  "description": "Set the bit resolution of the PWM (analogWrite) for SAMD21 and SAMD51 boards. i.e. analogWriteResolution(). Usually  8..16 bits.",
+  "license": "GPLv3",
+  "name": "analog-write-resolution",
+  "version": "0.2.0"
+}
