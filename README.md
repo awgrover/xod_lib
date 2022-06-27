@@ -4,6 +4,8 @@ XOD is a flow-based-programming tool for programming arduino. See https://xod.io
 
 This (https://github.com/awgrover/xod_lib) is a library of nodes for it. Some may be useful. Some may be ill conceived.
 
+Many are available as proper [XOD libraries](https://xod.io/libs/?q=awgrover/). If possible, install as libraries.
+
 # Installation
 
 ## XOD Add Library
